@@ -1,6 +1,13 @@
 import 'dart:async';
 import 'package:cryphive/main.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const SplashScreen());
+}
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -40,16 +47,16 @@ class _SplashScreenState extends State<SplashScreenPage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      backgroundColor: Colors.white,
-      body:Center(
-        child:Column(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //logo
             Image.asset('assets/images/logo.png', height: 500,),
             const SizedBox(height: 5,),
             const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Colors.black),
+              valueColor: AlwaysStoppedAnimation(Colors.white),
             )
           ],
         ),
