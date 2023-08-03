@@ -1,14 +1,7 @@
 import 'package:cryphive/pages/home_page.dart';
 import 'package:cryphive/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-Future main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const Auth());
-}
 
 class Auth extends StatelessWidget {
   const Auth({super.key});
@@ -17,6 +10,7 @@ class Auth extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Authentication Terminal',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
