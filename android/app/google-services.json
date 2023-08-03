@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "794204024516",
+    "project_id": "cryphive",
+    "storage_bucket": "cryphive.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794204024516:android:ea38b3974d8d6ecccca391",
+        "android_client_info": {
+          "package_name": "com.example.cryphive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "794204024516-m6mq1egh612clelbvp9ssoblgenl3tmh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE8FggY0dJAaufN-MBS08R6M58zMigdwM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "794204024516-m6mq1egh612clelbvp9ssoblgenl3tmh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
