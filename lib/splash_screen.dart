@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreenPage>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //logo
-            Image.asset('assets/images/logo.png', height: 500,),
+            Image.asset('assets/images/cryphive_word.png', height: 500,),
             const SizedBox(height: 5,),
             const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation(Colors.white),
