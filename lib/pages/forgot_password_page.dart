@@ -1,4 +1,5 @@
 import 'package:cryphive/widgets/button_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,6 +15,44 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String email = '';
 
   final _emailKey = GlobalKey<FormState>();
+
+  Future<void> resetPassword() async {
+    try{
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+          email: email.trim()
+      );
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            backgroundColor: Colors.pinkAccent,
+            title: Text('Reset Link Sent'),
+          );
+        },
+      );
+    } on FirebaseAuthException catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            backgroundColor: Colors.deepPurpleAccent,
+            title: Text('User Not Found'),
+          );
+        },
+      );
+    }
+  }
+
+  /*
+  The first part before @ checks for the local part of the email address:
+  ([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*) matches one or more characters that are not <, >, (, ), [, \, ., ,, ;, :, whitespace, @, or ". This ensures that there are no invalid characters in the local part.
+  (\.[^<>()[\]\\.,;:\s@\"]+)* allows for periods followed by one or more characters that are not the same set of invalid characters. This allows for the presence of periods in the local part but ensures they are followed by valid characters.
+  (\".+\") allows for the local part to be enclosed in double quotes. This is an alternative format for the local part that allows certain special characters. For example, an email like "john.doe"@example.com is valid.
+  The second part after @ checks for the domain part of the email address:
+  (\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\]) matches an IP address enclosed in square brackets. This allows for email addresses in the format [192.168.0.1].
+  (([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}) matches the domain name, which consists of one or more groups of alphanumeric characters or hyphens followed by a period. The last group must be two or more alphabetical characters. This ensures that the domain name is valid, such as example.com.
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +75,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: size.width * 0.025),
+                          horizontal: size.width * 0.025,
+                          vertical: 1,
+                        ),
                         child: Row(
                           children: [
                             InkWell(
-                              onTap: () =>
-                                  Navigator.pop(context), //go back to authPage
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
                               child: Icon(
                                 Icons.arrow_back,
                                 color: Colors.white,
@@ -52,11 +94,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               padding: EdgeInsets.symmetric(
                                 horizontal: size.width * 0.015,
                               ),
-                              child: Text(
-                                'Back',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontSize: size.height * 0.018,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'Back',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: size.height * 0.018,
+                                  ),
                                 ),
                               ),
                             ),
@@ -97,7 +144,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         child: buildTextField(
                           "Email",
                           Icons.email_outlined,
-                          false,
                           size,
                               (valuemail) {
                             if (valuemail.length < 5) {
@@ -136,7 +182,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             ],
                             onPressed: () async {
                               if (_emailKey.currentState!.validate()) {
-                                print('$email forgot password');
+                                resetPassword();
                               }
                             }),
                       ),
@@ -168,11 +214,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 
-  bool pwVisible = false;
   Widget buildTextField(
       String hintText,
       IconData icon,
-      bool password,
       size,
       FormFieldValidator validator,
       ) {
@@ -198,7 +242,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             },
             validator: validator,
             textInputAction: TextInputAction.next,
-            obscureText: password ? !pwVisible : false,
             decoration: InputDecoration(
               errorStyle: const TextStyle(height: 0),
               hintStyle: const TextStyle(
@@ -218,29 +261,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   color: const Color(0xff7B6F72),
                 ),
               ),
-              suffixIcon: password
-                  ? Padding(
-                padding: EdgeInsets.only(
-                  top: size.height * 0.005,
-                ),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      pwVisible = !pwVisible;
-                    });
-                  },
-                  child: pwVisible
-                      ? const Icon(
-                    Icons.visibility_off_outlined,
-                    color: Color(0xff7B6F72),
-                  )
-                      : const Icon(
-                    Icons.visibility_outlined,
-                    color: Color(0xff7B6F72),
-                  ),
-                ),
-              )
-                  : null,
             ),
           ),
         ),

@@ -1,67 +1,74 @@
-import 'package:cryphive/pages/forgot_password_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/pages/home_page.dart';
-import 'package:cryphive/pages/register_page.dart';
+import 'package:cryphive/pages/login_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
 
   bool checkedValue = false;
   List textFieldsStrings = [
+    "", //username
     "", //email
     "", //password
+    "", //confirmPassword
   ];
 
+  final _usernameKey = GlobalKey<FormState>();
   final _emailKey = GlobalKey<FormState>();
   final _passwordKey = GlobalKey<FormState>();
+  final _confirmPasswordKey = GlobalKey<FormState>();
 
-  void signIn() async{
+  void signUp() async{
     try{
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: textFieldsStrings[0],
-        password: textFieldsStrings[1],
-      );
+      if(checkedValue == true){
+        if(textFieldsStrings[2] == textFieldsStrings[3]){
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: textFieldsStrings[1],
+            password: textFieldsStrings[2],
+          );
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+          FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: textFieldsStrings[1],
+            password: textFieldsStrings[2],
+          );
+
+          await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).set({
+            'Email' : textFieldsStrings[1],
+            'Username' : textFieldsStrings[0],
+            'ProfilePic' : 'https://media.istockphoto.com/id/1316420668/vector/user-icon-human-person-symbol-social-profile-icon-avatar-login-sign-web-user-symbol.jpg?s=612x612&w=0&k=20&c=AhqW2ssX8EeI2IYFm6-ASQ7rfeBWfrFFV4E87SaFhJE=',
+            'LoginMethod' : 'Email',
+            'UID' : FirebaseAuth.instance.currentUser!.uid,
+          });
+
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+          });
+        }
+        else{
+          buildSnackError(
+            'Passwords does not match',
+            context,
+            MediaQuery.of(context).size,
+          );
+        }
+      }
     } on FirebaseAuthException catch (e) {
-      if(e.code == 'user-not-found'){
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              backgroundColor: Colors.pinkAccent,
-              title: Text('Incorrect Email'),
-            );
-          },
-        );
-      }
-      else if(e.code == 'wrong-password'){
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              backgroundColor: Colors.pinkAccent,
-              title: Text('Incorrect Password'),
-            );
-          },
-        );
-      }
+      buildSnackError(
+        e.code,
+        context,
+        MediaQuery.of(context).size,
+      );
     }
-    // await FirebaseFirestore.instance.collection('Users').doc('Test').set({
-    //   'Email' : 'test',
-    //   'Phone' : 'test',
-    //   'Username' : 'test',
-    //   'ProfilePic' : 'https://media.istockphoto.com/id/1316420668/vector/user-icon-human-person-symbol-social-profile-icon-avatar-login-sign-web-user-symbol.jpg?s=612x612&w=0&k=20&c=AhqW2ssX8EeI2IYFm6-ASQ7rfeBWfrFFV4E87SaFhJE=',
-    // });
   }
 
   @override
@@ -113,6 +120,27 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Form(
                         child: buildTextField(
+                          "Username",
+                          Icons.person_outlined,
+                          false,
+                          size,
+                              (valuename) {
+                            if (valuename.length <= 0) {
+                              buildSnackError(
+                                'Invalid username',
+                                context,
+                                size,
+                              );
+                              return '';
+                            }
+                            return null;
+                          },
+                          _usernameKey,
+                          0,
+                        ),
+                      ),
+                      Form(
+                        child: buildTextField(
                           "Email",
                           Icons.email_outlined,
                           false,
@@ -139,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                             return null;
                           },
                           _emailKey,
-                          0,
+                          1,
                         ),
                       ),
                       Form(
@@ -160,7 +188,28 @@ class _LoginPageState extends State<LoginPage> {
                             return null;
                           },
                           _passwordKey,
-                          1,
+                          2,
+                        ),
+                      ),
+                      Form(
+                        child: buildTextField(
+                          "Confirm Passsword",
+                          Icons.lock_outline,
+                          true,
+                          size,
+                              (valuepassword) {
+                            if (valuepassword != textFieldsStrings[3]) {
+                              buildSnackError(
+                                'Passwords must match',
+                                context,
+                                size,
+                              );
+                              return '';
+                            }
+                            return null;
+                          },
+                          _confirmPasswordKey,
+                          3,
                         ),
                       ),
                       Padding(
@@ -168,30 +217,79 @@ class _LoginPageState extends State<LoginPage> {
                           horizontal: size.width * 0.015,
                           vertical: size.height * 0.025,
                         ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const ForgotPasswordPage()),
-                            );
-                          },
-                          child: Text(
-                            "Forgot your password?",
-                            style: TextStyle(
-                              color: const Color(0xffADA4A5),
-                              decoration: TextDecoration.underline,
-                              fontSize: size.height * 0.02,
+                        child: CheckboxListTile(
+                          title: RichText(
+                            textAlign: TextAlign.left,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text:
+                                  "By creating an account, you agree to our ",
+                                  style: TextStyle(
+                                    color: const Color(0xffADA4A5),
+                                    fontSize: size.height * 0.015,
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: InkWell(
+                                    onTap: () {
+                                      // ignore: avoid_print
+                                      print('Conditions of Use');
+                                    },
+                                    child: Text(
+                                      "Conditions of Use",
+                                      style: TextStyle(
+                                        color: const Color(0xffADA4A5),
+                                        decoration:
+                                        TextDecoration.underline,
+                                        fontSize: size.height * 0.015,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: " and ",
+                                  style: TextStyle(
+                                    color: const Color(0xffADA4A5),
+                                    fontSize: size.height * 0.015,
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: InkWell(
+                                    onTap: () {
+                                      // ignore: avoid_print
+                                      print('Privacy Notice');
+                                    },
+                                    child: Text(
+                                      "Privacy Notice",
+                                      style: TextStyle(
+                                        color: const Color(0xffADA4A5),
+                                        decoration:
+                                        TextDecoration.underline,
+                                        fontSize: size.height * 0.015,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                          activeColor: const Color(0xff7B6F72),
+                          value: checkedValue,
+                          onChanged: (newValue) {
+                            setState(() {
+                              checkedValue = newValue!;
+                            });
+                          },
+                          controlAffinity:
+                          ListTileControlAffinity.leading,
                         ),
                       ),
                       AnimatedPadding(
                         duration: const Duration(milliseconds: 500),
                         padding: EdgeInsets.only(top: size.height * 0.085),
                         child: ButtonWidget(
-                          text: "Login",
+                          text: "Register",
                           backColor: [
                             Colors.black,
                             Colors.black,
@@ -201,10 +299,21 @@ class _LoginPageState extends State<LoginPage> {
                             Colors.white,
                           ],
                           onPressed: () async {
-                            //validation for login
-                            if (_emailKey.currentState!.validate()) {
-                              if (_passwordKey.currentState!.validate()) {
-                                signIn();
+                            if (_usernameKey.currentState!.validate()) {
+                              if (_emailKey.currentState!.validate()) {
+                                if (_passwordKey.currentState!.validate()) {
+                                  if (_confirmPasswordKey.currentState!
+                                      .validate()) {
+                                    if (checkedValue == false) {
+                                      buildSnackError(
+                                          'Accept our Privacy Policy and Term Of Use',
+                                          context,
+                                          size);
+                                    } else {
+                                      signUp();
+                                    }
+                                  }
+                                }
                               }
                             }
                           },
@@ -232,14 +341,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => RegisterPage()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LoginPage()));
                         },
                         child: RichText(
                           textAlign: TextAlign.left,
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: "Don’t have an account yet? ",
+                                text: "Already have an account? ",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: size.height * 0.018,
