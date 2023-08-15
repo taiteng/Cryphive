@@ -1,5 +1,6 @@
 import 'package:cryphive/pages/forgot_password_page.dart';
 import 'package:cryphive/pages/home_page.dart';
+import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/pages/register_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
         password: textFieldsStrings[1],
       );
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const NavigationPage(),),);
     } on FirebaseAuthException catch (e) {
       if(e.code == 'user-not-found'){
         showDialog(
@@ -56,12 +57,6 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     }
-    // await FirebaseFirestore.instance.collection('Users').doc('Test').set({
-    //   'Email' : 'test',
-    //   'Phone' : 'test',
-    //   'Username' : 'test',
-    //   'ProfilePic' : 'https://media.istockphoto.com/id/1316420668/vector/user-icon-human-person-symbol-social-profile-icon-avatar-login-sign-web-user-symbol.jpg?s=612x612&w=0&k=20&c=AhqW2ssX8EeI2IYFm6-ASQ7rfeBWfrFFV4E87SaFhJE=',
-    // });
   }
 
   @override
@@ -74,8 +69,8 @@ class _LoginPageState extends State<LoginPage> {
         child: Container(
           height: size.height,
           width: size.height,
-          decoration: BoxDecoration(
-            color: const Color(0xff151f2c),
+          decoration: const BoxDecoration(
+            color: Color(0xff151f2c),
           ),
           child: SafeArea(
             child: Stack(
@@ -232,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => RegisterPage()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RegisterPage()));
                         },
                         child: RichText(
                           textAlign: TextAlign.left,
@@ -275,15 +270,15 @@ class _LoginPageState extends State<LoginPage> {
       child: Container(
         width: size.width * 0.9,
         height: size.height * 0.05,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.black,
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
         child: Form(
           key: key,
           child: TextFormField(
-            style: TextStyle(
-                color: const Color(0xffADA4A5)
+            style: const TextStyle(
+                color: Color(0xffADA4A5)
             ),
             onChanged: (value) {
               setState(() {
