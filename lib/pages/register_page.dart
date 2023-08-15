@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cryphive/pages/home_page.dart';
+import 'package:cryphive/pages/disclaimer_page.dart';
 import 'package:cryphive/pages/login_page.dart';
+import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
           });
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const NavigationPage()));
           });
         }
         else{
@@ -233,8 +234,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 WidgetSpan(
                                   child: InkWell(
                                     onTap: () {
-                                      // ignore: avoid_print
-                                      print('Conditions of Use');
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const DisclaimerPage()));
                                     },
                                     child: Text(
                                       "Conditions of Use",
