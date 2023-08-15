@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cryphive/pages/disclaimer_page.dart';
 import 'package:cryphive/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -203,25 +204,35 @@ class _SettingsPageState extends State<SettingsPage> {
                         Text("Misc", style: headingStyle),
                       ],
                     ),
-                    const ListTile(
-                      leading: Icon(
-                        Icons.file_open_outlined,
-                        color: Colors.deepOrange,
-                      ),
-                      title: Text(
-                        "Terms of Service",
-                        style: const TextStyle(color: Colors.white,),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const DisclaimerPage()));
+                      },
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.file_open_outlined,
+                          color: Colors.deepOrange,
+                        ),
+                        title: Text(
+                          "Terms of Service",
+                          style: const TextStyle(color: Colors.white,),
+                        ),
                       ),
                     ),
                     const Divider(color: Color(0xff3c3c3f),),
-                    const ListTile(
-                      leading: Icon(
-                        Icons.file_copy_outlined,
-                        color: Colors.deepOrange,
-                      ),
-                      title: Text(
-                        "Open Source and Licences",
-                        style: const TextStyle(color: Colors.white,),
+                    GestureDetector(
+                      onTap: () {
+
+                      },
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.file_copy_outlined,
+                          color: Colors.deepOrange,
+                        ),
+                        title: Text(
+                          "Open Source and Licences",
+                          style: const TextStyle(color: Colors.white,),
+                        ),
                       ),
                     ),
                   ],
