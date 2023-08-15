@@ -1,5 +1,4 @@
-import 'package:cryphive/pages/login_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cryphive/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,22 +10,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  void signOut() async{
-    await FirebaseAuth.instance.signOut();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage(),),);
-  }
-
   @override
   Widget build(BuildContext context) {
+
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            signOut();
-          },
-          child: Text(
-            'Logout'
+      backgroundColor: Color(0xff151f2c),
+      appBar: AppBar(
+        elevation: 0.00,
+        titleSpacing: 00.0,
+        centerTitle: true,
+        toolbarHeight: 40,
+        toolbarOpacity: 0.8,
+        backgroundColor: Color(0xff151f2c),
+        title: const Text(
+          'Home',
+          style: TextStyle(
+            color: Colors.white,
           ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Center(
+          child: Text('Home'),
         ),
       ),
     );

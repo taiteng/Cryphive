@@ -1,5 +1,6 @@
 import 'package:cryphive/pages/home_page.dart';
 import 'package:cryphive/pages/login_page.dart';
+import 'package:cryphive/pages/navigation_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class _AuthPageState extends State<AuthPage> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot){
           if(snapshot.hasData){
-            return const HomePage();
+            return const NavigationPage();
           }
           else if(snapshot.hasError){
             return const Center(child: Text('Something Went Wrong :('),);
