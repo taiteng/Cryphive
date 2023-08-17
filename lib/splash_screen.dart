@@ -47,13 +47,13 @@ class _SplashScreenState extends State<SplashScreenPage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xff090a13),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //logo
-            Image.asset('assets/images/cryphive_word.png', height: 500,),
+            Image.asset('assets/images/cryphive_word_nobg.png', height: 500,),
             const SizedBox(height: 5,),
             const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation(Colors.white),
