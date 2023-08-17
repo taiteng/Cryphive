@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/pages/disclaimer_page.dart';
+import 'package:cryphive/pages/edit_profile_page.dart';
 import 'package:cryphive/pages/login_page.dart';
+import 'package:cryphive/pages/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,35 @@ class _SettingsPageState extends State<SettingsPage> {
 
   final User? user = FirebaseAuth.instance.currentUser;
   final CollectionReference _user = FirebaseFirestore.instance.collection('Users');
+
+  void deleteProfile() async{
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Profile'),
+          content: const Text("Are You Sure Want To Proceed ?"),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.done_rounded),
+              color: Colors.green,
+              onPressed: () {
+
+                Navigator.of(context).pop();
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.cancel_rounded),
+              color: Colors.red,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void signOut() async{
     await FirebaseAuth.instance.signOut();
@@ -46,7 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xff151f2c),
+      backgroundColor: Colors.black,
       appBar: AppBar(
         elevation: 0.00,
         titleSpacing: 00.0,
@@ -57,7 +88,7 @@ class _SettingsPageState extends State<SettingsPage> {
         title: const Text(
           'Settings',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.yellowAccent,
           ),
         ),
       ),
@@ -66,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Container(
           padding: const EdgeInsets.all(12),
           alignment: Alignment.center,
-          child: FutureBuilder<DocumentSnapshot>(
+          child: user != null ? FutureBuilder<DocumentSnapshot>(
             future: _user.doc(user?.uid.toString()).get(),
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -168,7 +199,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     const Divider(color: Color(0xff3c3c3f),),
                     GestureDetector(
                       onTap: () {
-                        //Edit Profile
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(
+                            email: data['Email'],
+                            username: data['Username'],
+                            profilePic: data['ProfilePic'],
+                            uID: data['UID']),
+                        ),);
                       },
                       child: const ListTile(
                         leading: Icon(
@@ -177,6 +213,22 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         title: Text(
                           'Edit Profile',
+                          style: const TextStyle(color: Colors.white,),
+                        ),
+                      ),
+                    ),
+                    const Divider(color: Color(0xff3c3c3f),),
+                    GestureDetector(
+                      onTap: () {
+                        deleteProfile();
+                      },
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.delete_forever_rounded,
+                          color: Colors.deepOrange,
+                        ),
+                        title: Text(
+                          'Delete Profile',
                           style: const TextStyle(color: Colors.white,),
                         ),
                       ),
@@ -242,6 +294,69 @@ class _SettingsPageState extends State<SettingsPage> {
                 return const Text("loading");
               }
             },
+          ) : Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Profile",
+                    style: headingStyle,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10,),
+              const ListTile(
+                leading: Icon(
+                  Icons.account_circle,
+                  color: Colors.deepOrange,
+                ),
+                title: Text(
+                  'Guest',
+                  style: TextStyle(color: Colors.white,),
+                ),
+              ),
+              const Divider(color: Color(0xff3c3c3f),),
+              const SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text("Account", style: headingStyle),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RegisterPage()));
+                },
+                child: const ListTile(
+                  leading: Icon(
+                    Icons.create_rounded,
+                    color: Colors.deepOrange,
+                  ),
+                  title: Text(
+                    'Create An Account?',
+                    style: const TextStyle(color: Colors.white,),
+                  ),
+                ),
+              ),
+              const Divider(color: Color(0xff3c3c3f),),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
+                },
+                child: const ListTile(
+                  leading: Icon(
+                    Icons.login_rounded,
+                    color: Colors.deepOrange,
+                  ),
+                  title: Text(
+                    'Log In To A Account',
+                    style: const TextStyle(color: Colors.white,),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

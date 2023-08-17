@@ -30,13 +30,14 @@ class _NavigationPageState extends State<NavigationPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xff151f2c),
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           IndexedStack(
             index: currentIndex,
             children: screens,
           ),
+          const Align(alignment: Alignment.bottomCenter,),
         ],
       ),
       bottomNavigationBar: Container(
@@ -48,7 +49,7 @@ class _NavigationPageState extends State<NavigationPage> {
             currentIndex: currentIndex,
             type: BottomNavigationBarType.fixed,
             iconSize: 28,
-            backgroundColor: Colors.black,
+            backgroundColor: const Color(0xff151f2c),
             selectedItemColor: Colors.deepOrange,
             selectedLabelStyle: const TextStyle(fontSize: 10),
             unselectedItemColor: Colors.grey,

@@ -82,13 +82,14 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Container(
           height: size.height,
           width: size.height,
-          decoration: BoxDecoration(
-            color: const Color(0xff151f2c),
+          decoration: const BoxDecoration(
+            color: Color(0xff151f2c),
           ),
           child: SafeArea(
             child: Stack(
               children: [
                 SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
                       Padding(
@@ -327,21 +328,15 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'CRYPHIVE',
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: size.height * 0.045,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            Image.asset('assets/images/cryphive_word_nobg.png', height: 40,),
                             Image.asset('assets/images/cryphive_logo_nobg.png', height: 40,),
                           ],
                         ),
                       ),
+                      const SizedBox(height: 10,),
                       InkWell(
                         onTap: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LoginPage()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
                         },
                         child: RichText(
                           textAlign: TextAlign.left,
@@ -384,15 +379,15 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Container(
         width: size.width * 0.9,
         height: size.height * 0.05,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.black,
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
         child: Form(
           key: key,
           child: TextFormField(
-            style: TextStyle(
-                color: const Color(0xffADA4A5)
+            style: const TextStyle(
+                color: Color(0xffADA4A5)
             ),
             onChanged: (value) {
               setState(() {
