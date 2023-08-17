@@ -28,7 +28,7 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
         ),
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back_ios_new,
+            Icons.arrow_back_rounded,
             color: Colors.white,
           ),
           onPressed: () {

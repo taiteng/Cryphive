@@ -1,4 +1,5 @@
 import 'package:cryphive/pages/forgot_password_page.dart';
+import 'package:cryphive/pages/home_page.dart';
 import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/pages/register_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
@@ -77,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Stack(
               children: [
                 SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
                       Padding(
@@ -206,6 +208,28 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const NavigationPage()));
+                          },
+                          child: RichText(
+                            textAlign: TextAlign.left,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Continue as a guest...",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: size.height * 0.018,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       AnimatedPadding(
                         duration: const Duration(milliseconds: 500),
                         padding: EdgeInsets.only(
@@ -213,19 +237,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              'CRYPHIVE',
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: size.height * 0.045,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            Image.asset('assets/images/cryphive_word_nobg.png', height: 40,),
                             Image.asset('assets/images/cryphive_logo_nobg.png', height: 40,),
                           ],
                         ),
                       ),
+                      const SizedBox(height: 10,),
                       InkWell(
                         onTap: () {
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RegisterPage()));
