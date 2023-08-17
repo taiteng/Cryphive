@@ -107,7 +107,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xff090a13),
       appBar: AppBar(
         elevation: 0.00,
         titleSpacing: 00.0,
@@ -116,7 +116,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         toolbarOpacity: 0.8,
         backgroundColor: const Color(0xff151f2c),
         title: const Text(
-          'Edit Profile',
+          'EDIT PROFILE',
           style: TextStyle(
             color: Colors.yellowAccent,
           ),

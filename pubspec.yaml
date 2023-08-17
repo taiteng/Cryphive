@@ -37,6 +37,10 @@ flutter:
     - assets/images/cryphive_word_nobg.png
     - assets/images/cryphive_logo.png
     - assets/images/cryphive_logo_nobg.png
+    - assets/images/h_icon.png
+    - assets/images/i_icon.png
+    - assets/images/v_icon.png
+    - assets/images/e_icon.png
 
   # fonts:
   #   - family: Schyler

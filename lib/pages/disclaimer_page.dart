@@ -12,7 +12,7 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff151f2c),
+      backgroundColor: const Color(0xff090a13),
       appBar: AppBar(
         elevation: 0.00,
         titleSpacing: 00.0,
@@ -21,7 +21,7 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
         toolbarOpacity: 0.8,
         backgroundColor: const Color(0xff151f2c),
         title: const Text(
-          'Disclaimer',
+          'DISCLAIMER',
           style: TextStyle(
             color: Colors.white,
           ),

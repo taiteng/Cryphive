@@ -77,7 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xff090a13),
       appBar: AppBar(
         elevation: 0.00,
         titleSpacing: 00.0,
@@ -86,7 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
         toolbarOpacity: 0.8,
         backgroundColor: const Color(0xff151f2c),
         title: const Text(
-          'Settings',
+          'SETTINGS',
           style: TextStyle(
             color: Colors.yellowAccent,
           ),

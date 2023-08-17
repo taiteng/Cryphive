@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xff090a13),
       appBar: AppBar(
         elevation: 0.00,
         titleSpacing: 00.0,
@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
         toolbarOpacity: 0.8,
         backgroundColor: const Color(0xff151f2c),
         title: const Text(
-          'Home',
+          'HOME',
           style: TextStyle(
             color: Colors.yellowAccent,
           ),

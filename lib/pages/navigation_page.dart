@@ -42,37 +42,48 @@ class _NavigationPageState extends State<NavigationPage> {
       ),
       bottomNavigationBar: Container(
         height: size.width * .165,
-        margin: const EdgeInsets.all(15),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10),),
           child: BottomNavigationBar(
+            elevation: 10,
             currentIndex: currentIndex,
             type: BottomNavigationBarType.fixed,
             iconSize: 28,
             backgroundColor: const Color(0xff151f2c),
             selectedItemColor: Colors.deepOrange,
-            selectedLabelStyle: const TextStyle(fontSize: 10),
+            selectedIconTheme: const IconThemeData(size: 33,),
+            selectedLabelStyle: const TextStyle(fontSize: 14),
             unselectedItemColor: Colors.grey,
-            unselectedLabelStyle: const TextStyle(fontSize: 10),
+            unselectedLabelStyle: const TextStyle(fontSize: 12),
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home_rounded),
-                label: 'Home',
+                icon: ImageIcon(
+                  AssetImage('assets/images/cryphive_logo_nobg.png'),
+                ),
+                label: 'Cryphive',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.newspaper_rounded),
+                icon: ImageIcon(
+                  AssetImage('assets/images/h_icon.png'),
+                ),
                 label: 'News',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.forum_rounded),
+                icon: ImageIcon(
+                  AssetImage('assets/images/i_icon.png'),
+                ),
                 label: 'Forum',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.attach_money_rounded),
+                icon: ImageIcon(
+                  AssetImage('assets/images/v_icon.png'),
+                ),
                 label: 'Journal',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.settings_rounded),
+                icon: ImageIcon(
+                  AssetImage('assets/images/e_icon.png'),
+                ),
                 label: 'Settings',
               ),
             ],
