@@ -1,4 +1,3 @@
-import 'package:cryphive/pages/register_page.dart';
 import 'package:flutter/material.dart';
 
 class DisclaimerPage extends StatefulWidget {
