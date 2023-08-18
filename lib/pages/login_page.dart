@@ -1,5 +1,4 @@
 import 'package:cryphive/pages/forgot_password_page.dart';
-import 'package:cryphive/pages/home_page.dart';
 import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/pages/register_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
