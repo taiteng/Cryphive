@@ -77,7 +77,7 @@ class _NewsPageState extends State<NewsPage> {
                               height: 100,
                               width: 100,
                               fit: BoxFit.cover,
-                              placeholderFit: BoxFit.fill,
+                              placeholderFit: BoxFit.cover,
                               placeholder: const AssetImage(
                                 'assets/images/cryphive_logo.png',
                               ),
@@ -109,23 +109,17 @@ class _NewsPageState extends State<NewsPage> {
                             ),
                           ),
                         ),
-                        title: Hero(
-                          tag: '${index}_title',
-                          child: Text(
-                            newsList[index].title,
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
+                        title: Text(
+                          newsList[index].title,
+                          style: const TextStyle(
+                            color: Colors.white,
                           ),
                         ),
-                        subtitle: Hero(
-                          tag: '${index}_description',
-                          child: Text(
-                            newsList[index].description,
-                            maxLines: 2,
-                            style: const TextStyle(
-                              color: Colors.grey,
-                            ),
+                        subtitle: Text(
+                          newsList[index].description,
+                          maxLines: 2,
+                          style: const TextStyle(
+                            color: Colors.grey,
                           ),
                         ),
                       ),
