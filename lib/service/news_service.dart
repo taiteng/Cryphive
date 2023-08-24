@@ -6,7 +6,7 @@ class NewsService {
   static String BASE_URL = 'https://newsapi.org/v2/everything?q=';
 
   getNewsList(String query) async {
-    var response = await http.get(Uri.parse(BASE_URL + query + '&apiKey=d387b58ae8254db685545577fb74d7fe'));
+    var response = await http.get(Uri.parse(BASE_URL + query + '&sortBy=publishedAt&apiKey=d387b58ae8254db685545577fb74d7fe'));
 
     if(response.statusCode == 200){
       List<News> newsList;
