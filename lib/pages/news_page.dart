@@ -71,38 +71,25 @@ class _NewsPageState extends State<NewsPage> {
                       child: ListTile(
                         leading: Hero(
                           tag: index,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: FadeInImage(
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover,
-                              placeholderFit: BoxFit.cover,
-                              placeholder: const AssetImage(
-                                'assets/images/cryphive_logo.png',
-                              ),
-                              placeholderErrorBuilder: (context, url, error) => const SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.error,
-                                    color: Colors.white,
-                                    size: 50,
-                                  ),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.135,
+                            width: MediaQuery.of(context).size.height * 0.165,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  newsList[index].urlToImage,
                                 ),
-                              ),
-                              image: NetworkImage(
-                                newsList[index].urlToImage,
-                              ),
-                              imageErrorBuilder: (context, url, error) => const SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.error,
-                                    color: Colors.white,
-                                    size: 50,
+                                fit: BoxFit.cover,
+                                onError: (context, error) => const SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.error,
+                                      color: Colors.white,
+                                      size: 50,
+                                    ),
                                   ),
                                 ),
                               ),
