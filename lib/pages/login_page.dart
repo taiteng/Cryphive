@@ -5,6 +5,8 @@ import 'package:cryphive/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,9 +28,14 @@ class _LoginPageState extends State<LoginPage> {
 
   void signIn() async{
     try{
+
+      var dataToHash = textFieldsStrings[1];
+      var bytesToHash = utf8.encode(dataToHash);
+      var sha256Digest = sha256.convert(bytesToHash);
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: textFieldsStrings[0],
-        password: textFieldsStrings[1],
+        password: sha256Digest.toString(),
       );
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
