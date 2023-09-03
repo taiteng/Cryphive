@@ -6,6 +6,8 @@ import 'package:cryphive/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -31,37 +33,42 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void signUp() async{
     try{
-      if(checkedValue == true){
-        if(textFieldsStrings[2] == textFieldsStrings[3]){
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: textFieldsStrings[1],
-            password: textFieldsStrings[2],
-          );
 
-          FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: textFieldsStrings[1],
-            password: textFieldsStrings[2],
-          );
+      var dataToHash = textFieldsStrings[2];
+      var bytesToHash = utf8.encode(dataToHash);
+      var sha256Digest = sha256.convert(bytesToHash);
 
-          await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).set({
-            'Email' : textFieldsStrings[1],
-            'Username' : textFieldsStrings[0],
-            'ProfilePic' : 'https://media.istockphoto.com/id/1316420668/vector/user-icon-human-person-symbol-social-profile-icon-avatar-login-sign-web-user-symbol.jpg?s=612x612&w=0&k=20&c=AhqW2ssX8EeI2IYFm6-ASQ7rfeBWfrFFV4E87SaFhJE=',
-            'LoginMethod' : 'Email',
-            'UID' : FirebaseAuth.instance.currentUser!.uid,
-          });
+      if(textFieldsStrings[2] == textFieldsStrings[3]){
 
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const NavigationPage()));
-          });
-        }
-        else{
-          buildSnackError(
-            'Passwords does not match',
-            context,
-            MediaQuery.of(context).size,
-          );
-        }
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: textFieldsStrings[1],
+          password: sha256Digest.toString(),
+        );
+
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: textFieldsStrings[1],
+          password: sha256Digest.toString(),
+        );
+
+        await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).set({
+          'Email' : textFieldsStrings[1],
+          'Username' : textFieldsStrings[0],
+          'ProfilePic' : 'https://media.istockphoto.com/id/1316420668/vector/user-icon-human-person-symbol-social-profile-icon-avatar-login-sign-web-user-symbol.jpg?s=612x612&w=0&k=20&c=AhqW2ssX8EeI2IYFm6-ASQ7rfeBWfrFFV4E87SaFhJE=',
+          'LoginMethod' : 'Email',
+          'UID' : FirebaseAuth.instance.currentUser!.uid,
+          'Password' : sha256Digest.toString(),
+        });
+
+        await Future.delayed(Duration.zero, () {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const NavigationPage()));
+        });
+      }
+      else{
+        buildSnackError(
+          'Passwords does not match',
+          context,
+          MediaQuery.of(context).size,
+        );
       }
     } on FirebaseAuthException catch (e) {
       buildSnackError(
