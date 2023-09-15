@@ -60,59 +60,82 @@ class _NewsPageState extends State<NewsPage> {
                 return ListView.builder(
                   itemCount: newsList.length,
                   itemBuilder: (context, index){
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return NewsDetailPage(news: newsList[index], index: index,);
-                      },),);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        leading: Hero(
-                          tag: index,
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * 0.135,
-                            width: MediaQuery.of(context).size.height * 0.165,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  newsList[index].urlToImage,
-                                ),
-                                fit: BoxFit.cover,
-                                onError: (context, error) => const SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.error,
-                                      color: Colors.white,
-                                      size: 50,
+
+                    String publishedAt = newsList[index].publishedAt;
+                    int indexOfT = publishedAt.indexOf('T');
+                    int indexOfZ = publishedAt.indexOf('Z');
+
+                    String datePart = '';
+                    String timePart = '';
+
+                    if (indexOfT != -1 && indexOfZ != -1) {
+                      datePart = publishedAt.substring(0, indexOfT);
+                      timePart = publishedAt.substring(indexOfT + 1, indexOfZ);
+                    }
+
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return NewsDetailPage(news: newsList[index], index: index,);
+                        },),);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: ListTile(
+                          leading: Hero(
+                            tag: index,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.135,
+                              width: MediaQuery.of(context).size.height * 0.165,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    newsList[index].urlToImage,
+                                  ),
+                                  fit: BoxFit.cover,
+                                  onError: (dynamic exception, StackTrace? stackTrace) => const SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.error,
+                                        color: Colors.white,
+                                        size: 50,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        title: Text(
-                          newsList[index].title,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          title: Text(
+                            newsList[index].title,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        subtitle: Text(
-                          newsList[index].description,
-                          maxLines: 2,
-                          style: const TextStyle(
-                            color: Colors.grey,
+                          subtitle: Column(
+                            children: [
+                              Text(
+                                'Published: $datePart $timePart',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Text(
+                                newsList[index].description,
+                                maxLines: 2,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
                 );
               }
             }

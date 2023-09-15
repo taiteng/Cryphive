@@ -42,57 +42,54 @@ class _NavigationPageState extends State<NavigationPage> {
       ),
       bottomNavigationBar: Container(
         height: size.width * .165,
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10),),
-          child: BottomNavigationBar(
-            elevation: 10,
-            currentIndex: currentIndex,
-            type: BottomNavigationBarType.fixed,
-            iconSize: 28,
-            backgroundColor: const Color(0xff151f2c),
-            selectedItemColor: Colors.deepOrange,
-            selectedIconTheme: const IconThemeData(size: 33,),
-            selectedLabelStyle: const TextStyle(fontSize: 14),
-            unselectedItemColor: Colors.grey,
-            unselectedLabelStyle: const TextStyle(fontSize: 12),
-            items: const [
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage('assets/images/cryphive_logo_nobg.png'),
-                ),
-                label: 'Cryphive',
+        child: BottomNavigationBar(
+          elevation: 10,
+          currentIndex: currentIndex,
+          type: BottomNavigationBarType.fixed,
+          iconSize: 28,
+          backgroundColor: const Color(0xff151f2c),
+          selectedItemColor: Colors.deepOrange,
+          selectedIconTheme: const IconThemeData(size: 33,),
+          selectedLabelStyle: const TextStyle(fontSize: 14),
+          unselectedItemColor: Colors.grey,
+          unselectedLabelStyle: const TextStyle(fontSize: 12),
+          items: const [
+            BottomNavigationBarItem(
+              icon: ImageIcon(
+                AssetImage('assets/images/cryphive_logo_nobg.png'),
               ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage('assets/images/h_icon.png'),
-                ),
-                label: 'News',
+              label: 'Cryphive',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(
+                AssetImage('assets/images/h_icon.png'),
               ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage('assets/images/i_icon.png'),
-                ),
-                label: 'Forum',
+              label: 'News',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(
+                AssetImage('assets/images/i_icon.png'),
               ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage('assets/images/v_icon.png'),
-                ),
-                label: 'Journal',
+              label: 'Forum',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(
+                AssetImage('assets/images/v_icon.png'),
               ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage('assets/images/e_icon.png'),
-                ),
-                label: 'Settings',
+              label: 'Journal',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(
+                AssetImage('assets/images/e_icon.png'),
               ),
-            ],
-            onTap: (index) {
-              setState(() {
-                currentIndex = index;
-              });
-            },
-          ),
+              label: 'Settings',
+            ),
+          ],
+          onTap: (index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
         ),
       ),
     );

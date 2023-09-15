@@ -56,7 +56,6 @@ class _RegisterPageState extends State<RegisterPage> {
           'ProfilePic' : 'https://media.istockphoto.com/id/1316420668/vector/user-icon-human-person-symbol-social-profile-icon-avatar-login-sign-web-user-symbol.jpg?s=612x612&w=0&k=20&c=AhqW2ssX8EeI2IYFm6-ASQ7rfeBWfrFFV4E87SaFhJE=',
           'LoginMethod' : 'Email',
           'UID' : FirebaseAuth.instance.currentUser!.uid,
-          'Password' : sha256Digest.toString(),
         });
 
         await Future.delayed(Duration.zero, () {
@@ -233,7 +232,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               children: [
                                 TextSpan(
                                   text:
-                                  "By creating an account, you agree to our ",
+                                  "By creating an account, you have look at our ",
                                   style: TextStyle(
                                     color: const Color(0xffADA4A5),
                                     fontSize: size.height * 0.015,
@@ -243,6 +242,29 @@ class _RegisterPageState extends State<RegisterPage> {
                                   child: InkWell(
                                     onTap: () {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => const DisclaimerPage()));
+                                    },
+                                    child: Text(
+                                      "Disclaimer Statement",
+                                      style: TextStyle(
+                                        color: const Color(0xffADA4A5),
+                                        decoration:
+                                        TextDecoration.underline,
+                                        fontSize: size.height * 0.015,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: ", and you agree to our ",
+                                  style: TextStyle(
+                                    color: const Color(0xffADA4A5),
+                                    fontSize: size.height * 0.015,
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: InkWell(
+                                    onTap: () {
+
                                     },
                                     child: Text(
                                       "Conditions of Use",

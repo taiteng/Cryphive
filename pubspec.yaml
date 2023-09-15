@@ -27,6 +27,7 @@ dependencies:
   flutter_web_browser: ^0.17.1
   url_launcher: ^6.0.3
   crypto: ^3.0.3
+  chart_sparkline: ^1.0.13
 
 dev_dependencies:
   flutter_test:
