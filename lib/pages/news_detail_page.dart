@@ -18,10 +18,23 @@ class NewsDetailPage extends StatefulWidget {
 }
 
 class _NewsDetailPageState extends State<NewsDetailPage> {
+
   @override
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
+
+    String publishedAt = widget.news.publishedAt;
+    int indexOfT = publishedAt.indexOf('T');
+    int indexOfZ = publishedAt.indexOf('Z');
+
+    String datePart = '';
+    String timePart = '';
+
+    if (indexOfT != -1 && indexOfZ != -1) {
+      datePart = publishedAt.substring(0, indexOfT);
+      timePart = publishedAt.substring(indexOfT + 1, indexOfZ);
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xff090a13),
@@ -66,6 +79,22 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                   child: Image.network(
                     widget.news.urlToImage,
                     fit: BoxFit.fill,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Center(
+                          child: Text(
+                            '😢 Something Went Wrong',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Text(
@@ -78,7 +107,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                 ),
                 const SizedBox(height: 20,),
                 Text(
-                  'Published At: ${widget.news.publishedAt}',
+                  'Published On: ${datePart} ${timePart}',
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 18,

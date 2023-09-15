@@ -31,8 +31,9 @@ class _SettingsPageState extends State<SettingsPage> {
             IconButton(
               icon: const Icon(Icons.done_rounded),
               color: Colors.green,
-              onPressed: () {
-
+              onPressed: () async {
+                await user?.delete();
+                signOut();
                 Navigator.of(context).pop();
               },
             ),
@@ -259,6 +260,22 @@ class _SettingsPageState extends State<SettingsPage> {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => const DisclaimerPage()));
+                      },
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.file_open_outlined,
+                          color: Colors.deepOrange,
+                        ),
+                        title: Text(
+                          "Disclaimer",
+                          style: const TextStyle(color: Colors.white,),
+                        ),
+                      ),
+                    ),
+                    const Divider(color: Color(0xff3c3c3f),),
+                    GestureDetector(
+                      onTap: () {
+
                       },
                       child: const ListTile(
                         leading: Icon(

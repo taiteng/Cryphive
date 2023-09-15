@@ -1,4 +1,11 @@
+import 'package:cryphive/const/custom_clipper.dart';
+import 'package:cryphive/model/coin_model.dart';
+import 'package:cryphive/model/trend_model.dart';
+import 'package:cryphive/widgets/coin_bar_widget.dart';
+import 'package:cryphive/widgets/coin_card_widget.dart';
+import 'package:cryphive/widgets/disabled_search_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -8,6 +15,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() {
+    getCoinsMarket();
+    getTrendingMarket();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +44,246 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      body: const SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Center(
-          child: Text('Home'),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const DisabledSearchBarWidget(),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              ClipPath(
+                clipper: HomeCustomClipper(),
+                child: Container(
+                  height: size.height * 0.7,
+                  width: size.width,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 5,
+                        color: Colors.grey.shade300,
+                        spreadRadius: 3,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                    color: Colors.white,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: size.height * 0.03,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.08),
+                          child: Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xff090a13),
+                                borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Text(
+                                'Cryptocurrencies',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        SizedBox(
+                          height: size.height * 0.5,
+                          child: isCoinsRefreshing == true
+                              ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0xffFBC700),
+                            ),
+                          )
+                              : coinsMarket == null || coinsMarket!.length == 0
+                              ? Padding(
+                            padding: EdgeInsets.all(size.height * 0.06),
+                            child: const Center(
+                              child: Text(
+                                'An error occurred. Please wait and try again later.',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
+                          )
+                              : ListView.builder(
+                            itemCount: coinsMarket!.length,
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return CoinBarWidget(
+                                coin: coinsMarket![index],
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                          child: Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xff090a13),
+                                borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Text(
+                                'Trending',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        SizedBox(
+                          height: size.height * 0.25,
+                          width: size.width,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: size.width * 0.02),
+                            child: isTrendingRefreshing == true
+                                ? const Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xffFBC700),
+                              ),
+                            )
+                                : trendingMarket == null || trendingMarket!.length == 0
+                                ? Padding(
+                              padding: EdgeInsets.all(size.height * 0.06),
+                              child: const Center(
+                                child: Text(
+                                  'An error occurred. Please wait and try again later.',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                            )
+                                : ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: trendingMarket!.length,
+                              itemBuilder: (context, index) {
+                                return CoinCardWidget(
+                                  coin: trendingMarket![index],
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                          child: Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xff090a13),
+                                borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Text(
+                                'Bitcoin Price Forecast',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  bool isCoinsRefreshing = true;
+  bool isTrendingRefreshing = true;
+
+  List? coinsMarket = [];
+  List? trendingMarket = [];
+
+  var coinsMarketList;
+  var trendingList;
+
+  Future<List<CoinModel>?> getCoinsMarket() async {
+    const url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true';
+
+    setState(() {
+      isCoinsRefreshing = true;
+    });
+
+    var response = await http.get(Uri.parse(url), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    });
+
+    setState(() {
+      isCoinsRefreshing = false;
+    });
+
+    if (response.statusCode == 200) {
+      var x = response.body;
+      coinsMarketList = coinModelFromJson(x);
+      setState(() {
+        coinsMarket = coinsMarketList;
+      });
+    }
+    else {
+      print(response.statusCode);
+    }
+  }
+
+  Future<List<CoinModel>?> getTrendingMarket() async {
+    const url = 'https://api.coingecko.com/api/v3/search/trending';
+
+    setState(() {
+      isTrendingRefreshing = true;
+    });
+
+    var response = await http.get(Uri.parse(url), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    });
+
+    setState(() {
+      isTrendingRefreshing = false;
+    });
+
+    if (response.statusCode == 200) {
+      var x = response.body;
+      trendingList = trendModelFromJson(x);
+      setState(() {
+        trendingMarket = trendingList;
+      });
+    }
+    else {
+      print(response.statusCode);
+    }
   }
 }
