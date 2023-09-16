@@ -80,7 +80,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         ),
                         child: Row(
                           children: [
-                            InkWell(
+                            GestureDetector(
                               onTap: () {
                                 Navigator.pop(context);
                               },
@@ -94,7 +94,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               padding: EdgeInsets.symmetric(
                                 horizontal: size.width * 0.015,
                               ),
-                              child: InkWell(
+                              child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
                                 },

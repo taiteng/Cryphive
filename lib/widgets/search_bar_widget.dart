@@ -1,14 +1,14 @@
 import 'package:cryphive/pages/search_page.dart';
 import 'package:flutter/material.dart';
 
-class DisabledSearchBarWidget extends StatefulWidget {
-  const DisabledSearchBarWidget({super.key});
+class SearchBarWidget extends StatefulWidget {
+  const SearchBarWidget({super.key});
 
   @override
-  State<DisabledSearchBarWidget> createState() => _DisabledSearchBarWidgetState();
+  State<SearchBarWidget> createState() => _SearchBarWidgetState();
 }
 
-class _DisabledSearchBarWidgetState extends State<DisabledSearchBarWidget> {
+class _SearchBarWidgetState extends State<SearchBarWidget> {
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _DisabledSearchBarWidgetState extends State<DisabledSearchBarWidget> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(25),
               ),
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context){
                     return const SearchPage();
@@ -68,7 +68,16 @@ class _DisabledSearchBarWidgetState extends State<DisabledSearchBarWidget> {
                         ),
                       ),
                     ),
-                    const Icon(Icons.search_rounded),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(
+                          color: const Color(0xff090a13),
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(3.0),
+                      child: const Icon(Icons.search_rounded),
+                    ),
                   ],
                 ),
               ),

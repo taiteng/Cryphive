@@ -158,7 +158,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                   ),
                 ),
                 const SizedBox(height: 5,),
-                InkWell(
+                GestureDetector(
                   onTap: () async {
                     if(!await launchUrl(Uri.parse(widget.news.url))){
                       buildSnackError(

@@ -239,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                 ),
                                 WidgetSpan(
-                                  child: InkWell(
+                                  child: GestureDetector(
                                     onTap: () {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => const DisclaimerPage()));
                                     },
@@ -262,7 +262,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                 ),
                                 WidgetSpan(
-                                  child: InkWell(
+                                  child: GestureDetector(
                                     onTap: () {
 
                                     },
@@ -285,7 +285,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                 ),
                                 WidgetSpan(
-                                  child: InkWell(
+                                  child: GestureDetector(
                                     onTap: () {
                                       // ignore: avoid_print
                                       print('Privacy Notice');
@@ -363,7 +363,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       const SizedBox(height: 10,),
-                      InkWell(
+                      GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
                         },
@@ -450,7 +450,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 padding: EdgeInsets.only(
                   top: size.height * 0.005,
                 ),
-                child: InkWell(
+                child: GestureDetector(
                   onTap: () {
                     setState(() {
                       pwVisible = !pwVisible;

@@ -31,7 +31,7 @@ class ButtonWidget extends StatelessWidget {
     return SizedBox(
       height: size.height * 0.07,
       width: size.width * 0.9,
-      child: InkWell(
+      child: GestureDetector(
         onTap: onPressed,
         child: Container(
           decoration: BoxDecoration(

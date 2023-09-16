@@ -1,4 +1,5 @@
 import 'package:chart_sparkline/chart_sparkline.dart';
+import 'package:cryphive/pages/coin_details_page.dart';
 import 'package:flutter/material.dart';
 
 class CoinBarWidget extends StatelessWidget {
@@ -17,9 +18,9 @@ class CoinBarWidget extends StatelessWidget {
         horizontal: size.width * 0.02,
         vertical: size.height * 0.015,
       ),
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {
-
+          Navigator.push(context, MaterialPageRoute(builder: (contest) => CoinDetailsPage(coin: coin,)));
         },
         child: Row(
           children: [

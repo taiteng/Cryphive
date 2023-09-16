@@ -3,7 +3,7 @@ import 'package:cryphive/model/coin_model.dart';
 import 'package:cryphive/model/trend_model.dart';
 import 'package:cryphive/widgets/coin_bar_widget.dart';
 import 'package:cryphive/widgets/coin_card_widget.dart';
-import 'package:cryphive/widgets/disabled_search_bar_widget.dart';
+import 'package:cryphive/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const DisabledSearchBarWidget(),
+              const SearchBarWidget(),
               SizedBox(
                 height: size.height * 0.02,
               ),
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                                 color: Color(0xffFBC700),
                               ),
                             )
-                                : trendingMarket == null || trendingMarket!.length == 0
+                                : trendingCoins == null || trendingCoins!.length == 0
                                 ? Padding(
                               padding: EdgeInsets.all(size.height * 0.06),
                               child: const Center(
@@ -175,10 +175,10 @@ class _HomePageState extends State<HomePage> {
                             )
                                 : ListView.builder(
                               scrollDirection: Axis.horizontal,
-                              itemCount: trendingMarket!.length,
+                              itemCount: trendingCoins!.length,
                               itemBuilder: (context, index) {
                                 return CoinCardWidget(
-                                  coin: trendingMarket![index],
+                                  coin: trendingCoins![index],
                                 );
                               },
                             ),
@@ -226,7 +226,7 @@ class _HomePageState extends State<HomePage> {
   bool isTrendingRefreshing = true;
 
   List? coinsMarket = [];
-  List? trendingMarket = [];
+  List? trendingCoins = [];
 
   var coinsMarketList;
   var trendingList;
@@ -279,7 +279,7 @@ class _HomePageState extends State<HomePage> {
       var x = response.body;
       trendingList = trendModelFromJson(x);
       setState(() {
-        trendingMarket = trendingList;
+        trendingCoins = trendingList;
       });
     }
     else {
