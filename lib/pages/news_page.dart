@@ -73,64 +73,79 @@ class _NewsPageState extends State<NewsPage> {
                       timePart = publishedAt.substring(indexOfT + 1, indexOfZ);
                     }
 
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return NewsDetailPage(news: newsList[index], index: index,);
-                        },),);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: ListTile(
-                          leading: Hero(
-                            tag: index,
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.135,
-                              width: MediaQuery.of(context).size.height * 0.165,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    newsList[index].urlToImage,
-                                  ),
-                                  fit: BoxFit.cover,
-                                  onError: (dynamic exception, StackTrace? stackTrace) => const SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.error,
-                                        color: Colors.white,
-                                        size: 50,
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 5,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return NewsDetailPage(news: newsList[index], index: index,);
+                          },),);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white60,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+                            minVerticalPadding: 5,
+                            horizontalTitleGap: 3,
+                            leading: Hero(
+                              tag: index,
+                              child: Container(
+                                height: size.height * 0.2,
+                                width: size.width * 0.285,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      newsList[index].urlToImage,
+                                    ),
+                                    fit: BoxFit.cover,
+                                    onError: (dynamic exception, StackTrace? stackTrace) => const SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.error,
+                                          color: Colors.black,
+                                          size: 50,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          title: Text(
-                            newsList[index].title,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            title: Text(
+                              newsList[index].title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
                             ),
-                          ),
-                          subtitle: Column(
-                            children: [
-                              Text(
-                                'Published: $datePart $timePart',
-                                style: const TextStyle(
-                                  color: Colors.grey,
+                            subtitle: Column(
+                              children: [
+                                Text(
+                                  'Published: $datePart $timePart',
+                                  style: const TextStyle(
+                                    color: Colors.indigoAccent,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                newsList[index].description,
-                                maxLines: 2,
-                                style: const TextStyle(
-                                  color: Colors.white70,
+                                Text(
+                                  newsList[index].description,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.black54,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -144,7 +159,7 @@ class _NewsPageState extends State<NewsPage> {
                 child: Text(
                   '${snapshot.error}',
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 20,
                   ),
                 ),

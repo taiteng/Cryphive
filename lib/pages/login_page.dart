@@ -172,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                           horizontal: size.width * 0.015,
                           vertical: size.height * 0.025,
                         ),
-                        child: InkWell(
+                        child: GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
@@ -216,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: InkWell(
+                        child: GestureDetector(
                           onTap: () {
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const NavigationPage()));
                           },
@@ -251,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 10,),
-                      InkWell(
+                      GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RegisterPage()));
                         },
@@ -338,7 +338,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.only(
                   top: size.height * 0.005,
                 ),
-                child: InkWell(
+                child: GestureDetector(
                   onTap: () {
                     setState(() {
                       pwVisible = !pwVisible;

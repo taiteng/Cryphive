@@ -17,7 +17,7 @@ class CoinCardWidget extends StatelessWidget {
           horizontal: size.width * 0.01,
           vertical: size.height * 0.01,
         ),
-        child: InkWell(
+        child: GestureDetector(
           onTap: () {
 
           },

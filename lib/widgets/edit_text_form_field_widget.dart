@@ -81,7 +81,7 @@ class _EditTextFormFieldWidgetState extends State<EditTextFormFieldWidget> {
                 padding: EdgeInsets.only(
                   top: widget.size.height * 0.005,
                 ),
-                child: InkWell(
+                child: GestureDetector(
                   onTap: () {
                     setState(() {
                       pwVisible = !pwVisible;
