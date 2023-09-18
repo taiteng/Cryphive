@@ -125,7 +125,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ],
                     ),
                     CircleAvatar(
-                      radius: 50,
+                      radius: 45,
                       backgroundImage: NetworkImage(data['ProfilePic']),
                     ),
                     const SizedBox(height: 10,),
