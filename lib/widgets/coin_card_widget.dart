@@ -34,7 +34,9 @@ class CoinCardWidget extends StatelessWidget {
               children: [
                 SizedBox(
                   height: size.height * 0.05,
-                  child: Image.network(coin.thumb),
+                  child: Image.network(
+                    coin.thumb,
+                  ),
                 ),
                 SizedBox(
                   height: size.height * 0.01,

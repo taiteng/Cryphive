@@ -223,13 +223,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool isCoinsRefreshing = true;
-  bool isTrendingRefreshing = true;
-
   List? coinsMarket = [];
-  List? trendingCoins = [];
-
   var coinsMarketList;
-  var trendingList;
 
   Future<List<CoinModel>?> getCoinsMarket() async {
     const url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true';
@@ -258,6 +253,10 @@ class _HomePageState extends State<HomePage> {
       print(response.statusCode);
     }
   }
+
+  bool isTrendingRefreshing = true;
+  List? trendingCoins = [];
+  var trendingList;
 
   Future<List<CoinModel>?> getTrendingMarket() async {
     const url = 'https://api.coingecko.com/api/v3/search/trending';
