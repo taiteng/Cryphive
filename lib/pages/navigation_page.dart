@@ -40,7 +40,7 @@ class _NavigationPageState extends State<NavigationPage> {
           const Align(alignment: Alignment.bottomCenter,),
         ],
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: SizedBox(
         height: size.width * .165,
         child: BottomNavigationBar(
           elevation: 10,

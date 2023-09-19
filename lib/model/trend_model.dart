@@ -14,6 +14,7 @@ class TrendModel {
     required this.symbol,
     required this.name,
     required this.thumb,
+    required this.large,
     required this.marketCapRank,
     required this.priceInBTC,
   });
@@ -22,6 +23,7 @@ class TrendModel {
   String symbol;
   String name;
   String thumb;
+  String large;
   int marketCapRank;
   double priceInBTC;
 
@@ -30,6 +32,7 @@ class TrendModel {
     symbol: json['item']['symbol'],
     name: json['item']['name'],
     thumb: json['item']['thumb'],
+    large: json['item']['large'],
     marketCapRank: json['item']['market_cap_rank'],
     priceInBTC: json['item']['price_btc'],
   );
@@ -39,6 +42,7 @@ class TrendModel {
     "symbol": symbol,
     "name": name,
     "thumb": thumb,
+    "large": large,
     "market_cap_rank": marketCapRank,
     "price_btc": priceInBTC,
   };

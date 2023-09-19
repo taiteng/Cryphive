@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/model/chart_model.dart';
 import 'package:cryphive/model/coin_details_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,8 +27,142 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
 
   late TrackballBehavior trackballBehavior;
 
+  String currentDate = DateFormat("yyyy-MM-dd").format(DateTime.now());
+  bool isWatchlist = false;
+  final User? user = FirebaseAuth.instance.currentUser;
+
+  Future<void> checkIsWatchlist() async {
+    final coinIDSnapshot = await FirebaseFirestore.instance
+        .collection('Watchlist')
+        .doc(user?.uid.toString())
+        .collection('Coins')
+        .doc(widget.coinID)
+        .get();
+
+    if (mounted) {
+      setState(() {
+        isWatchlist = coinIDSnapshot.exists;
+      });
+    }
+  }
+
+  Future<void> addToWatchlist() async {
+    final favouriteRef = FirebaseFirestore.instance
+        .collection("Watchlist")
+        .doc(user?.uid.toString())
+        .collection("Coins")
+        .doc(widget.coinID);
+
+    if (isWatchlist) {
+      await favouriteRef.delete();
+    } else {
+      await favouriteRef.set({
+        'coinID': widget.coinID,
+      });
+    }
+
+    setState(() {
+      isWatchlist = !isWatchlist;
+    });
+  }
+
+  List<ChartModel>? itemChart;
+  bool isRefresh = true;
+
+  List<String> text = ['D', 'W', 'M', '3M', '6M', 'Y'];
+  List<bool> textBool = [true, false, false, false, false, false];
+
+  int days = 1;
+
+  setDays(String txt) {
+    if (txt == 'D') {
+      setState(() {
+        days = 1;
+      });
+    } else if (txt == 'W') {
+      setState(() {
+        days = 7;
+      });
+    } else if (txt == 'M') {
+      setState(() {
+        days = 30;
+      });
+    } else if (txt == '3M') {
+      setState(() {
+        days = 90;
+      });
+    } else if (txt == '6M') {
+      setState(() {
+        days = 180;
+      });
+    } else if (txt == 'Y') {
+      setState(() {
+        days = 365;
+      });
+    }
+  }
+
+  Future<void> getChart() async {
+    String url = 'https://api.coingecko.com/api/v3/coins/${widget.coinID}/ohlc?vs_currency=usd&days=$days';
+
+    setState(() {
+      isRefresh = true;
+    });
+
+    var response = await http.get(Uri.parse(url), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    });
+
+    setState(() {
+      isRefresh = false;
+    });
+    if (response.statusCode == 200) {
+      Iterable x = json.decode(response.body);
+      List<ChartModel> modelList =
+      x.map((e) => ChartModel.fromJson(e)).toList();
+      setState(() {
+        itemChart = modelList;
+      });
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+  bool isDetailsRefreshing = true;
+  var coinDetails, detailsList;
+
+  Future<List<CoinDetailsModel>?> getCoinDetails() async {
+    String url = 'https://api.coingecko.com/api/v3/coins/${widget.coinID}?vs_currency=usd';
+
+    setState(() {
+      isDetailsRefreshing = true;
+    });
+
+    var response = await http.get(Uri.parse(url), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    });
+
+    setState(() {
+      isDetailsRefreshing = false;
+    });
+
+    if (response.statusCode == 200) {
+      var x = json.decode(response.body);
+      detailsList = CoinDetailsModel.fromJson(x);
+      setState(() {
+        coinDetails = detailsList;
+      });
+    }
+    else {
+      print(response.statusCode);
+    }
+  }
+
   @override
   void initState() {
+    checkIsWatchlist();
     getChart();
     getCoinDetails();
     trackballBehavior = TrackballBehavior(
@@ -461,7 +598,31 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                     flex: 5,
                     child: GestureDetector(
                       onTap: () {
+                        if(user != null){
+                          addToWatchlist();
 
+                          if(isWatchlist){
+                            buildSnack(
+                              'Removed from Watchlist',
+                              context,
+                              size,
+                            );
+                          }
+                          else{
+                            buildSnack(
+                              'Added to Watchlist',
+                              context,
+                              size,
+                            );
+                          }
+                        }
+                        else{
+                          buildSnack(
+                            'Please Login',
+                            context,
+                            size,
+                          );
+                        }
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(
@@ -474,11 +635,19 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.add,
+                            isWatchlist ? Icon(
+                              Icons.watch_later,
+                              size: size.height * 0.02,
+                            ) : Icon(
+                              Icons.watch_later_outlined,
                               size: size.height * 0.02,
                             ),
-                            const Text(
+                            isWatchlist ? const Text(
+                              'Added to Watchlist',
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ) : const Text(
                               'Add to Watchlist',
                               style: TextStyle(
                                 fontSize: 20,
@@ -526,97 +695,19 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
     );
   }
 
-  List<String> text = ['D', 'W', 'M', '3M', '6M', 'Y'];
-  List<bool> textBool = [true, false, false, false, false, false];
-
-  int days = 1;
-
-  setDays(String txt) {
-    if (txt == 'D') {
-      setState(() {
-        days = 1;
-      });
-    } else if (txt == 'W') {
-      setState(() {
-        days = 7;
-      });
-    } else if (txt == 'M') {
-      setState(() {
-        days = 30;
-      });
-    } else if (txt == '3M') {
-      setState(() {
-        days = 90;
-      });
-    } else if (txt == '6M') {
-      setState(() {
-        days = 180;
-      });
-    } else if (txt == 'Y') {
-      setState(() {
-        days = 365;
-      });
-    }
-  }
-
-  List<ChartModel>? itemChart;
-  bool isRefresh = true;
-
-  Future<void> getChart() async {
-    String url = 'https://api.coingecko.com/api/v3/coins/${widget.coinID}/ohlc?vs_currency=usd&days=$days';
-
-    setState(() {
-      isRefresh = true;
-    });
-
-    var response = await http.get(Uri.parse(url), headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    });
-
-    setState(() {
-      isRefresh = false;
-    });
-    if (response.statusCode == 200) {
-      Iterable x = json.decode(response.body);
-      List<ChartModel> modelList =
-          x.map((e) => ChartModel.fromJson(e)).toList();
-      setState(() {
-        itemChart = modelList;
-      });
-    } else {
-      print(response.statusCode);
-    }
-  }
-
-  bool isDetailsRefreshing = true;
-  var coinDetails, detailsList;
-
-  Future<List<CoinDetailsModel>?> getCoinDetails() async {
-    String url = 'https://api.coingecko.com/api/v3/coins/${widget.coinID}?vs_currency=usd';
-
-    setState(() {
-      isDetailsRefreshing = true;
-    });
-
-    var response = await http.get(Uri.parse(url), headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    });
-
-    setState(() {
-      isDetailsRefreshing = false;
-    });
-
-    if (response.statusCode == 200) {
-      var x = json.decode(response.body);
-      detailsList = CoinDetailsModel.fromJson(x);
-      setState(() {
-        coinDetails = detailsList;
-      });
-    }
-    else {
-      print(response.statusCode);
-    }
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> buildSnack(
+      String error, context, size) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.black,
+        content: SizedBox(
+          height: size.height * 0.02,
+          child: Center(
+            child: Text(error),
+          ),
+        ),
+      ),
+    );
   }
 }

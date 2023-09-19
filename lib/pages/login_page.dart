@@ -28,7 +28,6 @@ class _LoginPageState extends State<LoginPage> {
 
   void signIn() async{
     try{
-
       var dataToHash = textFieldsStrings[1];
       var bytesToHash = utf8.encode(dataToHash);
       var sha256Digest = sha256.convert(bytesToHash);
@@ -54,15 +53,35 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
       else if(e.code == 'wrong-password'){
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              backgroundColor: Colors.pinkAccent,
-              title: Text('Incorrect Password'),
+        //what if user forgot password and typed in the newly unhashed password, this function will login the user with the unhashed password then hash the password for the next login
+        try{
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: textFieldsStrings[0],
+            password: textFieldsStrings[1],
+          );
+
+          var dataToHash = textFieldsStrings[1];
+          var bytesToHash = utf8.encode(dataToHash);
+          var sha256Digest = sha256.convert(bytesToHash);
+
+          await FirebaseAuth.instance.currentUser?.updatePassword(sha256Digest.toString());
+
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const NavigationPage()));
+          });
+        } on FirebaseAuthException catch (e) {
+          if(e.code == 'wrong-password'){
+            showDialog(
+              context: context,
+              builder: (context) {
+                return const AlertDialog(
+                  backgroundColor: Colors.pinkAccent,
+                  title: Text('Incorrect Password'),
+                );
+              },
             );
-          },
-        );
+          }
+        }
       }
     }
   }
