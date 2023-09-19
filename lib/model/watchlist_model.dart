@@ -1,11 +1,9 @@
-class CoinDetailsModel {
-  CoinDetailsModel({
+class WatchlistModel {
+  WatchlistModel({
     required this.id,
     required this.symbol,
     required this.name,
-    required this.links,
     required this.image,
-    required this.description,
     required this.marketCapRank,
     required this.marketData,
   });
@@ -13,19 +11,15 @@ class CoinDetailsModel {
   String id;
   String symbol;
   String name;
-  Links links;
   ImageUrls image;
-  Description description;
   int marketCapRank;
   MarketData marketData;
 
-  factory CoinDetailsModel.fromJson(Map<String, dynamic> json) => CoinDetailsModel(
+  factory WatchlistModel.fromJson(Map<String, dynamic> json) => WatchlistModel(
     id: json["id"],
     symbol: json["symbol"],
     name: json["name"],
-    links: Links.fromJson(json['links']),
     image: ImageUrls.fromJson(json['image']),
-    description: Description.fromJson(json['description']),
     marketCapRank: json["market_cap_rank"],
     marketData: MarketData.fromJson(json['market_data']),
   );
@@ -34,59 +28,26 @@ class CoinDetailsModel {
     "id": id,
     "symbol": symbol,
     "name": name,
-    "links": links.toJson(),
     "image": image.toJson(),
-    "description": description.toJson(),
+    "market_cap_rank": marketCapRank,
     "market_data": marketData.toJson(),
   };
 }
 
-class Description {
-  String en;
-
-  Description({
-    required this.en,
+class SparklineIn7D {
+  SparklineIn7D({
+    required this.price,
   });
 
-  factory Description.fromJson(Map<String, dynamic> json) {
-    return Description(
-      en: json['en'],
-    );
-  }
+  List<double> price;
 
-  Map<String, dynamic> toJson() {
-    return {
-      "en": en,
-    };
-  }
-}
+  factory SparklineIn7D.fromJson(Map<String, dynamic> json) => SparklineIn7D(
+    price: List<double>.from(json["price"].map((x) => x?.toDouble())),
+  );
 
-class Links {
-  List<String> homepage;
-  List<String> blockchainSite;
-  List<String> officialForumUrl;
-
-  Links({
-    required this.homepage,
-    required this.blockchainSite,
-    required this.officialForumUrl,
-  });
-
-  factory Links.fromJson(Map<String, dynamic> json) {
-    return Links(
-      homepage: List<String>.from(json['homepage']),
-      blockchainSite: List<String>.from(json['blockchain_site']),
-      officialForumUrl: List<String>.from(json['official_forum_url']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "homepage": homepage,
-      "blockchain_site": blockchainSite,
-      "official_forum_url": officialForumUrl,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    "price": List<dynamic>.from(price.map((x) => x)),
+  };
 }
 
 class ImageUrls {
@@ -123,6 +84,8 @@ class MarketData {
   double marketCapChangePercentage24H;
   double low24h;
   double high24h;
+  double priceChange24H;
+  List<double> sparklineIn7D;
 
   MarketData({
     required this.totalVolume,
@@ -130,6 +93,8 @@ class MarketData {
     required this.marketCapChangePercentage24H,
     required this.low24h,
     required this.high24h,
+    required this.priceChange24H,
+    required this.sparklineIn7D,
   });
 
   factory MarketData.fromJson(Map<String, dynamic> json) {
@@ -139,6 +104,8 @@ class MarketData {
       marketCapChangePercentage24H: (json['market_cap_change_percentage_24h'])?.toDouble() ?? 0.0,
       low24h: (json['low_24h'] ?? {})['usd']?.toDouble() ?? 0.0,
       high24h: (json['high_24h'] ?? {})['usd']?.toDouble() ?? 0.0,
+      priceChange24H: (json['price_change_24h'])?.toDouble() ?? 0.0,
+      sparklineIn7D: List<double>.from((json['sparkline_7d'] ?? {})["price"].map((x) => x?.toDouble())),
     );
   }
 
@@ -149,6 +116,8 @@ class MarketData {
       "marketCapChangePercentage24H": marketCapChangePercentage24H,
       "low24h": low24h,
       "high24h": high24h,
+      "priceChange24H": priceChange24H,
+      "sparklineIn7D": List<dynamic>.from(sparklineIn7D.map((x) => x)),
     };
   }
 }

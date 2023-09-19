@@ -2,11 +2,11 @@ import 'package:chart_sparkline/chart_sparkline.dart';
 import 'package:cryphive/pages/coin_details_page.dart';
 import 'package:flutter/material.dart';
 
-class CoinBarWidget extends StatelessWidget {
+class WatchlistBarWidget extends StatelessWidget {
 
   var coin;
 
-  CoinBarWidget({super.key, this.coin});
+  WatchlistBarWidget({super.key, this.coin});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class CoinBarWidget extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 45,
                       backgroundImage: NetworkImage(
-                        coin.image,
+                        coin.image.large,
                       ),
                       onBackgroundImageError: (dynamic exception, StackTrace? stackTrace) => const SizedBox(
                         child: Center(
@@ -90,9 +90,9 @@ class CoinBarWidget extends StatelessWidget {
                   child: SizedBox(
                     height: size.height * 0.05,
                     child: Sparkline(
-                      data: coin.sparklineIn7D.price,
+                      data: coin.marketData.sparklineIn7D,
                       lineWidth: 2.0,
-                      lineColor: coin.marketCapChangePercentage24H >= 0
+                      lineColor: coin.marketData.marketCapChangePercentage24H >= 0
                           ? Colors.green
                           : Colors.red,
                       fillMode: FillMode.below,
@@ -100,7 +100,7 @@ class CoinBarWidget extends StatelessWidget {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           stops: const [0.0, 0.7],
-                          colors: coin.marketCapChangePercentage24H >= 0
+                          colors: coin.marketData.marketCapChangePercentage24H >= 0
                               ? [Colors.green, Colors.green.shade100]
                               : [Colors.red, Colors.red.shade100]
                       ),
@@ -117,7 +117,7 @@ class CoinBarWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '\$ ${coin.currentPrice}',
+                        '\$ ${coin.marketData.currentPrice}',
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -127,12 +127,12 @@ class CoinBarWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            coin.priceChange24H.toString().contains('-')
-                              ? "-\$${coin.priceChange24H
-                                  .toStringAsFixed(2)
-                                  .toString()
-                                  .replaceAll('-', '')}"
-                              : "\$${coin.priceChange24H.toStringAsFixed(2)}",
+                            coin.marketData.priceChange24H.toString().contains('-')
+                                ? "-\$${coin.marketData.priceChange24H
+                                .toStringAsFixed(2)
+                                .toString()
+                                .replaceAll('-', '')}"
+                                : "\$${coin.marketData.priceChange24H.toStringAsFixed(2)}",
                             style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.normal,
@@ -143,14 +143,14 @@ class CoinBarWidget extends StatelessWidget {
                             width: size.width * 0.01,
                           ),
                           Text(
-                            coin.marketCapChangePercentage24H.toStringAsFixed(2) +
+                            coin.marketData.marketCapChangePercentage24H.toStringAsFixed(2) +
                                 '%',
                             style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
-                              color: coin.marketCapChangePercentage24H >= 0
-                                  ? Colors.green
-                                  : Colors.red),
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
+                                color: coin.marketData.marketCapChangePercentage24H >= 0
+                                    ? Colors.green
+                                    : Colors.red),
                           ),
                         ],
                       ),

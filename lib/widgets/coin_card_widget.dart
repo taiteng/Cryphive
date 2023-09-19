@@ -1,3 +1,4 @@
+import 'package:cryphive/pages/coin_details_page.dart';
 import 'package:flutter/material.dart';
 
 class CoinCardWidget extends StatelessWidget {
@@ -19,7 +20,7 @@ class CoinCardWidget extends StatelessWidget {
         ),
         child: GestureDetector(
           onTap: () {
-
+            Navigator.push(context, MaterialPageRoute(builder: (contest) => CoinDetailsPage(coinID: coin.id,)));
           },
           child: Container(
             width: size.width * 0.275,
@@ -35,7 +36,7 @@ class CoinCardWidget extends StatelessWidget {
                 SizedBox(
                   height: size.height * 0.05,
                   child: Image.network(
-                    coin.thumb,
+                    coin.large,
                   ),
                 ),
                 SizedBox(

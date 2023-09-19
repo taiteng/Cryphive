@@ -15,6 +15,7 @@ class SearchModel {
     required this.symbol,
     required this.name,
     required this.thumb,
+    required this.large,
     required this.marketCapRank,
   });
 
@@ -22,6 +23,7 @@ class SearchModel {
   String symbol;
   String name;
   String thumb;
+  String large;
   int marketCapRank;
 
   factory SearchModel.fromJson(Map<String, dynamic> json) => SearchModel(
@@ -29,6 +31,7 @@ class SearchModel {
     symbol: json['symbol'],
     name: json['name'],
     thumb: json['thumb'],
+    large: json['large'],
     marketCapRank: json['market_cap_rank'],
   );
 
@@ -37,6 +40,7 @@ class SearchModel {
     "symbol": symbol,
     "name": name,
     "thumb": thumb,
+    "large": large,
     "market_cap_rank": marketCapRank,
   };
 }
