@@ -9,11 +9,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CoinDetailsPage extends StatefulWidget {
   
-  var coin;
+  var coinID;
 
   CoinDetailsPage({
     super.key,
-    this.coin,
+    this.coinID,
   });
 
   @override
@@ -47,14 +47,40 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
         toolbarHeight: 40,
         toolbarOpacity: 0.8,
         backgroundColor: const Color(0xff151f2c),
-        title: Text(
-          widget.coin.name,
+        title: isDetailsRefreshing == true || coinDetails == null
+            ? const Text(
+          'Loading...',
+          style: TextStyle(
+            color: Colors.yellowAccent,
+          ),
+        )
+            : Text(
+          coinDetails.name,
           style: const TextStyle(
             color: Colors.yellowAccent,
           ),
         ),
       ),
-      body: SizedBox(
+      body: isDetailsRefreshing == true
+          ? const Center(
+        child: CircularProgressIndicator(
+          color: Color(0xffFBC700),
+        ),
+      )
+          : coinDetails == null
+          ? Padding(
+        padding: EdgeInsets.all(size.height * 0.06),
+        child: const Center(
+          child: Text(
+            'An error occurred. Please wait and try again later.',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      )
+          : SizedBox(
         height: size.height,
         width: size.width,
         child: Column(
@@ -98,10 +124,25 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                             children: [
                               SizedBox(
                                 height: size.height * 0.08,
-                                child: CircleAvatar(
-                                  radius: 45,
-                                  backgroundImage: NetworkImage(
-                                    widget.coin.image,
+                                child: AspectRatio(
+                                  aspectRatio: 1.0,
+                                  child: Image.network(
+                                    coinDetails.image.large,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (BuildContext context, Object exception,
+                                        StackTrace? stackTrace) {
+                                      return const SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.error,
+                                            color: Colors.black,
+                                            size: 50,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
@@ -113,7 +154,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    widget.coin.id,
+                                    coinDetails.id,
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 20,
@@ -124,7 +165,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                                     height: size.height * 0.01,
                                   ),
                                   Text(
-                                    widget.coin.symbol,
+                                    coinDetails.symbol,
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.normal,
@@ -140,7 +181,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '\$${widget.coin.currentPrice}',
+                                '\$${coinDetails.marketData.currentPrice}',
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.normal,
@@ -151,11 +192,11 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                                 height: size.height * 0.01,
                               ),
                               Text(
-                                '${widget.coin.marketCapChangePercentage24H}%',
+                                '${coinDetails.marketData.marketCapChangePercentage24H}%',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.normal,
-                                  color: widget.coin.marketCapChangePercentage24H >= 0
+                                  color: coinDetails.marketData.marketCapChangePercentage24H >= 0
                                       ? Colors.green
                                       : Colors.red,
                                 ),
@@ -194,7 +235,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                               height: size.height * 0.01,
                             ),
                             Text(
-                              '\$${widget.coin.low24H}',
+                              '\$${coinDetails.marketData.low24h}',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.normal,
@@ -217,7 +258,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                               height: size.height * 0.01,
                             ),
                             Text(
-                              '\$${widget.coin.high24H}',
+                              '\$${coinDetails.marketData.high24h}',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.normal,
@@ -240,7 +281,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                               height: size.height * 0.01,
                             ),
                             Text(
-                              '\$${widget.coin.totalVolume}M',
+                              '\$${coinDetails.marketData.totalVolume}M',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.normal,
@@ -382,26 +423,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                             horizontal: size.width * 0.06,
                             vertical: size.height * 0.01,
                           ),
-                          child: isDetailsRefreshing == true
-                              ? const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xffFBC700),
-                            ),
-                          )
-                              : coinDetails == null
-                              ? Padding(
-                            padding: EdgeInsets.all(size.height * 0.06),
-                            child: const Center(
-                              child: Text(
-                                'An error occurred. Please wait and try again later.',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          )
-                              : HtmlWidget(
+                          child: HtmlWidget(
                             coinDetails.description.en,
                             textStyle: const TextStyle(
                               color: Colors.white,
@@ -541,7 +563,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
   bool isRefresh = true;
 
   Future<void> getChart() async {
-    String url = 'https://api.coingecko.com/api/v3/coins/${widget.coin.id}/ohlc?vs_currency=usd&days=$days';
+    String url = 'https://api.coingecko.com/api/v3/coins/${widget.coinID}/ohlc?vs_currency=usd&days=$days';
 
     setState(() {
       isRefresh = true;
@@ -571,7 +593,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
   var coinDetails, detailsList;
 
   Future<List<CoinDetailsModel>?> getCoinDetails() async {
-    String url = 'https://api.coingecko.com/api/v3/coins/${widget.coin.id}?vs_currency=usd';
+    String url = 'https://api.coingecko.com/api/v3/coins/${widget.coinID}?vs_currency=usd';
 
     setState(() {
       isDetailsRefreshing = true;

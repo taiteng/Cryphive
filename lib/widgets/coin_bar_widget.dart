@@ -20,7 +20,7 @@ class CoinBarWidget extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (contest) => CoinDetailsPage(coin: coin,)));
+          Navigator.push(context, MaterialPageRoute(builder: (contest) => CoinDetailsPage(coinID: coin.id,)));
         },
         child: Container(
           height: size.height * 0.09,

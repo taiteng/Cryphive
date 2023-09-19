@@ -1,3 +1,4 @@
+import 'package:cryphive/pages/coin_details_page.dart';
 import 'package:flutter/material.dart';
 
 class CoinSearchWidget extends StatelessWidget {
@@ -15,7 +16,7 @@ class CoinSearchWidget extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
         onTap: () {
-
+          Navigator.push(context, MaterialPageRoute(builder: (contest) => CoinDetailsPage(coinID: coin.id,)));
         },
         child: Container(
           padding: const EdgeInsets.all(3.0),
@@ -30,7 +31,7 @@ class CoinSearchWidget extends StatelessWidget {
             leading: AspectRatio(
               aspectRatio: 1.0,
               child: Image.network(
-                coin.thumb,
+                coin.large,
                 fit: BoxFit.cover,
                 errorBuilder: (BuildContext context, Object exception,
                     StackTrace? stackTrace) {
