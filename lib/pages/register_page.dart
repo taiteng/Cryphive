@@ -6,8 +6,6 @@ import 'package:cryphive/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -34,20 +32,17 @@ class _RegisterPageState extends State<RegisterPage> {
   void signUp() async{
     try{
 
-      var dataToHash = textFieldsStrings[2];
-      var bytesToHash = utf8.encode(dataToHash);
-      var sha256Digest = sha256.convert(bytesToHash);
-
       if(textFieldsStrings[2] == textFieldsStrings[3]){
 
+        //Don't need hashing because Firebase has the auto hashing function
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: textFieldsStrings[1],
-          password: sha256Digest.toString(),
+          password: textFieldsStrings[2],
         );
 
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: textFieldsStrings[1],
-          password: sha256Digest.toString(),
+          password: textFieldsStrings[2],
         );
 
         await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).set({

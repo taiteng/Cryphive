@@ -119,8 +119,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
     });
     if (response.statusCode == 200) {
       Iterable x = json.decode(response.body);
-      List<ChartModel> modelList =
-      x.map((e) => ChartModel.fromJson(e)).toList();
+      List<ChartModel> modelList = x.map((e) => ChartModel.fromJson(e)).toList();
       setState(() {
         itemChart = modelList;
       });
