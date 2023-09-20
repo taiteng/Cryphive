@@ -26,7 +26,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         context: context,
         builder: (context) {
           return const AlertDialog(
-            backgroundColor: Colors.pinkAccent,
+            backgroundColor: Colors.deepOrangeAccent,
             title: Text('Reset Link Sent'),
           );
         },
@@ -36,7 +36,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         context: context,
         builder: (context) {
           return const AlertDialog(
-            backgroundColor: Colors.deepPurpleAccent,
+            backgroundColor: Colors.deepOrangeAccent,
             title: Text('User Not Found'),
           );
         },

@@ -5,8 +5,6 @@ import 'package:cryphive/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -28,13 +26,11 @@ class _LoginPageState extends State<LoginPage> {
 
   void signIn() async{
     try{
-      var dataToHash = textFieldsStrings[1];
-      var bytesToHash = utf8.encode(dataToHash);
-      var sha256Digest = sha256.convert(bytesToHash);
 
+      //Don't need hashing because Firebase has the auto hashing function
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: textFieldsStrings[0],
-        password: sha256Digest.toString(),
+        password: textFieldsStrings[0],
       );
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -46,42 +42,22 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           builder: (context) {
             return const AlertDialog(
-              backgroundColor: Colors.pinkAccent,
+              backgroundColor: Colors.deepOrangeAccent,
               title: Text('Incorrect Email'),
             );
           },
         );
       }
       else if(e.code == 'wrong-password'){
-        //what if user forgot password and typed in the newly unhashed password, this function will login the user with the unhashed password then hash the password for the next login
-        try{
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: textFieldsStrings[0],
-            password: textFieldsStrings[1],
-          );
-
-          var dataToHash = textFieldsStrings[1];
-          var bytesToHash = utf8.encode(dataToHash);
-          var sha256Digest = sha256.convert(bytesToHash);
-
-          await FirebaseAuth.instance.currentUser?.updatePassword(sha256Digest.toString());
-
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const NavigationPage()));
-          });
-        } on FirebaseAuthException catch (e) {
-          if(e.code == 'wrong-password'){
-            showDialog(
-              context: context,
-              builder: (context) {
-                return const AlertDialog(
-                  backgroundColor: Colors.pinkAccent,
-                  title: Text('Incorrect Password'),
-                );
-              },
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              backgroundColor: Colors.deepOrangeAccent,
+              title: Text('Incorrect Password'),
             );
-          }
-        }
+          },
+        );
       }
     }
   }

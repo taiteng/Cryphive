@@ -138,8 +138,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    getCoinsMarket();
-    getTrendingMarket();
+    // getCoinsMarket();
+    // getTrendingMarket();
     super.initState();
   }
 
@@ -165,6 +165,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: CarouselSlider(
+        slideIndicator: CircularSlideIndicator(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          currentIndicatorColor: Colors.deepOrangeAccent,
+          indicatorBackgroundColor: Colors.grey,
+        ),
         onSlideChanged: (index) {
           watchlistCoinsMarketList?.clear();
           getWatchlistCoinIDs();
@@ -201,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           children: [
                             SizedBox(
-                              height: size.height * 0.03,
+                              height: size.height * 0.015,
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: size.width * 0.08),
@@ -223,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.02,
+                              height: size.height * 0.015,
                             ),
                             SizedBox(
                               height: size.height * 0.5,
@@ -255,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.02,
+                              height: size.height * 0.015,
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
@@ -277,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.01,
+                              height: size.height * 0.015,
                             ),
                             SizedBox(
                               height: size.height * 0.25,
@@ -312,7 +317,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.02,
+                              height: size.height * 0.015,
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
@@ -335,7 +340,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.01,
+                              height: size.height * 0.1,
                             ),
                           ],
                         ),
