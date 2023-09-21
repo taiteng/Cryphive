@@ -159,13 +159,38 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
     }
   }
 
+  int ConvertDateTime(int unixTime){
+
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(unixTime);
+
+    int DateAndTime = int.parse(DateFormat("ddMMyyyyHHmmss").format(dateTime));
+
+    // if (days == 1) {
+    //
+    // } else if (days == 7) {
+    //
+    // } else if (days == 30) {
+    //
+    // } else if (days == 90) {
+    //
+    // } else if (days == 180) {
+    //
+    // } else if (days == 365) {
+    //
+    // }
+
+    return DateAndTime;
+  }
+
   @override
   void initState() {
     checkIsWatchlist();
     getChart();
     getCoinDetails();
     trackballBehavior = TrackballBehavior(
-        enable: true, activationMode: ActivationMode.singleTap);
+      enable: true,
+      activationMode: ActivationMode.singleTap,
+    );
     super.initState();
   }
 
@@ -453,6 +478,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                                 ),
                               )
                             : SfCartesianChart(
+                                backgroundColor: Colors.white,
                                 trackballBehavior: trackballBehavior,
                                 zoomPanBehavior: ZoomPanBehavior(
                                   enablePinching: true,

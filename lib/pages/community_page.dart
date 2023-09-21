@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ForumPage extends StatefulWidget {
-  const ForumPage({super.key});
+class CommunityPage extends StatefulWidget {
+  const CommunityPage({super.key});
 
   @override
-  State<ForumPage> createState() => _ForumPageState();
+  State<CommunityPage> createState() => _CommunityPageState();
 }
 
-class _ForumPageState extends State<ForumPage> {
+class _CommunityPageState extends State<CommunityPage> {
   @override
   Widget build(BuildContext context) {
 
@@ -23,7 +23,7 @@ class _ForumPageState extends State<ForumPage> {
         toolbarOpacity: 0.8,
         backgroundColor: const Color(0xff151f2c),
         title: const Text(
-          'FORUM',
+          'COMMUNITY',
           style: TextStyle(
             color: Colors.yellowAccent,
           ),

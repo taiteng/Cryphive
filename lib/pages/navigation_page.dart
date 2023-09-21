@@ -1,4 +1,4 @@
-import 'package:cryphive/pages/forum_page.dart';
+import 'package:cryphive/pages/community_page.dart';
 import 'package:cryphive/pages/home_page.dart';
 import 'package:cryphive/pages/journal_page.dart';
 import 'package:cryphive/pages/news_page.dart';
@@ -19,7 +19,7 @@ class _NavigationPageState extends State<NavigationPage> {
   final screens = const [
     HomePage(),
     NewsPage(),
-    ForumPage(),
+    CommunityPage(),
     JournalPage(),
     SettingsPage(),
   ];
@@ -70,7 +70,7 @@ class _NavigationPageState extends State<NavigationPage> {
               icon: ImageIcon(
                 AssetImage('assets/images/i_icon.png'),
               ),
-              label: 'Forum',
+              label: 'Community',
             ),
             BottomNavigationBarItem(
               icon: ImageIcon(
