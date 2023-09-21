@@ -23,13 +23,13 @@ class WatchlistBarWidget extends StatelessWidget {
           Navigator.push(context, MaterialPageRoute(builder: (contest) => CoinDetailsPage(coinID: coin.id,)));
         },
         child: Container(
-          height: size.height * 0.09,
+          height: size.height * 0.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: const Color(0xff090a13),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(3.0),
+            padding: const EdgeInsets.all(2.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,10 +55,10 @@ class WatchlistBarWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: size.width * 0.01,
+                  width: size.width * 0.005,
                 ),
                 Expanded(
-                  flex: 2,
+                  flex: 1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +66,7 @@ class WatchlistBarWidget extends StatelessWidget {
                       Text(
                         coin.id,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -74,7 +74,7 @@ class WatchlistBarWidget extends StatelessWidget {
                       Text(
                         coin.symbol,
                         style: const TextStyle(
-                          fontSize: 15,
+                          fontSize: 13,
                           fontWeight: FontWeight.normal,
                           color: Colors.grey,
                         ),
@@ -83,7 +83,7 @@ class WatchlistBarWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: size.width * 0.01,
+                  width: size.width * 0.005,
                 ),
                 Expanded(
                   flex: 2,
@@ -108,7 +108,7 @@ class WatchlistBarWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: size.width * 0.01,
+                  width: size.width * 0.005,
                 ),
                 Expanded(
                   flex: 2,
@@ -134,7 +134,7 @@ class WatchlistBarWidget extends StatelessWidget {
                                 .replaceAll('-', '')}"
                                 : "\$${coin.marketData.priceChange24H.toStringAsFixed(2)}",
                             style: const TextStyle(
-                              fontSize: 15,
+                              fontSize: 13,
                               fontWeight: FontWeight.normal,
                               color: Colors.grey,
                             ),
@@ -146,7 +146,7 @@ class WatchlistBarWidget extends StatelessWidget {
                             coin.marketData.marketCapChangePercentage24H.toStringAsFixed(2) +
                                 '%',
                             style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 13,
                                 fontWeight: FontWeight.normal,
                                 color: coin.marketData.marketCapChangePercentage24H >= 0
                                     ? Colors.green

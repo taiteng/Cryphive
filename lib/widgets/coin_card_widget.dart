@@ -15,15 +15,15 @@ class CoinCardWidget extends StatelessWidget {
     return SizedBox(
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: size.width * 0.01,
-          vertical: size.height * 0.01,
+          horizontal: size.width * 0.005,
+          vertical: size.height * 0.005,
         ),
         child: GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (contest) => CoinDetailsPage(coinID: coin.id,)));
           },
           child: Container(
-            width: size.width * 0.275,
+            width: size.width * 0.285,
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),

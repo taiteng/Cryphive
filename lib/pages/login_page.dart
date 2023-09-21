@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
       //Don't need hashing because Firebase has the auto hashing function
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: textFieldsStrings[0],
-        password: textFieldsStrings[0],
+        password: textFieldsStrings[1],
       );
 
       WidgetsBinding.instance.addPostFrameCallback((_) {

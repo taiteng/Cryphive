@@ -4,6 +4,7 @@ import 'package:cryphive/const/custom_clipper.dart';
 import 'package:cryphive/model/coin_model.dart';
 import 'package:cryphive/model/trend_model.dart';
 import 'package:cryphive/model/watchlist_model.dart';
+import 'package:cryphive/widgets/bitcoin_price_forecast_widget.dart';
 import 'package:cryphive/widgets/coin_bar_widget.dart';
 import 'package:cryphive/widgets/coin_card_widget.dart';
 import 'package:cryphive/widgets/search_bar_widget.dart';
@@ -138,8 +139,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // getCoinsMarket();
-    // getTrendingMarket();
+    getCoinsMarket();
+    getTrendingMarket();
     super.initState();
   }
 
@@ -339,6 +340,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
+                            SizedBox(
+                              height: size.height * 0.015,
+                            ),
+                            const BitcoinPriceForecastWidget(),
                             SizedBox(
                               height: size.height * 0.1,
                             ),
