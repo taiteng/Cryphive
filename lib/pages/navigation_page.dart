@@ -20,6 +20,8 @@ class NavigationPage extends StatefulWidget {
 
 class _NavigationPageState extends State<NavigationPage> {
 
+  var currentIndex;
+
   final screens = const [
     HomePage(),
     NewsPage(),
@@ -27,6 +29,12 @@ class _NavigationPageState extends State<NavigationPage> {
     JournalPage(),
     SettingsPage(),
   ];
+
+  @override
+  void initState() {
+    currentIndex = widget.index;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +46,7 @@ class _NavigationPageState extends State<NavigationPage> {
       body: Stack(
         children: [
           IndexedStack(
-            index: widget.index,
+            index: currentIndex,
             children: screens,
           ),
           const Align(alignment: Alignment.bottomCenter,),
@@ -48,7 +56,7 @@ class _NavigationPageState extends State<NavigationPage> {
         height: size.width * .165,
         child: BottomNavigationBar(
           elevation: 10,
-          currentIndex: widget.index,
+          currentIndex: currentIndex,
           type: BottomNavigationBarType.fixed,
           iconSize: 28,
           backgroundColor: const Color(0xff151f2c),
@@ -91,7 +99,7 @@ class _NavigationPageState extends State<NavigationPage> {
           ],
           onTap: (index) {
             setState(() {
-              widget.index = index;
+              currentIndex = index;
             });
           },
         ),

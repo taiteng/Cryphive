@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/pages/disclaimer_page.dart';
+import 'package:cryphive/pages/edit_notification_page.dart';
 import 'package:cryphive/pages/edit_profile_page.dart';
 import 'package:cryphive/pages/login_page.dart';
 import 'package:cryphive/pages/register_page.dart';
@@ -205,14 +206,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         title: Text(
                           'Edit Capital Balance',
-                          style: const TextStyle(color: Colors.white,),
+                          style: TextStyle(color: Colors.white,),
                         ),
                       ),
                     ),
                     const Divider(color: Color(0xff3c3c3f),),
                     GestureDetector(
                       onTap: () {
-                        //Edit Notification
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const EditNotificationPage()));
                       },
                       child: const ListTile(
                         leading: Icon(
@@ -221,7 +222,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         title: Text(
                           'Edit Notifications',
-                          style: const TextStyle(color: Colors.white,),
+                          style: TextStyle(color: Colors.white,),
                         ),
                       ),
                     ),
@@ -244,7 +245,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         title: Text(
                           'Edit Profile',
-                          style: const TextStyle(color: Colors.white,),
+                          style: TextStyle(color: Colors.white,),
                         ),
                       ),
                     ),
@@ -260,7 +261,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         title: Text(
                           'Delete Profile',
-                          style: const TextStyle(color: Colors.white,),
+                          style: TextStyle(color: Colors.white,),
                         ),
                       ),
                     ),
@@ -276,7 +277,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         title: Text(
                           'Sign Out',
-                          style: const TextStyle(color: Colors.white,),
+                          style: TextStyle(color: Colors.white,),
                         ),
                       ),
                     ),
@@ -298,7 +299,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         title: Text(
                           "Disclaimer",
-                          style: const TextStyle(color: Colors.white,),
+                          style: TextStyle(color: Colors.white,),
                         ),
                       ),
                     ),
@@ -314,7 +315,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         title: Text(
                           "Terms of Service",
-                          style: const TextStyle(color: Colors.white,),
+                          style: TextStyle(color: Colors.white,),
                         ),
                       ),
                     ),
@@ -330,7 +331,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         title: Text(
                           "Open Source and Licences",
-                          style: const TextStyle(color: Colors.white,),
+                          style: TextStyle(color: Colors.white,),
                         ),
                       ),
                     ),
@@ -383,7 +384,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   title: Text(
                     'Create An Account?',
-                    style: const TextStyle(color: Colors.white,),
+                    style: TextStyle(color: Colors.white,),
                   ),
                 ),
               ),
@@ -399,7 +400,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   title: Text(
                     'Log In To A Account',
-                    style: const TextStyle(color: Colors.white,),
+                    style: TextStyle(color: Colors.white,),
                   ),
                 ),
               ),
