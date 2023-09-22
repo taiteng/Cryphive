@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:cryphive/widgets/edit_text_form_field_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +15,7 @@ class EditProfilePage extends StatefulWidget {
   final String username;
   final String profilePic;
   final String uID;
+  final String capitalBalance;
 
   const EditProfilePage({
     super.key,
@@ -21,6 +23,7 @@ class EditProfilePage extends StatefulWidget {
     required this.username,
     required this.profilePic,
     required this.uID,
+    required this.capitalBalance,
   });
 
   @override
@@ -31,7 +34,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   final User? user = FirebaseAuth.instance.currentUser;
 
-  final _formKey = GlobalKey<FormState>();
   final _usernameKey = GlobalKey<FormState>();
 
   TextEditingController usernameController = TextEditingController();
@@ -81,6 +83,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           'ProfilePic' : widget.profilePic.toString(),
           'LoginMethod' : 'Email',
           'UID' : widget.uID.toString(),
+          'Capital': widget.capitalBalance.toString(),
         });
       }
       else{
@@ -92,10 +95,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
           'ProfilePic' : urlDownload.toString(),
           'LoginMethod' : 'Email',
           'UID' : widget.uID.toString(),
+          'Capital': widget.capitalBalance.toString(),
         });
       }
 
-      Navigator.pop(context);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 4),),);
     } catch (e){
       print(e);
     }
@@ -132,7 +136,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

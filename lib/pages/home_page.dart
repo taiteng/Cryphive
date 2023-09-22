@@ -139,8 +139,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    getCoinsMarket();
-    getTrendingMarket();
+    // getCoinsMarket();
+    // getTrendingMarket();
     super.initState();
   }
 

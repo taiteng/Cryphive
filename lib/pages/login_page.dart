@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const NavigationPage()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 0,)));
       });
     } on FirebaseAuthException catch (e) {
       if(e.code == 'user-not-found'){
@@ -213,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.all(5.0),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const NavigationPage()));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 0,)));
                           },
                           child: RichText(
                             textAlign: TextAlign.left,
