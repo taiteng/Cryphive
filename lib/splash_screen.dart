@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:cryphive/main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
 
 Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  tzdata.initializeTimeZones();
   runApp(const SplashScreen());
 }
 
@@ -42,6 +45,11 @@ class _SplashScreenState extends State<SplashScreenPage>{
         ),
       ),
     );
+
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
+    InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid,);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   @override

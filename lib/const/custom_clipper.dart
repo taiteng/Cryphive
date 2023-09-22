@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class HomeCustomClipper extends CustomClipper<Path> {
+class CryphiveCustomClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();

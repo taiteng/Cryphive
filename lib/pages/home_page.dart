@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                     height: size.height * 0.02,
                   ),
                   ClipPath(
-                    clipper: HomeCustomClipper(),
+                    clipper: CryphiveCustomClipper(),
                     child: Container(
                       height: size.height * 0.7,
                       width: size.width,
@@ -360,7 +360,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(top: 10.0),
             color: const Color(0xff151f2c),
             child: ClipPath(
-              clipper: HomeCustomClipper(),
+              clipper: CryphiveCustomClipper(),
               child: Container(
                 height: size.height * 0.7,
                 width: size.width,
