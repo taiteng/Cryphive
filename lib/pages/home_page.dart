@@ -13,6 +13,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -137,10 +139,67 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  List<String> _alertIDs = [];
+
+  Future<void> _scheduleNotification() async {
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    // Android-specific notification details
+    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      '666',
+      'Cryphive Alerts',
+      icon: '@mipmap/ic_launcher',
+    );
+
+    // Notification details
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    // Schedule the notification
+    // await flutterLocalNotificationsPlugin.zonedSchedule(
+    //   12345,
+    //   'Cryphive Alerts',
+    //   'Bitcoin has reached 28000u',
+    //   tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)), // Scheduled time
+    //   platformChannelSpecifics,
+    //   androidAllowWhileIdle: true,
+    //   uiLocalNotificationDateInterpretation:
+    //   UILocalNotificationDateInterpretation.absoluteTime,
+    // );
+
+    await FirebaseFirestore.instance.collection('Notification').doc(user?.uid.toString()).collection('Alerts').get().then(
+          (snapshot) => snapshot.docs.forEach((alertID) async {
+        if (alertID.exists) {
+          _alertIDs.add(alertID.reference.id);
+
+          if(alertID['Initialized'] == false){
+            await flutterLocalNotificationsPlugin.show(
+              12345,
+              alertID['Title'],
+              alertID['Description'],
+              platformChannelSpecifics,
+              payload: 'data',
+            );
+
+            await FirebaseFirestore.instance.collection('Notification').doc(user?.uid.toString()).collection('Alerts').doc(alertID.reference.id).set({
+              'AID': alertID.reference.id,
+              'Initialized': true,
+              'Title': alertID['Title'],
+              'Description': alertID['Description'],
+              'Symbol': alertID['Symbol'],
+            });
+          }
+        } else {
+          print("Ntg to see here");
+        }
+      }),
+    );
+  }
+
   @override
   void initState() {
     // getCoinsMarket();
     // getTrendingMarket();
+    _scheduleNotification();
     super.initState();
   }
 
