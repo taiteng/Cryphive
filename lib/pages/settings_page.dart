@@ -3,6 +3,7 @@ import 'package:cryphive/pages/disclaimer_page.dart';
 import 'package:cryphive/pages/edit_profile_page.dart';
 import 'package:cryphive/pages/login_page.dart';
 import 'package:cryphive/pages/register_page.dart';
+import 'package:cryphive/widgets/edit_capital_balance_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -184,6 +185,33 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return EditCapitalBalanceWidget(
+                              email: data['Email'],
+                              username: data['Username'],
+                              profilePic: data['ProfilePic'],
+                              uID: data['UID'],
+                              capitalBalance: data['Capital'],
+                            );
+                          },
+                        );
+                      },
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.credit_card_rounded,
+                          color: Colors.deepOrange,
+                        ),
+                        title: Text(
+                          'Edit Capital Balance',
+                          style: const TextStyle(color: Colors.white,),
+                        ),
+                      ),
+                    ),
+                    const Divider(color: Color(0xff3c3c3f),),
+                    GestureDetector(
+                      onTap: () {
                         //Edit Notification
                       },
                       child: const ListTile(
@@ -201,10 +229,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(
-                            email: data['Email'],
-                            username: data['Username'],
-                            profilePic: data['ProfilePic'],
-                            uID: data['UID']),
+                          email: data['Email'],
+                          username: data['Username'],
+                          profilePic: data['ProfilePic'],
+                          uID: data['UID'],
+                          capitalBalance: data['Capital'],
+                        ),
                         ),);
                       },
                       child: const ListTile(

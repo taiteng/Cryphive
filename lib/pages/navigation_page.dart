@@ -6,15 +6,19 @@ import 'package:cryphive/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class NavigationPage extends StatefulWidget {
-  const NavigationPage({super.key});
+
+  int index;
+
+  NavigationPage({
+    super.key,
+    required this.index,
+  });
 
   @override
   State<NavigationPage> createState() => _NavigationPageState();
 }
 
 class _NavigationPageState extends State<NavigationPage> {
-
-  var currentIndex = 0;
 
   final screens = const [
     HomePage(),
@@ -34,7 +38,7 @@ class _NavigationPageState extends State<NavigationPage> {
       body: Stack(
         children: [
           IndexedStack(
-            index: currentIndex,
+            index: widget.index,
             children: screens,
           ),
           const Align(alignment: Alignment.bottomCenter,),
@@ -44,7 +48,7 @@ class _NavigationPageState extends State<NavigationPage> {
         height: size.width * .165,
         child: BottomNavigationBar(
           elevation: 10,
-          currentIndex: currentIndex,
+          currentIndex: widget.index,
           type: BottomNavigationBarType.fixed,
           iconSize: 28,
           backgroundColor: const Color(0xff151f2c),
@@ -87,7 +91,7 @@ class _NavigationPageState extends State<NavigationPage> {
           ],
           onTap: (index) {
             setState(() {
-              currentIndex = index;
+              widget.index = index;
             });
           },
         ),
