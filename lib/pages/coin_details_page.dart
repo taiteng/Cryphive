@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/model/chart_model.dart';
 import 'package:cryphive/model/coin_details_model.dart';
+import 'package:cryphive/widgets/add_alert_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +12,6 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CoinDetailsPage extends StatefulWidget {
-  
   var coinID;
 
   CoinDetailsPage({
@@ -24,7 +24,6 @@ class CoinDetailsPage extends StatefulWidget {
 }
 
 class _CoinDetailsPageState extends State<CoinDetailsPage> {
-
   late TrackballBehavior trackballBehavior;
 
   String currentDate = DateFormat("yyyy-MM-dd").format(DateTime.now());
@@ -103,7 +102,8 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
   }
 
   Future<void> getChart() async {
-    String url = 'https://api.coingecko.com/api/v3/coins/${widget.coinID}/ohlc?vs_currency=usd&days=$days';
+    String url =
+        'https://api.coingecko.com/api/v3/coins/${widget.coinID}/ohlc?vs_currency=usd&days=$days';
 
     setState(() {
       isRefresh = true;
@@ -119,7 +119,8 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
     });
     if (response.statusCode == 200) {
       Iterable x = json.decode(response.body);
-      List<ChartModel> modelList = x.map((e) => ChartModel.fromJson(e)).toList();
+      List<ChartModel> modelList =
+          x.map((e) => ChartModel.fromJson(e)).toList();
       setState(() {
         itemChart = modelList;
       });
@@ -132,7 +133,8 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
   var coinDetails, detailsList;
 
   Future<List<CoinDetailsModel>?> getCoinDetails() async {
-    String url = 'https://api.coingecko.com/api/v3/coins/${widget.coinID}?vs_currency=usd';
+    String url =
+        'https://api.coingecko.com/api/v3/coins/${widget.coinID}?vs_currency=usd';
 
     setState(() {
       isDetailsRefreshing = true;
@@ -153,33 +155,9 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
       setState(() {
         coinDetails = detailsList;
       });
-    }
-    else {
+    } else {
       print(response.statusCode);
     }
-  }
-
-  int ConvertDateTime(int unixTime){
-
-    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(unixTime);
-
-    int DateAndTime = int.parse(DateFormat("ddMMyyyyHHmmss").format(dateTime));
-
-    // if (days == 1) {
-    //
-    // } else if (days == 7) {
-    //
-    // } else if (days == 30) {
-    //
-    // } else if (days == 90) {
-    //
-    // } else if (days == 180) {
-    //
-    // } else if (days == 365) {
-    //
-    // }
-
-    return DateAndTime;
   }
 
   @override
@@ -196,7 +174,6 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -210,513 +187,533 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
         backgroundColor: const Color(0xff151f2c),
         title: isDetailsRefreshing == true || coinDetails == null
             ? const Text(
-          'Loading...',
-          style: TextStyle(
-            color: Colors.yellowAccent,
-          ),
-        )
+                'Loading...',
+                style: TextStyle(
+                  color: Colors.yellowAccent,
+                ),
+              )
             : Text(
-          coinDetails.name,
-          style: const TextStyle(
-            color: Colors.yellowAccent,
-          ),
-        ),
+                coinDetails.name,
+                style: const TextStyle(
+                  color: Colors.yellowAccent,
+                ),
+              ),
       ),
       body: isDetailsRefreshing == true
           ? const Center(
-        child: CircularProgressIndicator(
-          color: Color(0xffFBC700),
-        ),
-      )
+              child: CircularProgressIndicator(
+                color: Color(0xffFBC700),
+              ),
+            )
           : coinDetails == null
-          ? Padding(
-        padding: EdgeInsets.all(size.height * 0.06),
-        child: const Center(
-          child: Text(
-            'An error occurred. Please wait and try again later.',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      )
-          : SizedBox(
-        height: size.height,
-        width: size.width,
-        child: Column(
-          children: [
-            SizedBox(
-              height: size.height * 0.1,
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.only(
-                      left: 3,
-                      right: 3,
-                      bottom: 36 + 3,
-                    ),
-                    height: size.height * 0.2 - 25,
-                    decoration: const BoxDecoration(
-                      color: Color(0xff151f2c),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(36),
-                        bottomRight: Radius.circular(36),
+              ? Padding(
+                  padding: EdgeInsets.all(size.height * 0.06),
+                  child: const Center(
+                    child: Text(
+                      'An error occurred. Please wait and try again later.',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      height: 75,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                height: size.height * 0.08,
-                                child: AspectRatio(
-                                  aspectRatio: 1.0,
-                                  child: Image.network(
-                                    coinDetails.image.large,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (BuildContext context, Object exception,
-                                        StackTrace? stackTrace) {
-                                      return const SizedBox(
-                                        width: 50,
-                                        height: 50,
-                                        child: Center(
-                                          child: Icon(
-                                            Icons.error,
-                                            color: Colors.black,
-                                            size: 50,
+                )
+              : SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: size.height * 0.1,
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(
+                                left: 3,
+                                right: 3,
+                                bottom: 36 + 3,
+                              ),
+                              height: size.height * 0.2 - 25,
+                              decoration: const BoxDecoration(
+                                color: Color(0xff151f2c),
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(36),
+                                  bottomRight: Radius.circular(36),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                alignment: Alignment.center,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                height: 75,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          height: size.height * 0.08,
+                                          child: AspectRatio(
+                                            aspectRatio: 1.0,
+                                            child: Image.network(
+                                              coinDetails.image.large,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (BuildContext context,
+                                                      Object exception,
+                                                      StackTrace? stackTrace) {
+                                                return const SizedBox(
+                                                  width: 50,
+                                                  height: 50,
+                                                  child: Center(
+                                                    child: Icon(
+                                                      Icons.error,
+                                                      color: Colors.black,
+                                                      size: 50,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: size.width * 0.03,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    coinDetails.id,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                        SizedBox(
+                                          width: size.width * 0.03,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              coinDetails.id,
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: size.height * 0.01,
+                                            ),
+                                            Text(
+                                              coinDetails.symbol,
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.01,
-                                  ),
-                                  Text(
-                                    coinDetails.symbol,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.grey,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '\$${coinDetails.marketData.currentPrice}',
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: size.height * 0.01,
+                                        ),
+                                        Text(
+                                          '${coinDetails.marketData.marketCapChangePercentage24H}%',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            color: coinDetails.marketData
+                                                        .marketCapChangePercentage24H >=
+                                                    0
+                                                ? Colors.green
+                                                : Colors.red,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '\$${coinDetails.marketData.currentPrice}',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black,
+                                  ],
                                 ),
                               ),
-                              SizedBox(
-                                height: size.height * 0.01,
-                              ),
-                              Text(
-                                '${coinDetails.marketData.marketCapChangePercentage24H}%',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  color: coinDetails.marketData.marketCapChangePercentage24H >= 0
-                                      ? Colors.green
-                                      : Colors.red,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: size.width * 0.05,
-                      vertical: size.height * 0.02,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            const Text(
-                              'Low',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height * 0.01,
-                            ),
-                            Text(
-                              '\$${coinDetails.marketData.low24h}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.05,
+                          vertical: size.height * 0.02,
                         ),
-                        Column(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              'High',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height * 0.01,
-                            ),
-                            Text(
-                              '\$${coinDetails.marketData.high24h}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            const Text(
-                              'Vol',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height * 0.01,
-                            ),
-                            Text(
-                              '\$${coinDetails.marketData.totalVolume}M',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.015,
-                  ),
-                  SizedBox(
-                    height: size.height * 0.4,
-                    width: size.width,
-                    // color: Colors.amber,
-                    child: isRefresh == true
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xffFBC700),
-                            ),
-                          )
-                        : itemChart == null
-                            ? Padding(
-                                padding: EdgeInsets.all(size.height * 0.06),
-                                child: const Center(
-                                  child: Text(
-                                    'An error occurred. Please wait and try again later.',
-                                    style: TextStyle(fontSize: 18),
+                            Column(
+                              children: [
+                                const Text(
+                                  'Low',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.grey,
                                   ),
                                 ),
-                              )
-                            : SfCartesianChart(
-                                backgroundColor: Colors.white,
-                                trackballBehavior: trackballBehavior,
-                                zoomPanBehavior: ZoomPanBehavior(
-                                  enablePinching: true,
-                                  zoomMode: ZoomMode.x,
+                                SizedBox(
+                                  height: size.height * 0.01,
                                 ),
-                                series: <CandleSeries>[
-                                  CandleSeries<ChartModel, int>(
-                                      enableSolidCandles: true,
-                                      enableTooltip: true,
-                                      bullColor: Colors.green,
-                                      bearColor: Colors.red,
-                                      dataSource: itemChart!,
-                                      xValueMapper: (ChartModel sales, _) =>
-                                          sales.time,
-                                      lowValueMapper: (ChartModel sales, _) =>
-                                          sales.low,
-                                      highValueMapper:
-                                          (ChartModel sales, _) => sales.high,
-                                      openValueMapper:
-                                          (ChartModel sales, _) => sales.open,
-                                      closeValueMapper:
-                                          (ChartModel sales, _) =>
-                                              sales.close,
-                                      animationDuration: 55),
-                                ],
-                              ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  Center(
-                    child: SizedBox(
-                      height: size.height * 0.03,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: text.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: size.width * 0.02,
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  textBool = [
-                                    false,
-                                    false,
-                                    false,
-                                    false,
-                                    false,
-                                    false
-                                  ];
-                                  textBool[index] = true;
-                                });
-                                setDays(text[index]);
-                                getChart();
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.03,
-                                  vertical: size.height * 0.005,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: textBool[index] == true
-                                      ? Colors.orangeAccent
-                                      : Colors.transparent,
-                                ),
-                                child: Text(
-                                  text[index],
+                                Text(
+                                  '\$${coinDetails.marketData.low24h}',
                                   style: const TextStyle(
                                     fontSize: 18,
+                                    fontWeight: FontWeight.normal,
                                     color: Colors.white,
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          );
-                        },
+                            Column(
+                              children: [
+                                const Text(
+                                  'High',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: size.height * 0.01,
+                                ),
+                                Text(
+                                  '\$${coinDetails.marketData.high24h}',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                const Text(
+                                  'Vol',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: size.height * 0.01,
+                                ),
+                                Text(
+                                  '\$${coinDetails.marketData.totalVolume}M',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  Expanded(
-                    child: ListView(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: size.width * 0.06,
-                          ),
-                          child: const Text(
-                            'Description',
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: size.width * 0.06,
-                            vertical: size.height * 0.01,
-                          ),
-                          child: HtmlWidget(
-                            coinDetails.description.en,
-                            textStyle: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 17,
-                            ),
-                            onErrorBuilder: (context, element, error) => Text(
-                              '$element error: $error',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 17,
+                      SizedBox(
+                        height: size.height * 0.015,
+                      ),
+                      SizedBox(
+                        height: size.height * 0.4,
+                        width: size.width,
+                        // color: Colors.amber,
+                        child: isRefresh == true
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Color(0xffFBC700),
+                                ),
+                              )
+                            : itemChart == null
+                                ? Padding(
+                                    padding: EdgeInsets.all(size.height * 0.06),
+                                    child: const Center(
+                                      child: Text(
+                                        'An error occurred. Please wait and try again later.',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  )
+                                : SfCartesianChart(
+                                    backgroundColor: Colors.white,
+                                    trackballBehavior: trackballBehavior,
+                                    zoomPanBehavior: ZoomPanBehavior(
+                                      enablePinching: true,
+                                      zoomMode: ZoomMode.x,
+                                    ),
+                                    series: <CandleSeries>[
+                                      CandleSeries<ChartModel, int>(
+                                          enableSolidCandles: true,
+                                          enableTooltip: true,
+                                          bullColor: Colors.green,
+                                          bearColor: Colors.red,
+                                          dataSource: itemChart!,
+                                          xValueMapper: (ChartModel sales, _) =>
+                                              sales.time,
+                                          lowValueMapper:
+                                              (ChartModel sales, _) =>
+                                                  sales.low,
+                                          highValueMapper:
+                                              (ChartModel sales, _) =>
+                                                  sales.high,
+                                          openValueMapper:
+                                              (ChartModel sales, _) =>
+                                                  sales.open,
+                                          closeValueMapper:
+                                              (ChartModel sales, _) =>
+                                                  sales.close,
+                                          animationDuration: 55),
+                                    ],
+                                  ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      SizedBox(
+                        height: size.height * 0.03,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: text.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.02,
                               ),
-                            ),
-                            onLoadingBuilder: (context, element, loadingProgress) => const CircularProgressIndicator(
-                              color: Color(0xffFBC700),
-                            ),
-                            onTapUrl: (url) async => await launchUrl(Uri.parse(url)),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.085,
-              width: size.width,
-              // color: Colors.amber,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: size.width * 0.02,
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: GestureDetector(
-                      onTap: () {
-                        if(user != null){
-                          addToWatchlist();
-
-                          if(isWatchlist){
-                            buildSnack(
-                              'Removed from Watchlist',
-                              context,
-                              size,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    textBool = [
+                                      false,
+                                      false,
+                                      false,
+                                      false,
+                                      false,
+                                      false
+                                    ];
+                                    textBool[index] = true;
+                                  });
+                                  setDays(text[index]);
+                                  getChart();
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: size.width * 0.03,
+                                    vertical: size.height * 0.005,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: textBool[index] == true
+                                        ? Colors.orangeAccent
+                                        : Colors.transparent,
+                                  ),
+                                  child: Text(
+                                    text[index],
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             );
-                          }
-                          else{
-                            buildSnack(
-                              'Added to Watchlist',
-                              context,
-                              size,
-                            );
-                          }
-                        }
-                        else{
-                          buildSnack(
-                            'Please Login',
-                            context,
-                            size,
-                          );
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: size.height * 0.012,
+                          },
                         ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: const Color(0xffFBC700),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      SizedBox(
+                        height: size.height * 0.15,
+                        child: ListView(
                           children: [
-                            isWatchlist ? Icon(
-                              Icons.watch_later,
-                              size: size.height * 0.02,
-                            ) : Icon(
-                              Icons.watch_later_outlined,
-                              size: size.height * 0.02,
-                            ),
-                            isWatchlist ? const Text(
-                              'Added to Watchlist',
-                              style: TextStyle(
-                                fontSize: 20,
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.05,
                               ),
-                            ) : const Text(
-                              'Add to Watchlist',
-                              style: TextStyle(
-                                fontSize: 20,
+                              child: const Text(
+                                'Description',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.06,
+                                vertical: size.height * 0.01,
+                              ),
+                              child: HtmlWidget(
+                                coinDetails.description.en,
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                ),
+                                onErrorBuilder: (context, element, error) =>
+                                    Text(
+                                  '$element error: $error',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                onLoadingBuilder:
+                                    (context, element, loadingProgress) =>
+                                        const CircularProgressIndicator(
+                                  color: Color(0xffFBC700),
+                                ),
+                                onTapUrl: (url) async =>
+                                    await launchUrl(Uri.parse(url)),
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.05,
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: GestureDetector(
-                      onTap: () {
+                      SizedBox(
+                        height: size.height * 0.085,
+                        width: size.width,
+                        // color: Colors.amber,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: size.width * 0.02,
+                            ),
+                            Expanded(
+                              flex: 5,
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (user != null) {
+                                    addToWatchlist();
 
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: size.height * 0.012,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.white,
-                        ),
-                        child: Icon(
-                          Icons.notification_add_rounded,
-                          color: Colors.grey,
-                          size: size.height * 0.03,
+                                    if (isWatchlist) {
+                                      buildSnack(
+                                        'Removed from Watchlist',
+                                        context,
+                                        size,
+                                      );
+                                    } else {
+                                      buildSnack(
+                                        'Added to Watchlist',
+                                        context,
+                                        size,
+                                      );
+                                    }
+                                  } else {
+                                    buildSnack(
+                                      'Please Login',
+                                      context,
+                                      size,
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: size.height * 0.012,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: const Color(0xffFBC700),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      isWatchlist
+                                          ? Icon(
+                                              Icons.watch_later,
+                                              size: size.height * 0.02,
+                                            )
+                                          : Icon(
+                                              Icons.watch_later_outlined,
+                                              size: size.height * 0.02,
+                                            ),
+                                      isWatchlist
+                                          ? const Text(
+                                              'Added to Watchlist',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                            )
+                                          : const Text(
+                                              'Add to Watchlist',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: size.width * 0.05,
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AddAlertWidget(
+                                        symbol: coinDetails.symbol,
+                                        id: coinDetails.id,
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: size.height * 0.012,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: Colors.white,
+                                  ),
+                                  child: Icon(
+                                    Icons.notification_add_rounded,
+                                    color: Colors.grey,
+                                    size: size.height * 0.03,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: size.width * 0.02,
+                            ),
+                          ],
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  SizedBox(
-                    width: size.width * 0.02,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+                ),
     );
   }
 
