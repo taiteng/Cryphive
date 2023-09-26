@@ -110,7 +110,8 @@ class _NavigationPageState extends State<NavigationPage> {
                     alertChartModel = chartModel;
 
                     if(alertChartModel != null){
-                      if(alertChartModel!.high! >= alertID['Price'] && alertChartModel!.low! < alertID['Price']) {
+                      if((alertChartModel!.high! >= alertID['Price'] && (alertChartModel!.low! <= alertID['Price'] || alertChartModel!.open! <= alertID['Price'])) ||
+                          (alertChartModel!.close! >= alertID['Price'] && (alertChartModel!.open! <= alertID['Price'] || alertChartModel!.low! <= alertID['Price']))) {
                         notificationID.forEach((String id) async {
 
                           if(id == alertID.reference.id){

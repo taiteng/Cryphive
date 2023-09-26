@@ -9,6 +9,7 @@ Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   tzdata.initializeTimeZones();
+
   runApp(const SplashScreen());
 }
 
