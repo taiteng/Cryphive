@@ -339,7 +339,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               }
               else {
-                return const Text("loading");
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xffFBC700),
+                  ),
+                );
               }
             },
           ) : Column(

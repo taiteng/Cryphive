@@ -45,7 +45,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
     }
   }
 
-  Future<void> addToWatchlist() async {
+  Future<void> editWatchlist() async {
     final favouriteRef = FirebaseFirestore.instance
         .collection("Watchlist")
         .doc(user?.uid.toString())
@@ -611,7 +611,7 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                               child: GestureDetector(
                                 onTap: () {
                                   if (user != null) {
-                                    addToWatchlist();
+                                    editWatchlist();
 
                                     if (isWatchlist) {
                                       buildSnack(
