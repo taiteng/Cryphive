@@ -137,22 +137,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> fetchForecastData() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:5000/'));
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      print(data);
-    } else {
-      throw Exception('Failed to load data');
-    }
-  }
-
   @override
   void initState() {
     // getCoinsMarket();
     // getTrendingMarket();
-    //fetchForecastData();
     super.initState();
   }
 
