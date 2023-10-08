@@ -1,18 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cryphive/pages/edit_notification_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AddAlertWidget extends StatelessWidget {
+class EditAlertWidget extends StatefulWidget {
 
-  final String symbol;
-  final String id;
+  final String alertID, title, description, condition, symbol, symbolID;
+  final bool initialized;
+  final num price;
+  final inputDate;
 
-  AddAlertWidget({
+  const EditAlertWidget({
     super.key,
+    required this.alertID,
+    required this.title,
+    required this.description,
+    required this.condition,
     required this.symbol,
-    required this.id,
+    required this.symbolID,
+    required this.initialized,
+    required this.price,
+    required this.inputDate,
   });
+
+  @override
+  State<EditAlertWidget> createState() => _EditAlertWidgetState();
+}
+
+class _EditAlertWidgetState extends State<EditAlertWidget> {
 
   final User? user = FirebaseAuth.instance.currentUser;
 
@@ -20,18 +36,16 @@ class AddAlertWidget extends StatelessWidget {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  String selectedSymbol = 'Crossing';
-
   Future uploadToFirebase() async{
     try{
-      await FirebaseFirestore.instance.collection('Notification').doc(user?.uid.toString()).collection('Alerts').add({
-        'Condition' : 'Crossing',
+      await FirebaseFirestore.instance.collection('Notification').doc(user?.uid.toString()).collection('Alerts').doc(widget.alertID).set({
+        'Condition' : widget.condition.toString(),
         'Description' : descriptionController.text.toString(),
-        'Initialized' : false,
-        'InputDate' : Timestamp.fromDate(DateTime.now()),
+        'Initialized' : widget.initialized,
+        'InputDate' : widget.inputDate,
         'Price' : num.parse(priceController.text),
-        'Symbol': symbol.toString(),
-        'SymbolID': id.toString(),
+        'Symbol': widget.symbol.toString(),
+        'SymbolID': widget.symbolID.toString(),
         'Title': titleController.text.toString(),
       });
     } catch (e){
@@ -40,12 +54,21 @@ class AddAlertWidget extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    titleController.text = widget.title.toString();
+    descriptionController.text = widget.description.toString();
+    priceController.text = widget.price.toString();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        'Add Alert',
+        'Edit Alert',
         style: TextStyle(
           fontSize: 18,
+          fontWeight: FontWeight.bold,
         ),
       ),
       content: SingleChildScrollView(
@@ -71,25 +94,7 @@ class AddAlertWidget extends StatelessWidget {
               controller: priceController,
               decoration: const InputDecoration(labelText: 'Input Price'),
             ),
-            const SizedBox(height: 12.5,),
-            const Text(
-              'Choose Symbol: ',
-              style: TextStyle(
-                color: Colors.black54,
-              ),
-            ),
-            DropdownButton<String>(
-              value: selectedSymbol,
-              onChanged: (String? newValue) {
-                selectedSymbol = newValue ?? 'Crossing';
-              },
-              items: <String>['Crossing', 'Coming Soon',].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
+            const SizedBox(height: 2.0,),
             const Divider(color: Colors.black87,),
           ],
         ),
@@ -117,8 +122,8 @@ class AddAlertWidget extends StatelessWidget {
             String userInput = priceController.text;
             if (userInput.isNotEmpty) {
               uploadToFirebase();
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const EditNotificationPage(),),);
             }
-            Navigator.pop(context);
           },
         ),
       ],

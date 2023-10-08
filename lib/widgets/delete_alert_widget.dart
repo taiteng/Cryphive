@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cryphive/pages/navigation_page.dart';
+import 'package:cryphive/pages/edit_notification_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_to_act/slide_to_act.dart';
@@ -64,7 +64,7 @@ class _DeleteAlertWidgetState extends State<DeleteAlertWidget> {
           ),
           onSubmit: () {
             deleteFromNotification();
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 4),),);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const EditNotificationPage(),),);
           },
         ),
       ],
