@@ -52,7 +52,7 @@ class _BitcoinPriceForecastWidgetState
 
   @override
   void initState() {
-    fetchForecastData();
+    //fetchForecastData();
     super.initState();
   }
 
