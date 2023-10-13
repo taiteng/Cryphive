@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/const/custom_clipper.dart';
 import 'package:cryphive/model/trading_journal_model.dart';
+import 'package:cryphive/widgets/journal_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -88,6 +89,7 @@ class _JournalPageState extends State<JournalPage> {
             icon: const Icon(
               Icons.add_box_rounded,
               color: Colors.yellowAccent,
+              size: 30,
             ),
             onPressed: () {
 
@@ -99,33 +101,30 @@ class _JournalPageState extends State<JournalPage> {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: SizedBox(
-                height: size.height * 0.05,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      width: size.width,
-                      height: size.height * 0.1,
-                      decoration: const BoxDecoration(
-                        color: Color(0xff151f2c),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(45),
-                          bottomRight: Radius.circular(45),
-                        ),
-                      ),
-                      child: const Text(
-                        'Trade Analysis',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
+            SizedBox(
+              height: size.height * 0.05,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    width: size.width,
+                    height: size.height * 0.1,
+                    decoration: const BoxDecoration(
+                      color: Color(0xff151f2c),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(45),
+                        bottomRight: Radius.circular(45),
                       ),
                     ),
-                  ],
-                ),
+                    child: const Text(
+                      'Trade Analysis',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -175,9 +174,8 @@ class _JournalPageState extends State<JournalPage> {
                                 shrinkWrap: true,
                                 physics: const BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
-                                  return const Text(
-                                    'hi',
-                                    style: TextStyle(color: Colors.white),
+                                  return JournalWidget(
+                                    tradingJournal: tradingJournals[index],
                                   );
                                 },
                               ),
