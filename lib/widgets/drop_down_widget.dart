@@ -1,34 +1,31 @@
 import 'package:flutter/material.dart';
 
-class EditTextFormFieldWidget extends StatefulWidget {
+class DropDownWidget extends StatefulWidget {
 
   final String hintText;
   final IconData icon;
-  final bool password;
-  final Size size;
+  String selectedValue;
   final FormFieldValidator validator;
+  final List<String> dropdownItems;
+  final Size size;
   final Key formKey;
-  final controller;
 
-  const EditTextFormFieldWidget({
+  DropDownWidget({
     super.key,
+    required this.selectedValue,
+    required this.dropdownItems,
+    required this.size,
+    required this.formKey,
     required this.hintText,
     required this.icon,
-    required this.password,
-    required this.size,
     required this.validator,
-    required this.formKey,
-    required this.controller,
   });
 
   @override
-  State<EditTextFormFieldWidget> createState() => _EditTextFormFieldWidgetState();
+  State<DropDownWidget> createState() => _DropDownWidgetState();
 }
 
-class _EditTextFormFieldWidgetState extends State<EditTextFormFieldWidget> {
-
-  bool pwVisible = false;
-
+class _DropDownWidgetState extends State<DropDownWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,19 +39,36 @@ class _EditTextFormFieldWidgetState extends State<EditTextFormFieldWidget> {
         ),
         child: Form(
           key: widget.formKey,
-          child: TextFormField(
-            controller: widget.controller,
+          child: DropdownButtonFormField<String>(
+            validator: widget.validator,
+            value: widget.selectedValue,
+            icon: const Icon(
+              Icons.arrow_drop_down,
+              color: Color(0xff7B6F72),
+            ),
+            iconSize: 30,
+            elevation: 10,
             style: const TextStyle(
               color: Color(0xffADA4A5),
+              fontSize: 15,
             ),
-            onChanged: (value) {
+            onChanged: (String? newValue) {
               setState(() {
-
+                widget.selectedValue = newValue!;
               });
             },
-            validator: widget.validator,
-            textInputAction: TextInputAction.next,
-            obscureText: widget.password ? !pwVisible : false,
+            dropdownColor: Colors.indigo,
+            items: widget.dropdownItems.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  style: const TextStyle(
+                    color: Color(0xffADA4A5),
+                  ),
+                ),
+              );
+            }).toList(),
             decoration: InputDecoration(
               errorStyle: const TextStyle(height: 0),
               hintStyle: const TextStyle(
@@ -62,7 +76,7 @@ class _EditTextFormFieldWidgetState extends State<EditTextFormFieldWidget> {
               ),
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(
-                top: widget.size.height * 0.012,
+                top: widget.size.height * 0.006,
               ),
               hintText: widget.hintText,
               prefixIcon: Padding(
@@ -74,29 +88,6 @@ class _EditTextFormFieldWidgetState extends State<EditTextFormFieldWidget> {
                   color: const Color(0xff7B6F72),
                 ),
               ),
-              suffixIcon: widget.password
-                  ? Padding(
-                padding: EdgeInsets.only(
-                  top: widget.size.height * 0.005,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      pwVisible = !pwVisible;
-                    });
-                  },
-                  child: pwVisible
-                      ? const Icon(
-                    Icons.visibility_off_outlined,
-                    color: Color(0xff7B6F72),
-                  )
-                      : const Icon(
-                    Icons.visibility_outlined,
-                    color: Color(0xff7B6F72),
-                  ),
-                ),
-              )
-                  : null,
             ),
           ),
         ),

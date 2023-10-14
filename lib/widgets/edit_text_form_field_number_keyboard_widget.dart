@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class EditTextFormFieldWidget extends StatefulWidget {
+class EditTextFormFieldNumberKeyboardWidget extends StatefulWidget {
 
   final String hintText;
   final IconData icon;
@@ -8,9 +9,10 @@ class EditTextFormFieldWidget extends StatefulWidget {
   final Size size;
   final FormFieldValidator validator;
   final Key formKey;
+  final bool allowNegative;
   final controller;
 
-  const EditTextFormFieldWidget({
+  const EditTextFormFieldNumberKeyboardWidget({
     super.key,
     required this.hintText,
     required this.icon,
@@ -19,13 +21,14 @@ class EditTextFormFieldWidget extends StatefulWidget {
     required this.validator,
     required this.formKey,
     required this.controller,
+    required this.allowNegative,
   });
 
   @override
-  State<EditTextFormFieldWidget> createState() => _EditTextFormFieldWidgetState();
+  State<EditTextFormFieldNumberKeyboardWidget> createState() => _EditTextFormFieldNumberKeyboardWidgetState();
 }
 
-class _EditTextFormFieldWidgetState extends State<EditTextFormFieldWidget> {
+class _EditTextFormFieldNumberKeyboardWidgetState extends State<EditTextFormFieldNumberKeyboardWidget> {
 
   bool pwVisible = false;
 
@@ -43,6 +46,14 @@ class _EditTextFormFieldWidgetState extends State<EditTextFormFieldWidget> {
         child: Form(
           key: widget.formKey,
           child: TextFormField(
+            enableSuggestions: false,
+            keyboardType: TextInputType.numberWithOptions(signed: widget.allowNegative, decimal: true),
+            inputFormatters: <TextInputFormatter>[
+              if (widget.allowNegative)
+                FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,2}'))
+              else
+                FilteringTextInputFormatter.allow(RegExp(r'^-?\d+\.?\d{0,2}'))
+            ],
             controller: widget.controller,
             style: const TextStyle(
               color: Color(0xffADA4A5),
