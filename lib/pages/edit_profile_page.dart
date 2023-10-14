@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
@@ -158,7 +157,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   return null;
                 },
                 formKey: _usernameKey,
-                stringToEdit: 0,
                 controller: usernameController,
               ),
               SizedBox(height: 10,),
@@ -187,18 +185,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   selectFile();
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
+                  width: size.width * 0.9,
+                  height: size.height * 0.05,
+                  decoration: const BoxDecoration(
                     color: Color(0xff151f2c),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
                   child: const Center(
                     child: Text(
                       "UPLOAD IMAGE",
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),

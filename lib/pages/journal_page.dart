@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/const/custom_clipper.dart';
 import 'package:cryphive/model/trading_journal_model.dart';
+import 'package:cryphive/pages/add_journal_page.dart';
 import 'package:cryphive/widgets/journal_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +93,7 @@ class _JournalPageState extends State<JournalPage> {
               size: 30,
             ),
             onPressed: () {
-
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddJournalPage()));
             },
           ),
         ],
