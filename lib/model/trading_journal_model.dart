@@ -11,7 +11,7 @@ class TradingJournalModel {
   String image;
   String journalID;
   num profitAndLoss;
-  num riskOfReward;
+  num riskRewardRatio;
   num stopLoss;
   num takeProfit;
   String strategy;
@@ -29,7 +29,7 @@ class TradingJournalModel {
     required this.image,
     required this.journalID,
     required this.profitAndLoss,
-    required this.riskOfReward,
+    required this.riskRewardRatio,
     required this.stopLoss,
     required this.takeProfit,
     required this.strategy,
