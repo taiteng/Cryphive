@@ -41,7 +41,7 @@ class _JournalPageState extends State<JournalPage> {
                   image: journalID['Image'],
                   journalID: journalID.reference.id,
                   profitAndLoss: journalID['ProfitAndLoss'],
-                  riskOfReward: journalID['RiskOfReward'],
+                  riskRewardRatio: journalID['RiskRewardRatio'],
                   stopLoss: journalID['StopLoss'],
                   takeProfit: journalID['TakeProfit'],
                   strategy: journalID['Strategy'],
@@ -183,7 +183,7 @@ class _JournalPageState extends State<JournalPage> {
                   )
                 : const Center(
                     child: Text(
-                      'Please login to review your watchlist',
+                      'Please login to review your journals',
                     ),
                   )
           ],

@@ -9,6 +9,7 @@ class DropDownWidget extends StatefulWidget {
   final List<String> dropdownItems;
   final Size size;
   final Key formKey;
+  final Function(String) onValueChanged;
 
   DropDownWidget({
     super.key,
@@ -19,6 +20,7 @@ class DropDownWidget extends StatefulWidget {
     required this.hintText,
     required this.icon,
     required this.validator,
+    required this.onValueChanged,
   });
 
   @override
@@ -55,6 +57,7 @@ class _DropDownWidgetState extends State<DropDownWidget> {
             onChanged: (String? newValue) {
               setState(() {
                 widget.selectedValue = newValue!;
+                widget.onValueChanged(newValue);
               });
             },
             dropdownColor: Colors.indigo,

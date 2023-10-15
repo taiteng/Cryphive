@@ -1,6 +1,8 @@
 import 'dart:io';
 
-import 'package:cryphive/model/search_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cryphive/pages/navigation_page.dart';
+import 'package:cryphive/widgets/button_widget.dart';
 import 'package:cryphive/widgets/date_time_picker_widget.dart';
 import 'package:cryphive/widgets/drop_down_widget.dart';
 import 'package:cryphive/widgets/edit_text_form_field_number_keyboard_widget.dart';
@@ -8,7 +10,6 @@ import 'package:cryphive/widgets/edit_text_form_field_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class AddJournalPage extends StatefulWidget {
@@ -22,6 +23,9 @@ class _AddJournalPageState extends State<AddJournalPage> {
 
   final User? user = FirebaseAuth.instance.currentUser;
 
+  String actionSelectedValue = 'Buy';
+  String timeFrameSelectedValue = '1H';
+
   final _symbolKey = GlobalKey<FormState>();
   final _actionKey = GlobalKey<FormState>();
   final _timeFrameKey = GlobalKey<FormState>();
@@ -31,7 +35,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
   final _takeProfitKey = GlobalKey<FormState>();
   final _stopLossKey = GlobalKey<FormState>();
   final _profitAndLossKey = GlobalKey<FormState>();
-  final _riskAndRewardKey = GlobalKey<FormState>();
+  final _riskRewardRatioKey = GlobalKey<FormState>();
   final _feedbackKey = GlobalKey<FormState>();
   final _feesKey = GlobalKey<FormState>();
   final _entryDateKey = GlobalKey<FormState>();
@@ -44,7 +48,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
   TextEditingController takeProfitController = TextEditingController();
   TextEditingController stopLossController = TextEditingController();
   TextEditingController profitAndLossController = TextEditingController();
-  TextEditingController riskAndRewardController = TextEditingController();
+  TextEditingController riskRewardRatioController = TextEditingController();
   TextEditingController feedbackController = TextEditingController();
   TextEditingController feesController = TextEditingController();
   TextEditingController entryDateController = TextEditingController();
@@ -80,6 +84,81 @@ class _AddJournalPageState extends State<AddJournalPage> {
     });
   }
 
+  Future<void> uploadToFirebase() async{
+    try{
+      DateTime entryDateTime = DateTime.parse(entryDateController.text);
+      Timestamp entryTimestamp = Timestamp.fromDate(entryDateTime);
+
+      DateTime exitDateTime = DateTime.parse(exitDateController.text);
+      Timestamp exitTimestamp = Timestamp.fromDate(exitDateTime);
+
+      if(_pickedFile != null){
+        await uploadFile();
+
+        final journalRef = FirebaseFirestore.instance
+            .collection("TradingJournal")
+            .doc(user?.uid.toString())
+            .collection("Journals");
+
+        await journalRef.add({
+          'Action': actionSelectedValue.toString(),
+        }).then((DocumentReference docID) async {
+          await journalRef.doc(docID.id.toString()).set({
+            'Action' : actionSelectedValue.toString(),
+            'EntryDate': entryTimestamp,
+            'EntryPrice': double.parse(entryPriceController.text.toString()),
+            'ExitDate': exitTimestamp,
+            'ExitPrice': double.parse(exitPriceController.text.toString()),
+            'Feedback': feedbackController.text.toString(),
+            'Fees': double.parse(feesController.text.toString()),
+            'Image': urlDownload.toString(),
+            'JID': docID.id.toString(),
+            'ProfitAndLoss': double.parse(profitAndLossController.text.toString()),
+            'RiskRewardRatio': double.parse(riskRewardRatioController.text.toString()),
+            'StopLoss': double.parse(stopLossController.text.toString()),
+            'TakeProfit': double.parse(takeProfitController.text.toString()),
+            'Strategy': strategyController.text.toString(),
+            'Symbol': symbolController.text.toString(),
+            'Timeframe': timeFrameSelectedValue.toString(),
+          });
+        });
+      }
+      else{
+        final journalRef = FirebaseFirestore.instance
+            .collection("TradingJournal")
+            .doc(user?.uid.toString())
+            .collection("Journals");
+
+        await journalRef.add({
+          'Action': actionSelectedValue.toString(),
+        }).then((DocumentReference docID) async {
+          await journalRef.doc(docID.id.toString()).set({
+            'Action' : actionSelectedValue.toString(),
+            'EntryDate': entryTimestamp,
+            'EntryPrice': double.parse(entryPriceController.text.toString()),
+            'ExitDate': exitTimestamp,
+            'ExitPrice': double.parse(exitPriceController.text.toString()),
+            'Feedback': feedbackController.text.toString(),
+            'Fees': double.parse(feesController.text.toString()),
+            'Image': 'https://www.entrepreneurshipinabox.com/wp-content/uploads/A-Basic-Guide-To-Stock-Trading-1024x682.jpg',
+            'JID': docID.id.toString(),
+            'ProfitAndLoss': double.parse(profitAndLossController.text.toString()),
+            'RiskRewardRatio': double.parse(riskRewardRatioController.text.toString()),
+            'StopLoss': double.parse(stopLossController.text.toString()),
+            'TakeProfit': double.parse(takeProfitController.text.toString()),
+            'Strategy': strategyController.text.toString(),
+            'Symbol': symbolController.text.toString(),
+            'Timeframe': timeFrameSelectedValue.toString(),
+          });
+        });
+      }
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3),),);
+    } catch(e) {
+      print(e.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -94,7 +173,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
     takeProfitController.dispose();
     stopLossController.dispose();
     profitAndLossController.dispose();
-    riskAndRewardController.dispose();
+    riskRewardRatioController.dispose();
     feedbackController.dispose();
     feesController.dispose();
     entryDateController.dispose();
@@ -150,7 +229,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 height: 10,
               ),
               DropDownWidget(
-                selectedValue: 'Buy',
+                selectedValue: actionSelectedValue,
                 dropdownItems: const ['Buy', 'Sell'],
                 size: size,
                 validator: (value) {
@@ -167,12 +246,17 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 formKey: _actionKey,
                 hintText: 'Action',
                 icon: Icons.pending_actions_rounded,
+                onValueChanged: (newValue) {
+                  setState(() {
+                    actionSelectedValue = newValue;
+                  });
+                },
               ),
               const SizedBox(
                 height: 10,
               ),
               DropDownWidget(
-                selectedValue: '1H',
+                selectedValue: timeFrameSelectedValue,
                 dropdownItems: const ['1m', '3m', '5m', '15m',
                   '30m', '45m', '1H', '2H', '3H', '4H', '6H',
                 '12H', '1D', '3D', '1W', '1M', '3M', '6M', '12M'],
@@ -191,6 +275,11 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 formKey: _timeFrameKey,
                 hintText: 'Timeframe',
                 icon: Icons.view_timeline_rounded,
+                onValueChanged: (newValue) {
+                  setState(() {
+                    timeFrameSelectedValue = newValue;
+                  });
+                },
               ),
               const SizedBox(
                 height: 10,
@@ -348,8 +437,8 @@ class _AddJournalPageState extends State<AddJournalPage> {
                   }
                   return null;
                 },
-                formKey: _riskAndRewardKey,
-                controller: riskAndRewardController,
+                formKey: _riskRewardRatioKey,
+                controller: riskRewardRatioController,
                 allowNegative: true,
               ),
               const SizedBox(
@@ -403,7 +492,17 @@ class _AddJournalPageState extends State<AddJournalPage> {
               DateTimePickerWidget(
                 size: size,
                 hintText: 'Entry Date',
-                validator: (value) {  },
+                validator: (value) {
+                  if (value == null) {
+                    buildSnackError(
+                      'Invalid Entry Date',
+                      context,
+                      size,
+                    );
+                    return '';
+                  }
+                  return null;
+                },
                 formKey: _entryDateKey,
                 icon: Icons.edit_calendar_rounded,
                 controller: entryDateController,
@@ -414,7 +513,17 @@ class _AddJournalPageState extends State<AddJournalPage> {
               DateTimePickerWidget(
                 size: size,
                 hintText: 'Exit Date',
-                validator: (value) {  },
+                validator: (value) {
+                  if (value == null) {
+                    buildSnackError(
+                      'Invalid Exit Date',
+                      context,
+                      size,
+                    );
+                    return '';
+                  }
+                  return null;
+                },
                 formKey: _exitDateKey,
                 icon: Icons.access_time_filled_rounded,
                 controller: exitDateController,
@@ -462,6 +571,27 @@ class _AddJournalPageState extends State<AddJournalPage> {
                     ),
                   ),
                 ),
+              ),
+              AnimatedPadding(
+                duration: const Duration(milliseconds: 500),
+                padding: EdgeInsets.only(top: size.height * 0.025),
+                child: ButtonWidget(
+                  text: "Submit",
+                  backColor: const [
+                    Colors.blueAccent,
+                    Colors.lightBlueAccent,
+                  ],
+                  textColor: const [
+                    Colors.black,
+                    Colors.black,
+                  ],
+                  onPressed: () async {
+                    uploadToFirebase();
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 10.0,
               ),
             ],
           ),

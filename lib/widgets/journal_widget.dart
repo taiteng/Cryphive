@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/model/trading_journal_model.dart';
+import 'package:cryphive/pages/edit_journal_page.dart';
 import 'package:cryphive/pages/navigation_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +30,7 @@ class _JournalWidgetState extends State<JournalWidget> {
 
     await journalRef.delete();
 
-    buildSnack(
-      'Journal Deleted',
-      context,
-      MediaQuery.of(context).size,
-    );
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3),),);
   }
 
   @override
@@ -157,7 +154,7 @@ class _JournalWidgetState extends State<JournalWidget> {
                           ),
                         ),
                         Text(
-                          'Risk of Reward: ${widget.tradingJournal.riskOfReward.toString()}',
+                          'Risk Reward Ratio: ${widget.tradingJournal.riskRewardRatio.toString()}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -258,7 +255,7 @@ class _JournalWidgetState extends State<JournalWidget> {
                 ),
                 InkWell(
                   onTap: () {
-
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => EditJournalPage(tradingJournal: widget.tradingJournal),),);
                   },
                   child: Container(
                     decoration: BoxDecoration(
