@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/const/custom_clipper.dart';
 import 'package:cryphive/model/trading_journal_model.dart';
 import 'package:cryphive/pages/add_journal_page.dart';
+import 'package:cryphive/widgets/analysis_of_trades_widget.dart';
 import 'package:cryphive/widgets/journal_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +22,13 @@ class _JournalPageState extends State<JournalPage> {
   List<TradingJournalModel> tradingJournals = [];
 
   Future getTradingJournals() async {
+    tradingJournals = [];
+
     await FirebaseFirestore.instance
         .collection('TradingJournal')
         .doc(user?.uid.toString())
         .collection('Journals')
+        .orderBy('EntryDate', descending: true)
         .get()
         .then(
           (snapshot) => snapshot.docs.forEach((journalID) {
@@ -93,7 +97,7 @@ class _JournalPageState extends State<JournalPage> {
               size: 30,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddJournalPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddJournalPage(getTradingJournals: getTradingJournals,)));
             },
           ),
         ],
@@ -129,10 +133,35 @@ class _JournalPageState extends State<JournalPage> {
               ),
             ),
             SizedBox(
-              height: size.height * 0.05,
+              height: size.height * 0.015,
             ),
-            const Divider(
-              color: Colors.grey,
+            user != null
+                ? SizedBox(
+              child: isJournalRefreshing == true
+                  ? const Center(
+                child: CircularProgressIndicator(
+                  color: Color(0xffFBC700),
+                ),
+              )
+                  : tradingJournals == null || tradingJournals!.length == 0
+                  ? Padding(
+                padding: EdgeInsets.all(size.height * 0.06),
+                child: const Center(
+                  child: Text(
+                    'An error occurred. Please wait and try again later.',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              )
+                  : AnalysisOfTradesWidget(tradingJournal: tradingJournals,),
+            )
+                : const Center(
+              child: Text(
+                'Please login to review your journals',
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.015,
             ),
             Container(
               decoration: BoxDecoration(
@@ -177,6 +206,7 @@ class _JournalPageState extends State<JournalPage> {
                                 itemBuilder: (context, index) {
                                   return JournalWidget(
                                     tradingJournal: tradingJournals[index],
+                                    getTradingJournals: getTradingJournals,
                                   );
                                 },
                               ),

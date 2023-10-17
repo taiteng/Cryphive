@@ -6,11 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class JournalWidget extends StatefulWidget {
+
   final TradingJournalModel tradingJournal;
+  final Function() getTradingJournals;
 
   const JournalWidget({
     super.key,
     required this.tradingJournal,
+    required this.getTradingJournals,
   });
 
   @override
@@ -30,7 +33,8 @@ class _JournalWidgetState extends State<JournalWidget> {
 
     await journalRef.delete();
 
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3),),);
+    widget.getTradingJournals;
+    Navigator.pop(context);
   }
 
   @override
@@ -255,7 +259,7 @@ class _JournalWidgetState extends State<JournalWidget> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => EditJournalPage(tradingJournal: widget.tradingJournal),),);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => EditJournalPage(tradingJournal: widget.tradingJournal, getTradingJournals: widget.getTradingJournals,),),);
                   },
                   child: Container(
                     decoration: BoxDecoration(
