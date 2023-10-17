@@ -13,7 +13,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class AddJournalPage extends StatefulWidget {
-  const AddJournalPage({super.key});
+
+  final Function() getTradingJournals;
+
+  const AddJournalPage({
+    super.key,
+    required this.getTradingJournals,
+  });
 
   @override
   State<AddJournalPage> createState() => _AddJournalPageState();
@@ -153,7 +159,8 @@ class _AddJournalPageState extends State<AddJournalPage> {
         });
       }
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3),),);
+      widget.getTradingJournals();
+      Navigator.pop(context);
     } catch(e) {
       print(e.toString());
     }
