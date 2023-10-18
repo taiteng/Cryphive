@@ -422,7 +422,7 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
                 height: size.height * 0.18,
                 width: size.width * 0.85,
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: LineChart(
                     LineChartData(
                       gridData: const FlGridData(show: false),
@@ -430,7 +430,7 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
                         leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 50,)),
                         rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
                         topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
-                        bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 20, interval: 1,)),
+                        bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false, reservedSize: 20, interval: 1,)),
                       ),
                       borderData: FlBorderData(show: false),
                       lineBarsData: [
