@@ -201,6 +201,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.8"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -329,22 +337,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.5.7"
-  firebase_ml_model_downloader:
-    dependency: "direct main"
-    description:
-      name: firebase_ml_model_downloader
-      sha256: "55e346d6063382970e4ba889baffdae65d8ff6134471ac30e6de44219b502ab1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.3+6"
-  firebase_ml_model_downloader_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_ml_model_downloader_platform_interface
-      sha256: "039ec6d6746ad21ab4ab01d147d4f1591cfbe3adac7e5b0c853c13c4142569a8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.4+6"
   firebase_storage:
     dependency: "direct main"
     description:
@@ -369,6 +361,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.7"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      sha256: "6b9eb2b3017241d05c482c01f668dd05cc909ec9a0114fdd49acd958ff2432fa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.64.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -832,14 +832,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      sha256: b1c1ac5ce6688d77f65f3375a9abb9319b3cb32486bdc7a1e0fdf004d7ba4e47
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.1"
   rxdart:
     dependency: transitive
     description:
@@ -957,14 +949,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
-  tflite_flutter:
-    dependency: "direct main"
-    description:
-      name: tflite_flutter
-      sha256: d5acf30411b6a4ee299be25bad5a44e7fc103231fefaecb1c27f42df48251eb9
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.1"
   timezone:
     dependency: "direct main"
     description:

@@ -6,6 +6,7 @@ import 'package:cryphive/widgets/analysis_of_trades_widget.dart';
 import 'package:cryphive/widgets/journal_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_carousel_slider/carousel_slider.dart';
 
 class JournalPage extends StatefulWidget {
   const JournalPage({super.key});
@@ -102,122 +103,137 @@ class _JournalPageState extends State<JournalPage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            SizedBox(
-              height: size.height * 0.05,
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    width: size.width,
-                    height: size.height * 0.1,
-                    decoration: const BoxDecoration(
-                      color: Color(0xff151f2c),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(45),
-                        bottomRight: Radius.circular(45),
-                      ),
+      body: CarouselSlider(
+        slideIndicator: CircularSlideIndicator(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          currentIndicatorColor: Colors.deepOrangeAccent,
+          indicatorBackgroundColor: Colors.grey,
+        ),
+        slideTransform: const CubeTransform(),
+        children: [
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                      BorderRadius.circular(10.0), // Adjust the radius as needed
                     ),
+                    padding: const EdgeInsets.all(5.0),
                     child: const Text(
                       'Trade Analysis',
-                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Color(0xff090a13),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.015,
-            ),
-            user != null
-                ? SizedBox(
-              child: isJournalRefreshing == true
-                  ? const Center(
-                child: CircularProgressIndicator(
-                  color: Color(0xffFBC700),
                 ),
-              )
-                  : tradingJournals == null || tradingJournals!.length == 0
-                  ? Padding(
-                padding: EdgeInsets.all(size.height * 0.06),
-                child: const Center(
-                  child: Text(
-                    'An error occurred. Please wait and try again later.',
-                    style: TextStyle(fontSize: 18),
-                  ),
+                SizedBox(
+                  height: size.height * 0.015,
                 ),
-              )
-                  : AnalysisOfTradesWidget(tradingJournal: tradingJournals,),
-            )
-                : const Center(
-              child: Text(
-                'Please login to review your journals',
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.015,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius:
-                    BorderRadius.circular(10.0), // Adjust the radius as needed
-              ),
-              padding: const EdgeInsets.all(5.0),
-              child: const Text(
-                'Journals',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Color(0xff090a13),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.005,
-            ),
-            user != null
-                ? SizedBox(
-                    child: isJournalRefreshing == true
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xffFBC700),
-                            ),
-                          )
-                        : tradingJournals == null || tradingJournals!.length == 0
-                            ? Padding(
-                                padding: EdgeInsets.all(size.height * 0.06),
-                                child: const Center(
-                                  child: Text(
-                                    'An error occurred. Please wait and try again later.',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                ),
-                              )
-                            : ListView.builder(
-                                itemCount: tradingJournals!.length,
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return JournalWidget(
-                                    tradingJournal: tradingJournals[index],
-                                    getTradingJournals: getTradingJournals,
-                                  );
-                                },
-                              ),
-                  )
-                : const Center(
-                    child: Text(
-                      'Please login to review your journals',
+                user != null
+                    ? SizedBox(
+                  child: isJournalRefreshing == true
+                      ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xffFBC700),
                     ),
                   )
-          ],
-        ),
+                      : tradingJournals == null || tradingJournals!.length == 0
+                      ? Padding(
+                    padding: EdgeInsets.all(size.height * 0.06),
+                    child: const Center(
+                      child: Text(
+                        'An error occurred. Please wait and try again later.',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  )
+                      : AnalysisOfTradesWidget(tradingJournal: tradingJournals,),
+                )
+                    : const Center(
+                  child: Text(
+                    'Please login to review your journal analysis',
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
+              ],
+            ),
+          ),
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                      BorderRadius.circular(10.0), // Adjust the radius as needed
+                    ),
+                    padding: const EdgeInsets.all(5.0),
+                    child: const Text(
+                      'Journals',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color(0xff090a13),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.005,
+                ),
+                user != null
+                    ? SizedBox(
+                  child: isJournalRefreshing == true
+                      ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xffFBC700),
+                    ),
+                  )
+                      : tradingJournals == null || tradingJournals!.length == 0
+                      ? Padding(
+                    padding: EdgeInsets.all(size.height * 0.06),
+                    child: const Center(
+                      child: Text(
+                        'An error occurred. Please wait and try again later.',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  )
+                      : ListView.builder(
+                    itemCount: tradingJournals!.length,
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return JournalWidget(
+                        tradingJournal: tradingJournals[index],
+                        getTradingJournals: getTradingJournals,
+                      );
+                    },
+                  ),
+                )
+                    : const Center(
+                  child: Text(
+                    'Please login to review your journals',
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
