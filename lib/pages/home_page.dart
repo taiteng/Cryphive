@@ -341,11 +341,11 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.015,
+                              height: size.height * 0.005,
                             ),
                             const BitcoinPriceForecastWidget(),
                             SizedBox(
-                              height: size.height * 0.05,
+                              height: size.height * 0.06,
                             ),
                           ],
                         ),
