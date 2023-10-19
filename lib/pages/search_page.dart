@@ -2,6 +2,7 @@ import 'package:cryphive/model/search_model.dart';
 import 'package:cryphive/widgets/coin_search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:loading_indicator/loading_indicator.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -175,8 +176,13 @@ class _SearchPageState extends State<SearchPage> {
                 height: size.height * 0.5,
                 child: isSearchRefreshing
                     ? const Center(
-                  child: CircularProgressIndicator(
-                    color: Color(0xffFBC700),
+                  child: SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: LoadingIndicator(
+                      colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                      indicatorType: Indicator.ballGridPulse,
+                    ),
                   ),
                 )
                     : searchList == null || searchList!.isEmpty

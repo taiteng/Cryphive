@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:loading_indicator/loading_indicator.dart';
 
 class BitcoinPriceForecastWidget extends StatefulWidget {
   const BitcoinPriceForecastWidget({super.key});
@@ -34,7 +35,7 @@ class _BitcoinPriceForecastWidgetState
   }
 
   Future<void> fetchForecastData() async {
-    final response = await http.get(Uri.parse('http://192.168.0.107:5000'));
+    final response = await http.get(Uri.parse('http://192.168.81.152:5000'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
@@ -71,8 +72,13 @@ class _BitcoinPriceForecastWidgetState
       width: size.width * 0.8,
       child: isRefreshing == true
           ? const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xffFBC700),
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: LoadingIndicator(
+                  colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                  indicatorType: Indicator.pacman,
+                ),
               ),
             )
           : Column(
@@ -166,8 +172,7 @@ class _BitcoinPriceForecastWidgetState
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.orangeAccent,
-                      borderRadius:
-                      BorderRadius.circular(10.0), // Adjust the radius as needed
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                     padding: const EdgeInsets.all(5.0),
                     child: const Text(
@@ -179,31 +184,38 @@ class _BitcoinPriceForecastWidgetState
                     ),
                   ),
                 ),
-                SizedBox(
+                Container(
                   height: size.height * 0.325,
                   width: size.width * 0.9,
-                  child: LineChart(
-                    LineChartData(
-                      gridData: const FlGridData(show: true),
-                      titlesData: const FlTitlesData(
-                        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 50,)),
-                        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
-                        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
-                        bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
-                      ),
-                      borderData: FlBorderData(show: true),
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: List.generate(predictionList.length, (index) {
-                            return FlSpot(index.toDouble(), predictionList[index].toDouble());
-                          }),
-                          isCurved: true,
-                          color: Colors.orangeAccent,
-                          barWidth: 2,
-                          isStrokeCapRound: true,
-                          belowBarData: BarAreaData(show: false),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff42501c),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: LineChart(
+                      LineChartData(
+                        gridData: const FlGridData(show: true),
+                        titlesData: const FlTitlesData(
+                          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 50,)),
+                          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
+                          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
+                          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
                         ),
-                      ],
+                        borderData: FlBorderData(show: true),
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: List.generate(predictionList.length, (index) {
+                              return FlSpot(index.toDouble(), predictionList[index].toDouble());
+                            }),
+                            isCurved: true,
+                            color: Colors.orangeAccent,
+                            barWidth: 2,
+                            isStrokeCapRound: true,
+                            belowBarData: BarAreaData(show: false),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )

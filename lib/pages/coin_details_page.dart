@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -201,10 +202,15 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
       ),
       body: isDetailsRefreshing == true
           ? const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xffFBC700),
-              ),
-            )
+        child: SizedBox(
+          height: 50,
+          width: 50,
+          child: LoadingIndicator(
+            colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+            indicatorType: Indicator.lineScale,
+          ),
+        ),
+      )
           : coinDetails == null
               ? Padding(
                   padding: EdgeInsets.all(size.height * 0.06),
@@ -447,10 +453,15 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                         // color: Colors.amber,
                         child: isRefresh == true
                             ? const Center(
-                                child: CircularProgressIndicator(
-                                  color: Color(0xffFBC700),
-                                ),
-                              )
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: LoadingIndicator(
+                              colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                              indicatorType: Indicator.lineScale,
+                            ),
+                          ),
+                        )
                             : itemChart == null
                                 ? Padding(
                                     padding: EdgeInsets.all(size.height * 0.06),
@@ -587,9 +598,16 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                                 ),
                                 onLoadingBuilder:
                                     (context, element, loadingProgress) =>
-                                        const CircularProgressIndicator(
-                                  color: Color(0xffFBC700),
-                                ),
+                                    const Center(
+                                      child: SizedBox(
+                                        height: 50,
+                                        width: 50,
+                                        child: LoadingIndicator(
+                                          colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                                          indicatorType: Indicator.lineScale,
+                                        ),
+                                      ),
+                                    ),
                                 onTapUrl: (url) async =>
                                     await launchUrl(Uri.parse(url)),
                               ),

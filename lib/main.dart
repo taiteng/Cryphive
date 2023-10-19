@@ -2,6 +2,7 @@ import 'package:cryphive/pages/login_page.dart';
 import 'package:cryphive/pages/navigation_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class Auth extends StatelessWidget {
   const Auth({super.key});
@@ -41,7 +42,16 @@ class _AuthPageState extends State<AuthPage> {
             return const Center(child: Text('Something Went Wrong :('),);
           }
           else if(snapshot.connectionState == ConnectionState.waiting){
-            return const Center(child: CircularProgressIndicator(),);
+            return const Center(
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: LoadingIndicator(
+                  colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                  indicatorType: Indicator.ballPulseSync,
+                ),
+              ),
+            );
           }
           else{
             return const LoginPage();

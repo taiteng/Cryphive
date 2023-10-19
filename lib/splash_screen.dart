@@ -3,6 +3,7 @@ import 'package:cryphive/main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 
 Future main() async{
@@ -64,9 +65,16 @@ class _SplashScreenState extends State<SplashScreenPage>{
             //logo
             Image.asset('assets/images/cryphive_word_nobg.png', height: 500,),
             const SizedBox(height: 5,),
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Colors.white),
-            )
+            const Center(
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: LoadingIndicator(
+                  colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                  indicatorType: Indicator.ballScaleMultiple,
+                ),
+              ),
+            ),
           ],
         ),
       ),

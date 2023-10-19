@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:http/http.dart' as http;
+import 'package:loading_indicator/loading_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -139,8 +140,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // getCoinsMarket();
-    // getTrendingMarket();
+    getCoinsMarket();
+    getTrendingMarket();
     super.initState();
   }
 
@@ -235,8 +236,13 @@ class _HomePageState extends State<HomePage> {
                               height: size.height * 0.5,
                               child: isCoinsRefreshing == true
                                   ? const Center(
-                                child: CircularProgressIndicator(
-                                  color: Color(0xffFBC700),
+                                child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: LoadingIndicator(
+                                    colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                                    indicatorType: Indicator.audioEqualizer,
+                                  ),
                                 ),
                               )
                                   : coinsMarket == null || coinsMarket!.length == 0
@@ -292,8 +298,13 @@ class _HomePageState extends State<HomePage> {
                                 padding: EdgeInsets.only(left: size.width * 0.02),
                                 child: isTrendingRefreshing == true
                                     ? const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Color(0xffFBC700),
+                                  child: SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: LoadingIndicator(
+                                      colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                                      indicatorType: Indicator.audioEqualizer,
+                                    ),
                                   ),
                                 )
                                     : trendingCoins == null || trendingCoins!.length == 0
@@ -408,8 +419,13 @@ class _HomePageState extends State<HomePage> {
                           ? SizedBox(
                         child: isWatchlistRefreshing == true
                             ? const Center(
-                          child: CircularProgressIndicator(
-                            color: Color(0xffFBC700),
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: LoadingIndicator(
+                              colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                              indicatorType: Indicator.audioEqualizer,
+                            ),
                           ),
                         )
                             : watchlistCoinsMarketList == null || watchlistCoinsMarketList!.length == 0
