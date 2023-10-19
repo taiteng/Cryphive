@@ -2,6 +2,7 @@ import 'package:cryphive/model/news_model.dart';
 import 'package:cryphive/pages/news_detail_page.dart';
 import 'package:cryphive/service/news_service.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({super.key});
@@ -167,7 +168,14 @@ class _NewsPageState extends State<NewsPage> {
             }
             else{
               return const Center(
-                child: CircularProgressIndicator(),
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: LoadingIndicator(
+                    colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                    indicatorType: Indicator.ballClipRotate,
+                  ),
+                ),
               );
             }
           },

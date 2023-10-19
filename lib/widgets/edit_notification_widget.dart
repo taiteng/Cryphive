@@ -4,6 +4,7 @@ import 'package:cryphive/widgets/edit_alert_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class EditNotificationWidget extends StatefulWidget {
   final String alertID;
@@ -260,8 +261,13 @@ class _EditNotificationWidgetState extends State<EditNotificationWidget> {
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(
-              color: Color(0xffFBC700),
+            child: SizedBox(
+              height: 50,
+              width: 50,
+              child: LoadingIndicator(
+                colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                indicatorType: Indicator.ballClipRotateMultiple,
+              ),
             ),
           );
         }

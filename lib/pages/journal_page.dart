@@ -7,6 +7,7 @@ import 'package:cryphive/widgets/journal_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class JournalPage extends StatefulWidget {
   const JournalPage({super.key});
@@ -140,8 +141,13 @@ class _JournalPageState extends State<JournalPage> {
                     ? SizedBox(
                   child: isJournalRefreshing == true
                       ? const Center(
-                    child: CircularProgressIndicator(
-                      color: Color(0xffFBC700),
+                    child: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: LoadingIndicator(
+                        colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                        indicatorType: Indicator.ballRotateChase,
+                      ),
                     ),
                   )
                       : tradingJournals == null || tradingJournals!.length == 0
@@ -196,8 +202,13 @@ class _JournalPageState extends State<JournalPage> {
                     ? SizedBox(
                   child: isJournalRefreshing == true
                       ? const Center(
-                    child: CircularProgressIndicator(
-                      color: Color(0xffFBC700),
+                    child: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: LoadingIndicator(
+                        colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                        indicatorType: Indicator.ballRotateChase,
+                      ),
                     ),
                   )
                       : tradingJournals == null || tradingJournals!.length == 0
