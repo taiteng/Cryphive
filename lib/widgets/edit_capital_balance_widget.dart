@@ -10,7 +10,7 @@ class EditCapitalBalanceWidget extends StatefulWidget {
   final String username;
   final String profilePic;
   final String uID;
-  final String capitalBalance;
+  final num capitalBalance;
 
   const EditCapitalBalanceWidget({
     super.key,
@@ -40,7 +40,7 @@ class _EditCapitalBalanceWidgetState extends State<EditCapitalBalanceWidget> {
           'ProfilePic' : widget.profilePic.toString(),
           'LoginMethod' : 'Email',
           'UID' : widget.uID.toString(),
-          'Capital': widget.capitalBalance.toString(),
+          'Capital': widget.capitalBalance,
         });
       }
       else{
@@ -50,7 +50,7 @@ class _EditCapitalBalanceWidgetState extends State<EditCapitalBalanceWidget> {
           'ProfilePic' : widget.profilePic.toString(),
           'LoginMethod' : 'Email',
           'UID' : widget.uID.toString(),
-          'Capital': capitalController.text.toString(),
+          'Capital': double.parse(capitalController.text.toString()),
         });
       }
     } catch (e){

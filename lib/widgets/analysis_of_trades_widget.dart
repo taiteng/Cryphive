@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/model/trading_journal_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class AnalysisOfTradesWidget extends StatefulWidget {
   final List<TradingJournalModel> tradingJournal;
@@ -16,6 +19,9 @@ class AnalysisOfTradesWidget extends StatefulWidget {
 
 class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
 
+  final User? user = FirebaseAuth.instance.currentUser;
+  final CollectionReference _user = FirebaseFirestore.instance.collection('Users');
+
   int totalTrades = 0;
   int numberOfWinningTrades = 0;
   int numberOfLosingTrades = 0;
@@ -28,9 +34,6 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
   num averageRiskRewardRatio = 0;
   num totalRRR = 0;
   num highestRiskRewardRatio = 0;
-  num returnOfInvestment = 0;
-  num totalInvestment = 0;
-  num profit = 0;
   Map<int, double> chartData = {};
   List<FlSpot> spots = [];
 
@@ -72,16 +75,6 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
       }
     }
 
-    for (TradingJournalModel journal in widget.tradingJournal) {
-      profit += journal.exitPrice - journal.entryPrice;
-    }
-
-    for (TradingJournalModel journal in widget.tradingJournal) {
-      totalInvestment += journal.entryPrice;
-    }
-
-    returnOfInvestment = (profit/totalInvestment) * 100;
-
     for (int i = 0; i < totalTrades; i++) {
       spots.add(FlSpot(i.toDouble(), widget.tradingJournal[i].profitAndLoss.toDouble()));
     }
@@ -102,6 +95,147 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        FutureBuilder<DocumentSnapshot>(
+          future: _user.doc(user?.uid.toString()).get(),
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot){
+              if (snapshot.hasError) {
+                return const Text("Something went wrong");
+              }
+              else if (snapshot.hasData && !snapshot.data!.exists) {
+                return const Text("Username does not exist");
+              }
+              else if (snapshot.connectionState == ConnectionState.done) {
+                Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+
+                num endingBalance = data['Capital'];
+
+                for (TradingJournalModel journal in widget.tradingJournal) {
+                  endingBalance += journal.profitAndLoss;
+                }
+
+                num returnOfInvestment = ((endingBalance - data['Capital']) / data['Capital']) * 100 ;
+
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: size.height * 0.1,
+                      width: size.width * 0.3,
+                      decoration: const BoxDecoration(
+                        color: Color(0xff21250f),
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Initial Balance',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              '\$${data['Capital'].toString()}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.025,
+                    ),
+                    Container(
+                      height: size.height * 0.1,
+                      width: size.width * 0.3,
+                      decoration: const BoxDecoration(
+                        color: Color(0xff21250f),
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Ending Balance',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              '\$${endingBalance.toString()}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.025,
+                    ),
+                    Container(
+                      height: size.height * 0.1,
+                      width: size.width * 0.3,
+                      decoration: const BoxDecoration(
+                        color: Color(0xff21250f),
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'ROI',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              '${returnOfInvestment.toStringAsFixed(2)}%',
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              else {
+                return const Center(
+                  child: SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: LoadingIndicator(
+                      colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                      indicatorType: Indicator.ballZigZag,
+                    ),
+                  ),
+                );
+              }
+            }
+        ),
+        SizedBox(
+          height: size.height * 0.015,
+        ),
         Container(
           height: size.height * 0.2,
           width: size.width * 0.9,
@@ -154,7 +288,7 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
           children: [
             Container(
               height: size.height * 0.1,
-              width: size.width * 0.3,
+              width: size.width * 0.4,
               decoration: const BoxDecoration(
                 color: Color(0xff21250f),
                 borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -183,11 +317,11 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
               ),
             ),
             SizedBox(
-              width: size.width * 0.025,
+              width: size.width * 0.05,
             ),
             Container(
               height: size.height * 0.1,
-              width: size.width * 0.3,
+              width: size.width * 0.4,
               decoration: const BoxDecoration(
                 color: Color(0xff21250f),
                 borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -198,47 +332,14 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Total Loss',
+                      'Average Profit',
                       style: TextStyle(
                         color: Colors.white,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      totalLoss.toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              width: size.width * 0.025,
-            ),
-            Container(
-              height: size.height * 0.1,
-              width: size.width * 0.3,
-              decoration: const BoxDecoration(
-                color: Color(0xff21250f),
-                borderRadius: BorderRadius.all(Radius.circular(25)),
-              ),
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Return Of Investment',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      '${returnOfInvestment.toStringAsFixed(2)}%',
+                      averageProfit.toString(),
                       style: const TextStyle(
                         color: Colors.white,
                       ),
@@ -270,14 +371,14 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Average Profit',
+                      'Total Loss',
                       style: TextStyle(
                         color: Colors.white,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      averageProfit.toString(),
+                      totalLoss.toString(),
                       style: const TextStyle(
                         color: Colors.white,
                       ),
@@ -342,14 +443,14 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Average Risk Reward Ratio',
+                      'Highest Risk Reward Ratio',
                       style: TextStyle(
                         color: Colors.white,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      averageRiskRewardRatio.toStringAsFixed(2),
+                      highestRiskRewardRatio.toString(),
                       style: const TextStyle(
                         color: Colors.white,
                       ),
@@ -375,14 +476,14 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Highest Risk Reward Ratio',
+                      'Average Risk Reward Ratio',
                       style: TextStyle(
                         color: Colors.white,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      highestRiskRewardRatio.toString(),
+                      averageRiskRewardRatio.toStringAsFixed(2),
                       style: const TextStyle(
                         color: Colors.white,
                       ),
@@ -450,6 +551,9 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
               ),
             ],
           ),
+        ),
+        SizedBox(
+          height: size.height * 0.015,
         ),
       ],
     );
