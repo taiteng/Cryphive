@@ -1,70 +1,55 @@
-import 'package:cryphive/pages/forgot_password_page.dart';
-import 'package:cryphive/pages/navigation_page.dart';
-import 'package:cryphive/pages/register_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class ChangePasswordPage extends StatefulWidget {
+  const ChangePasswordPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
-  bool checkedValue = false;
+  var auth = FirebaseAuth.instance;
+  var currentUser = FirebaseAuth.instance.currentUser;
+
   List textFieldsStrings = [
     "", //email
-    "", //password
+    "", //old password
+    "", //new password
   ];
 
   final _emailKey = GlobalKey<FormState>();
-  final _passwordKey = GlobalKey<FormState>();
+  final _oldPasswordKey = GlobalKey<FormState>();
+  final _newPasswordKey = GlobalKey<FormState>();
 
-  void signIn() async{
-    try{
+  Future<void> changePassword() async {
+    var cred = EmailAuthProvider.credential(
+      email: textFieldsStrings[0].toString().trim(),
+      password: textFieldsStrings[1].toString().trim(),
+    );
 
-      //Don't need hashing because Firebase has the auto hashing function
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: textFieldsStrings[0],
-        password: textFieldsStrings[1],
+    await currentUser!.reauthenticateWithCredential(cred).then((value) {
+      currentUser!.updatePassword(textFieldsStrings[2].toString().trim());
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            backgroundColor: Colors.deepOrangeAccent,
+            title: Text('Password Changed'),
+          );
+        },
       );
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 0,)));
-      });
-    } on FirebaseAuthException catch (e) {
-      if(e.code == 'user-not-found'){
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              backgroundColor: Colors.deepOrangeAccent,
-              title: Text('Incorrect Email'),
-            );
-          },
-        );
-      }
-      else if(e.code == 'wrong-password'){
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              backgroundColor: Colors.deepOrangeAccent,
-              title: Text('Incorrect Password'),
-            );
-          },
-        );
-      }
-    }
+    }).catchError((error){
+      print(error.toString());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -79,36 +64,74 @@ class _LoginPageState extends State<LoginPage> {
             child: Stack(
               children: [
                 SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(top: size.height * 0.02),
-                        child: Align(
-                          child: Text(
-                            'Hey there,',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: size.height * 0.02,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.025,
+                          vertical: 1,
+                        ),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                                size: size.height * 0.03,
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.015,
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'Back',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: size.height * 0.018,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: size.height * 0.015),
+                        padding: EdgeInsets.only(
+                          top: size.height * 0.05,
+                          left: size.width * 0.055,
+                        ),
                         child: Align(
+                          alignment: Alignment.centerLeft,
                           child: Text(
-                            'Welcome Back',
+                            'Change Password',
                             style: GoogleFonts.poppins(
                               color: Colors.white,
-                              fontSize: size.height * 0.025,
+                              fontSize: size.height * 0.035,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: size.height * 0.01),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: size.width * 0.055),
+                        child: Align(
+                          child: Text(
+                            "Please provide your email and old password to change your password.",
+                            style: GoogleFonts.poppins(
+                              color: Colors.white54,
+                              fontSize: size.height * 0.02,
+                            ),
+                          ),
+                        ),
                       ),
                       Form(
                         child: buildTextField(
@@ -143,14 +166,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Form(
                         child: buildTextField(
-                          "Password",
+                          "Old Password",
                           Icons.lock_outline,
                           true,
                           size,
-                              (valuepassword) {
-                            if (valuepassword.length < 6) {
+                              (valueoldpassword) {
+                            if (valueoldpassword.length < 6) {
                               buildSnackError(
-                                'Invalid password',
+                                'Invalid old password',
                                 context,
                                 size,
                               );
@@ -158,111 +181,68 @@ class _LoginPageState extends State<LoginPage> {
                             }
                             return null;
                           },
-                          _passwordKey,
+                          _oldPasswordKey,
                           1,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: size.width * 0.015,
-                          vertical: size.height * 0.025,
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const ForgotPasswordPage()),
-                            );
-                          },
-                          child: Text(
-                            "Forgot your password?",
-                            style: TextStyle(
-                              color: const Color(0xffADA4A5),
-                              decoration: TextDecoration.underline,
-                              fontSize: size.height * 0.02,
-                            ),
-                          ),
-                        ),
-                      ),
-                      AnimatedPadding(
-                        duration: const Duration(milliseconds: 500),
-                        padding: EdgeInsets.only(top: size.height * 0.085),
-                        child: ButtonWidget(
-                          text: "Login",
-                          backColor: [
-                            Colors.black,
-                            Colors.black,
-                          ],
-                          textColor: const [
-                            Colors.white,
-                            Colors.white,
-                          ],
-                          onPressed: () async {
-                            //validation for login
-                            if (_emailKey.currentState!.validate()) {
-                              if (_passwordKey.currentState!.validate()) {
-                                signIn();
-                              }
+                      Form(
+                        child: buildTextField(
+                          "New Password",
+                          Icons.lock_outline,
+                          true,
+                          size,
+                              (valuenewpassword) {
+                            if (valuenewpassword.length < 6) {
+                              buildSnackError(
+                                'Invalid new password',
+                                context,
+                                size,
+                              );
+                              return '';
                             }
+                            return null;
                           },
+                          _newPasswordKey,
+                          2,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 0,)));
-                          },
-                          child: RichText(
-                            textAlign: TextAlign.left,
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "Continue as a guest...",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: size.height * 0.018,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        padding: EdgeInsets.only(top: size.height * 0.025),
+                        child: ButtonWidget(
+                            text: 'Send',
+                            backColor: const [
+                              Colors.black,
+                              Colors.black,
+                            ],
+                            textColor: const [
+                              Colors.white,
+                              Colors.white,
+                            ],
+                            onPressed: () async {
+                              if (_emailKey.currentState!.validate()) {
+                                if (_oldPasswordKey.currentState!.validate()) {
+                                  if (_newPasswordKey.currentState!.validate()) {
+                                    await changePassword();
+                                  }
+                                }
+                              }
+                            }),
                       ),
-                      AnimatedPadding(
-                        duration: const Duration(milliseconds: 500),
-                        padding: EdgeInsets.only(
-                          top: size.height * 0.15,
-                        ),
+                      Padding(
+                        padding: EdgeInsets.only(top: size.height * 0.08),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Image.asset('assets/images/cryphive_word_nobg.png', height: 40,),
+                            Text(
+                              'CRYPHIVE',
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: size.height * 0.045,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             Image.asset('assets/images/cryphive_logo_nobg.png', height: 40,),
                           ],
-                        ),
-                      ),
-                      const SizedBox(height: 10,),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RegisterPage()));
-                        },
-                        child: RichText(
-                          textAlign: TextAlign.left,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Don’t have an account yet? ",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: size.height * 0.018,
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ],

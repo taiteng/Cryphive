@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cryphive/pages/change_password_page.dart';
 import 'package:cryphive/pages/disclaimer_page.dart';
 import 'package:cryphive/pages/edit_notification_page.dart';
 import 'package:cryphive/pages/edit_profile_page.dart';
@@ -223,6 +224,22 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         title: Text(
                           'Edit Notifications',
+                          style: TextStyle(color: Colors.white,),
+                        ),
+                      ),
+                    ),
+                    const Divider(color: Color(0xff3c3c3f),),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ChangePasswordPage()));
+                      },
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.edit_notifications,
+                          color: Colors.deepOrange,
+                        ),
+                        title: Text(
+                          'Edit Password',
                           style: TextStyle(color: Colors.white,),
                         ),
                       ),
