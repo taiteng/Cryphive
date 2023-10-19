@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cryphive/pages/forgot_password_page.dart';
 import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/pages/register_page.dart';
@@ -38,26 +39,42 @@ class _LoginPageState extends State<LoginPage> {
       });
     } on FirebaseAuthException catch (e) {
       if(e.code == 'user-not-found'){
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              backgroundColor: Colors.deepOrangeAccent,
-              title: Text('Incorrect Email'),
-            );
-          },
-        );
+        await Flushbar(
+          title: 'Incorrect Email',
+          titleSize: 14,
+          titleColor: Colors.white,
+          message: 'User not found.',
+          messageSize: 12,
+          messageColor: Colors.white,
+          duration: const Duration(seconds: 3),
+          icon: const Icon(
+            Icons.check,
+            color: Colors.white,
+          ),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          reverseAnimationCurve: Curves.decelerate,
+          forwardAnimationCurve: Curves.elasticOut,
+          backgroundColor: Colors.black,
+        ).show(context);
       }
       else if(e.code == 'wrong-password'){
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              backgroundColor: Colors.deepOrangeAccent,
-              title: Text('Incorrect Password'),
-            );
-          },
-        );
+        await Flushbar(
+          title: 'Incorrect Password',
+          titleSize: 14,
+          titleColor: Colors.white,
+          message: 'Wrong password.',
+          messageSize: 12,
+          messageColor: Colors.white,
+          duration: const Duration(seconds: 3),
+          icon: const Icon(
+            Icons.check,
+            color: Colors.white,
+          ),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          reverseAnimationCurve: Curves.decelerate,
+          forwardAnimationCurve: Curves.elasticOut,
+          backgroundColor: Colors.black,
+        ).show(context);
       }
     }
   }

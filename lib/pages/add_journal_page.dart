@@ -188,6 +188,44 @@ class _AddJournalPageState extends State<AddJournalPage> {
     super.dispose();
   }
 
+  Widget buildProgress() => StreamBuilder<TaskSnapshot>(
+    stream: _uploadTask?.snapshotEvents,
+    builder: (context, snapshot){
+      if(snapshot.hasData){
+        final data = snapshot.data!;
+        double progress = data.bytesTransferred / data.totalBytes;
+
+        return SizedBox(
+          height: 50,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              LinearProgressIndicator(
+                value: progress,
+                backgroundColor: Colors.grey.shade200,
+                color: Colors.deepOrangeAccent,
+              ),
+              Center(
+                child: Text(
+                  '${(100 * progress).round()}%',
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+      else if(snapshot.connectionState ==  ConnectionState.waiting){
+        return const Text('Waiting for Upload');
+      }
+      else{
+        return const Text('');
+      }
+    },
+  );
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -600,6 +638,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
               const SizedBox(
                 height: 10.0,
               ),
+              buildProgress(),
             ],
           ),
         ),
