@@ -23,15 +23,13 @@ class _CommunityPageState extends State<CommunityPage> {
   Future getPosts() async {
     posts = [];
 
-    await FirebaseFirestore.instance
-        .collection('Community')
-        .orderBy('Date', descending: true)
-        .get()
-        .then(
-          (snapshot) => snapshot.docs.forEach((postID) {
+    await FirebaseFirestore.instance.collection('Posts').orderBy('Date', descending: true).get().then((snapshot) => snapshot.docs.forEach((postID) async {
         if (postID.exists) {
           posts.add(
             PostsModel(
+              pID: postID['pID'],
+              uID: postID['uID'],
+              username: postID['Username'],
               title: postID['Title'],
               description: postID['Description'],
               imageURL: postID['ImageURL'],
@@ -129,7 +127,7 @@ class _CommunityPageState extends State<CommunityPage> {
           child: const Center(
             child: Text(
               'An error occurred. Please wait and try again later.',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18, color: Colors.white),
             ),
           ),
         )
@@ -142,12 +140,16 @@ class _CommunityPageState extends State<CommunityPage> {
               return PostsWidget(
                 posts: posts[index],
                 isLoggedIn: true,
+                currentUserID: user!.uid.toString(),
+                getPosts: getPosts,
               );
             }
             else{
               return PostsWidget(
                 posts: posts[index],
                 isLoggedIn: false,
+                currentUserID: '',
+                getPosts: getPosts,
               );
             }
           },

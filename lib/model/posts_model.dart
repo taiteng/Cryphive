@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostsModel {
+  String pID;
+  String uID;
+  String username;
   String title;
   String description;
   String imageURL;
@@ -10,6 +13,9 @@ class PostsModel {
   num numberOfComments;
 
   PostsModel({
+    required this.pID,
+    required this.uID,
+    required this.username,
     required this.title,
     required this.description,
     required this.imageURL,
