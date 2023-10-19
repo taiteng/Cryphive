@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,33 +17,41 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   var currentUser = FirebaseAuth.instance.currentUser;
 
   List textFieldsStrings = [
-    "", //email
     "", //old password
     "", //new password
   ];
 
-  final _emailKey = GlobalKey<FormState>();
   final _oldPasswordKey = GlobalKey<FormState>();
   final _newPasswordKey = GlobalKey<FormState>();
 
   Future<void> changePassword() async {
     var cred = EmailAuthProvider.credential(
-      email: textFieldsStrings[0].toString().trim(),
-      password: textFieldsStrings[1].toString().trim(),
+      email: currentUser!.email.toString().trim(),
+      password: textFieldsStrings[0].toString().trim(),
     );
 
-    await currentUser!.reauthenticateWithCredential(cred).then((value) {
-      currentUser!.updatePassword(textFieldsStrings[2].toString().trim());
+    await currentUser!.reauthenticateWithCredential(cred).then((value) async {
+      currentUser!.updatePassword(textFieldsStrings[1].toString().trim());
 
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            backgroundColor: Colors.deepOrangeAccent,
-            title: Text('Password Changed'),
-          );
-        },
-      );
+      await Flushbar(
+        title: 'Change Password',
+        titleSize: 14,
+        titleColor: Colors.white,
+        message: 'Password Changed.',
+        messageSize: 12,
+        messageColor: Colors.white,
+        duration: const Duration(seconds: 3),
+        icon: const Icon(
+          Icons.check,
+          color: Colors.white,
+        ),
+        flushbarStyle: FlushbarStyle.FLOATING,
+        reverseAnimationCurve: Curves.decelerate,
+        forwardAnimationCurve: Curves.elasticOut,
+        backgroundColor: Colors.black,
+      ).show(context);
+
+      Navigator.pop(context);
     }).catchError((error){
       print(error.toString());
     });
@@ -135,37 +144,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       ),
                       Form(
                         child: buildTextField(
-                          "Email",
-                          Icons.email_outlined,
-                          false,
-                          size,
-                              (valuemail) {
-                            if (valuemail.length < 5) {
-                              buildSnackError(
-                                'Invalid email',
-                                context,
-                                size,
-                              );
-                              return '';
-                            }
-                            if (!RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+.[a-zA-Z]+")
-                                .hasMatch(valuemail)) {
-                              buildSnackError(
-                                'Invalid email',
-                                context,
-                                size,
-                              );
-                              return '';
-                            }
-                            return null;
-                          },
-                          _emailKey,
-                          0,
-                        ),
-                      ),
-                      Form(
-                        child: buildTextField(
                           "Old Password",
                           Icons.lock_outline,
                           true,
@@ -182,7 +160,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             return null;
                           },
                           _oldPasswordKey,
-                          1,
+                          0,
                         ),
                       ),
                       Form(
@@ -203,7 +181,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             return null;
                           },
                           _newPasswordKey,
-                          2,
+                          1,
                         ),
                       ),
                       Padding(
@@ -219,11 +197,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                               Colors.white,
                             ],
                             onPressed: () async {
-                              if (_emailKey.currentState!.validate()) {
-                                if (_oldPasswordKey.currentState!.validate()) {
-                                  if (_newPasswordKey.currentState!.validate()) {
-                                    await changePassword();
-                                  }
+                              if (_oldPasswordKey.currentState!.validate()) {
+                                if (_newPasswordKey.currentState!.validate()) {
+                                  await changePassword();
                                 }
                               }
                             }),

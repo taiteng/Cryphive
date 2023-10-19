@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,25 +23,41 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           email: email.trim(),
       );
 
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            backgroundColor: Colors.deepOrangeAccent,
-            title: Text('Reset Link Sent'),
-          );
-        },
-      );
+      await Flushbar(
+        title: 'Reset Password',
+        titleSize: 14,
+        titleColor: Colors.white,
+        message: 'Reset link sent.',
+        messageSize: 12,
+        messageColor: Colors.white,
+        duration: const Duration(seconds: 3),
+        icon: const Icon(
+          Icons.check,
+          color: Colors.white,
+        ),
+        flushbarStyle: FlushbarStyle.FLOATING,
+        reverseAnimationCurve: Curves.decelerate,
+        forwardAnimationCurve: Curves.elasticOut,
+        backgroundColor: Colors.black,
+      ).show(context);
     } on FirebaseAuthException catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            backgroundColor: Colors.deepOrangeAccent,
-            title: Text('User Not Found'),
-          );
-        },
-      );
+      await Flushbar(
+        title: 'An Error Occured',
+        titleSize: 14,
+        titleColor: Colors.white,
+        message: 'User not found.',
+        messageSize: 12,
+        messageColor: Colors.white,
+        duration: const Duration(seconds: 3),
+        icon: const Icon(
+          Icons.check,
+          color: Colors.white,
+        ),
+        flushbarStyle: FlushbarStyle.FLOATING,
+        reverseAnimationCurve: Curves.decelerate,
+        forwardAnimationCurve: Curves.elasticOut,
+        backgroundColor: Colors.black,
+      ).show(context);
     }
   }
 
@@ -225,15 +242,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       child: Container(
         width: size.width * 0.9,
         height: size.height * 0.06,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.black,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Form(
           key: _emailKey,
           child: TextFormField(
-            style: TextStyle(
-                color: const Color(0xffADA4A5),
+            style: const TextStyle(
+                color: Color(0xffADA4A5),
             ),
             onChanged: (value) {
               setState(() {

@@ -77,7 +77,7 @@ class _BitcoinPriceForecastWidgetState
                 width: 50,
                 child: LoadingIndicator(
                   colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
-                  indicatorType: Indicator.pacman,
+                  indicatorType: Indicator.audioEqualizer,
                 ),
               ),
             )

@@ -38,6 +38,7 @@ dependencies:
   slide_to_act: ^2.0.1
   fl_chart: ^0.64.0
   loading_indicator: ^3.1.1
+  another_flushbar: ^1.12.30
 
 dev_dependencies:
   flutter_test:

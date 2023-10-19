@@ -65,14 +65,12 @@ class _SplashScreenState extends State<SplashScreenPage>{
             //logo
             Image.asset('assets/images/cryphive_word_nobg.png', height: 500,),
             const SizedBox(height: 5,),
-            const Center(
-              child: SizedBox(
-                height: 50,
-                width: 50,
-                child: LoadingIndicator(
-                  colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
-                  indicatorType: Indicator.ballScaleMultiple,
-                ),
+            const SizedBox(
+              height: 80,
+              width: 80,
+              child: LoadingIndicator(
+                colors: [Colors.orangeAccent, Colors.orange, Colors.deepOrangeAccent, Colors.deepOrange],
+                indicatorType: Indicator.ballSpinFadeLoader,
               ),
             ),
           ],
