@@ -11,6 +11,7 @@ class PostsModel {
   Timestamp date;
   num numberOfLikes;
   num numberOfComments;
+  num numberOfViews;
 
   PostsModel({
     required this.pID,
@@ -23,5 +24,6 @@ class PostsModel {
     required this.date,
     required this.numberOfLikes,
     required this.numberOfComments,
+    required this.numberOfViews,
   });
 }

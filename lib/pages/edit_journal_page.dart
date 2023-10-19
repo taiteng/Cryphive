@@ -77,7 +77,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
   }
 
   Future uploadFile() async{
-    final path = 'UserProfile/${_pickedFile!.name}';
+    final path = 'Journal/${_pickedFile!.name}';
     final file = File(_pickedFile!.path!);
 
     final ref = FirebaseStorage.instance.ref().child(path);
