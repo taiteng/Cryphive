@@ -4,6 +4,7 @@ import 'package:cryphive/pages/disclaimer_page.dart';
 import 'package:cryphive/pages/edit_notification_page.dart';
 import 'package:cryphive/pages/edit_profile_page.dart';
 import 'package:cryphive/pages/login_page.dart';
+import 'package:cryphive/pages/manage_posts_page.dart';
 import 'package:cryphive/pages/register_page.dart';
 import 'package:cryphive/widgets/edit_capital_balance_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -188,6 +189,22 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ManagePostPage()));
+                      },
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.comment_rounded,
+                          color: Colors.deepOrange,
+                        ),
+                        title: Text(
+                          'Manage Posts',
+                          style: TextStyle(color: Colors.white,),
+                        ),
+                      ),
+                    ),
+                    const Divider(color: Color(0xff3c3c3f),),
+                    GestureDetector(
+                      onTap: () {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -235,7 +252,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                       child: const ListTile(
                         leading: Icon(
-                          Icons.edit_notifications,
+                          Icons.password_rounded,
                           color: Colors.deepOrange,
                         ),
                         title: Text(

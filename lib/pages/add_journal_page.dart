@@ -74,7 +74,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
   }
 
   Future uploadFile() async{
-    final path = 'UserProfile/${_pickedFile!.name}';
+    final path = 'Journal/${_pickedFile!.name}';
     final file = File(_pickedFile!.path!);
 
     final ref = FirebaseStorage.instance.ref().child(path);
@@ -98,13 +98,13 @@ class _AddJournalPageState extends State<AddJournalPage> {
       DateTime exitDateTime = DateTime.parse(exitDateController.text);
       Timestamp exitTimestamp = Timestamp.fromDate(exitDateTime);
 
+      final journalRef = FirebaseFirestore.instance
+          .collection("TradingJournal")
+          .doc(user?.uid.toString())
+          .collection("Journals");
+
       if(_pickedFile != null){
         await uploadFile();
-
-        final journalRef = FirebaseFirestore.instance
-            .collection("TradingJournal")
-            .doc(user?.uid.toString())
-            .collection("Journals");
 
         await journalRef.add({
           'Action': actionSelectedValue.toString(),
@@ -130,11 +130,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
         });
       }
       else{
-        final journalRef = FirebaseFirestore.instance
-            .collection("TradingJournal")
-            .doc(user?.uid.toString())
-            .collection("Journals");
-
         await journalRef.add({
           'Action': actionSelectedValue.toString(),
         }).then((DocumentReference docID) async {
@@ -164,28 +159,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
     } catch(e) {
       print(e.toString());
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    symbolController.dispose();
-    strategyController.dispose();
-    entryPriceController.dispose();
-    exitPriceController.dispose();
-    takeProfitController.dispose();
-    stopLossController.dispose();
-    profitAndLossController.dispose();
-    riskRewardRatioController.dispose();
-    feedbackController.dispose();
-    feesController.dispose();
-    entryDateController.dispose();
-    exitDateController.dispose();
-    super.dispose();
   }
 
   Widget buildProgress() => StreamBuilder<TaskSnapshot>(
@@ -225,6 +198,28 @@ class _AddJournalPageState extends State<AddJournalPage> {
       }
     },
   );
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    symbolController.dispose();
+    strategyController.dispose();
+    entryPriceController.dispose();
+    exitPriceController.dispose();
+    takeProfitController.dispose();
+    stopLossController.dispose();
+    profitAndLossController.dispose();
+    riskRewardRatioController.dispose();
+    feedbackController.dispose();
+    feesController.dispose();
+    entryDateController.dispose();
+    exitDateController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -270,9 +265,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 formKey: _symbolKey,
                 controller: symbolController,
               ),
-              const SizedBox(
-                height: 10,
-              ),
+
               DropDownWidget(
                 selectedValue: actionSelectedValue,
                 dropdownItems: const ['Buy', 'Sell'],
@@ -297,9 +290,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
                   });
                 },
               ),
-              const SizedBox(
-                height: 10,
-              ),
+
               DropDownWidget(
                 selectedValue: timeFrameSelectedValue,
                 dropdownItems: const ['1m', '3m', '5m', '15m',
@@ -326,9 +317,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
                   });
                 },
               ),
-              const SizedBox(
-                height: 10,
-              ),
+
               EditTextFormFieldWidget(
                 hintText: 'Strategy',
                 icon: Icons.lightbulb_circle_rounded,
@@ -347,9 +336,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 },
                 formKey: _strategyKey,
                 controller: strategyController,
-              ),
-              const SizedBox(
-                height: 10,
               ),
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Entry Price',
@@ -371,9 +357,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 controller: entryPriceController,
                 allowNegative: false,
               ),
-              const SizedBox(
-                height: 10,
-              ),
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Exit Price',
                 icon: Icons.trending_down_rounded,
@@ -393,9 +376,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 formKey: _exitPriceKey,
                 controller: exitPriceController,
                 allowNegative: false,
-              ),
-              const SizedBox(
-                height: 10,
               ),
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Take Profit',
@@ -417,9 +397,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 controller: takeProfitController,
                 allowNegative: false,
               ),
-              const SizedBox(
-                height: 10,
-              ),
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Stop Loss',
                 icon: Icons.warning_amber_rounded,
@@ -439,9 +416,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 formKey: _stopLossKey,
                 controller: stopLossController,
                 allowNegative: false,
-              ),
-              const SizedBox(
-                height: 10,
               ),
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Profit and Loss',
@@ -463,9 +437,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 controller: profitAndLossController,
                 allowNegative: true,
               ),
-              const SizedBox(
-                height: 10,
-              ),
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Risk and Reward',
                 icon: Icons.compare_arrows_rounded,
@@ -486,9 +457,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 controller: riskRewardRatioController,
                 allowNegative: true,
               ),
-              const SizedBox(
-                height: 10,
-              ),
               EditTextFormFieldWidget(
                 hintText: 'Feedback',
                 icon: Icons.feedback_rounded,
@@ -507,9 +475,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 },
                 formKey: _feedbackKey,
                 controller: feedbackController,
-              ),
-              const SizedBox(
-                height: 10,
               ),
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Fees',
@@ -531,9 +496,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 controller: feesController,
                 allowNegative: false,
               ),
-              const SizedBox(
-                height: 10,
-              ),
               DateTimePickerWidget(
                 size: size,
                 hintText: 'Entry Date',
@@ -552,9 +514,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 icon: Icons.edit_calendar_rounded,
                 controller: entryDateController,
               ),
-              const SizedBox(
-                height: 10,
-              ),
               DateTimePickerWidget(
                 size: size,
                 hintText: 'Exit Date',
@@ -572,9 +531,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 formKey: _exitDateKey,
                 icon: Icons.access_time_filled_rounded,
                 controller: exitDateController,
-              ),
-              const SizedBox(
-                height: 10,
               ),
               _pickedFile != null
                   ? Padding(

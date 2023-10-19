@@ -1,5 +1,7 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/model/posts_model.dart';
+import 'package:cryphive/pages/add_post_page.dart';
 import 'package:cryphive/widgets/posts_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,7 @@ class _CommunityPageState extends State<CommunityPage> {
 
   List<PostsModel> posts = [];
 
-  Future getPosts() async {
+  Future<void> getPosts() async {
     posts = [];
 
     await FirebaseFirestore.instance.collection('Posts').orderBy('Date', descending: true).get().then((snapshot) => snapshot.docs.forEach((postID) async {
@@ -37,6 +39,7 @@ class _CommunityPageState extends State<CommunityPage> {
               date: postID['Date'],
               numberOfLikes: postID['NumberOfLikes'],
               numberOfComments: postID['NumberOfComments'],
+              numberOfViews: postID['NumberOfViews'],
             ),
           );
         } else {
@@ -65,7 +68,7 @@ class _CommunityPageState extends State<CommunityPage> {
       floatingActionButton: GestureDetector(
         onTap: () {
           if(user != null){
-
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AddPostPage(getPosts: getPosts,)));
           }
           else{
             buildSnackError(
@@ -141,7 +144,6 @@ class _CommunityPageState extends State<CommunityPage> {
                 posts: posts[index],
                 isLoggedIn: true,
                 currentUserID: user!.uid.toString(),
-                getPosts: getPosts,
               );
             }
             else{
@@ -149,7 +151,6 @@ class _CommunityPageState extends State<CommunityPage> {
                 posts: posts[index],
                 isLoggedIn: false,
                 currentUserID: '',
-                getPosts: getPosts,
               );
             }
           },
