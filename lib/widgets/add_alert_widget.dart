@@ -114,11 +114,13 @@ class AddAlertWidget extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            String userInput = priceController.text;
-            if (userInput.isNotEmpty) {
+            String userInputPrice = priceController.text;
+            String userInputTitle = titleController.text;
+            String userInputDesc = descriptionController.text;
+            if (userInputPrice.isNotEmpty && userInputTitle.isNotEmpty && userInputDesc.isNotEmpty) {
               uploadToFirebase();
+              Navigator.pop(context);
             }
-            Navigator.pop(context);
           },
         ),
       ],
