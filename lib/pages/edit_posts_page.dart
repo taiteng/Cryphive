@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class ManagePostPage extends StatefulWidget {
-  const ManagePostPage({super.key});
+class EditPostsPage extends StatefulWidget {
+  const EditPostsPage({super.key});
 
   @override
-  State<ManagePostPage> createState() => _ManagePostPageState();
+  State<EditPostsPage> createState() => _EditPostsPageState();
 }
 
-class _ManagePostPageState extends State<ManagePostPage> {
+class _EditPostsPageState extends State<EditPostsPage> {
 
   Future<void> deletePost() async{
     QuerySnapshot commentsQuerySnapshot = await FirebaseFirestore.instance.collection('Posts').doc('widget.posts.pID').collection('Comments').get();

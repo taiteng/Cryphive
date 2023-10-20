@@ -4,7 +4,7 @@ import 'package:cryphive/pages/disclaimer_page.dart';
 import 'package:cryphive/pages/edit_notification_page.dart';
 import 'package:cryphive/pages/edit_profile_page.dart';
 import 'package:cryphive/pages/login_page.dart';
-import 'package:cryphive/pages/manage_posts_page.dart';
+import 'package:cryphive/pages/edit_posts_page.dart';
 import 'package:cryphive/pages/register_page.dart';
 import 'package:cryphive/widgets/edit_capital_balance_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -189,7 +189,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ManagePostPage()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const EditPostsPage()));
                       },
                       child: const ListTile(
                         leading: Icon(

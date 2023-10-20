@@ -119,8 +119,10 @@ class _EditAlertWidgetState extends State<EditAlertWidget> {
             ),
           ),
           onPressed: () {
-            String userInput = priceController.text;
-            if (userInput.isNotEmpty) {
+            String userInputPrice = priceController.text;
+            String userInputTitle = titleController.text;
+            String userInputDesc = descriptionController.text;
+            if (userInputPrice.isNotEmpty && userInputTitle.isNotEmpty && userInputDesc.isNotEmpty) {
               uploadToFirebase();
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const EditNotificationPage(),),);
             }
