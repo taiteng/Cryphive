@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
           messageColor: Colors.white,
           duration: const Duration(seconds: 3),
           icon: const Icon(
-            Icons.check,
+            Icons.not_interested_rounded,
             color: Colors.white,
           ),
           flushbarStyle: FlushbarStyle.FLOATING,
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
           messageColor: Colors.white,
           duration: const Duration(seconds: 3),
           icon: const Icon(
-            Icons.check,
+            Icons.not_interested_rounded,
             color: Colors.white,
           ),
           flushbarStyle: FlushbarStyle.FLOATING,

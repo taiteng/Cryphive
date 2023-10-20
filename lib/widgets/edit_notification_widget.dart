@@ -24,9 +24,9 @@ class _EditNotificationWidgetState extends State<EditNotificationWidget> {
   @override
   Widget build(BuildContext context) {
     CollectionReference _alertDetails = FirebaseFirestore.instance
-        .collection('Notification')
+        .collection('Users')
         .doc(user?.uid.toString())
-        .collection('Alerts');
+        .collection('Notifications');
 
     Size size = MediaQuery.of(context).size;
 

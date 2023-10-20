@@ -23,9 +23,9 @@ class _DeleteAlertWidgetState extends State<DeleteAlertWidget> {
 
   Future<void> deleteFromNotification() async{
     final alertRef = FirebaseFirestore.instance
-        .collection("Notification")
+        .collection("Users")
         .doc(user?.uid.toString())
-        .collection("Alerts")
+        .collection("Notifications")
         .doc(widget.alertID);
     await alertRef.delete();
   }

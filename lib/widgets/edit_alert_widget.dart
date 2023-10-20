@@ -38,7 +38,7 @@ class _EditAlertWidgetState extends State<EditAlertWidget> {
 
   Future uploadToFirebase() async{
     try{
-      await FirebaseFirestore.instance.collection('Notification').doc(user?.uid.toString()).collection('Alerts').doc(widget.alertID).set({
+      await FirebaseFirestore.instance.collection('Users').doc(user?.uid.toString()).collection('Notifications').doc(widget.alertID).set({
         'Condition' : widget.condition.toString(),
         'Description' : descriptionController.text.toString(),
         'Initialized' : widget.initialized,

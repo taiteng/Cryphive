@@ -24,7 +24,7 @@ class AddAlertWidget extends StatelessWidget {
 
   Future uploadToFirebase() async{
     try{
-      await FirebaseFirestore.instance.collection('Notification').doc(user?.uid.toString()).collection('Alerts').add({
+      await FirebaseFirestore.instance.collection('Users').doc(user?.uid.toString()).collection('Notifications').add({
         'Condition' : 'Crossing',
         'Description' : descriptionController.text.toString(),
         'Initialized' : false,

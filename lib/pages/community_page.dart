@@ -1,4 +1,3 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/model/posts_model.dart';
 import 'package:cryphive/pages/add_post_page.dart';

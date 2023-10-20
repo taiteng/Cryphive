@@ -210,7 +210,7 @@ class _PostsWidgetState extends State<PostsWidget> {
                           ),
                         ),
                         Expanded(
-                          flex: 1,
+                          flex: 2,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -266,10 +266,48 @@ class _PostsWidgetState extends State<PostsWidget> {
                                       openDialog();
                                     },
                                     icon: const Icon(Icons.remove_red_eye_rounded),
-                                    color: Colors.black38,
+                                    color: Colors.indigo,
                                   ),
                                   Text(
                                     noViews.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    onPressed: () async {
+
+                                      setState(() {
+                                        noViews++;
+                                      });
+
+                                      await FirebaseFirestore.instance.collection('Posts').doc(widget.posts.pID).set({
+                                        'uID': widget.posts.uID,
+                                        'pID': widget.posts.pID,
+                                        'Username': widget.posts.username,
+                                        'Title': widget.posts.title,
+                                        'Description': widget.posts.description,
+                                        'ImageURL': widget.posts.imageURL,
+                                        'HasImage': widget.posts.hasImage,
+                                        'Date': widget.posts.date,
+                                        'NumberOfLikes': noLikes,
+                                        'NumberOfComments': widget.posts.numberOfComments,
+                                        'NumberOfViews': widget.posts.numberOfViews + 1,
+                                      });
+
+                                      openDialog();
+                                    },
+                                    icon: const Icon(Icons.comment_rounded),
+                                    color: Colors.green,
+                                  ),
+                                  Text(
+                                    noComments.toString(),
                                     style: const TextStyle(
                                       color: Colors.black54,
                                       fontSize: 12,
@@ -390,7 +428,7 @@ class _PostsWidgetState extends State<PostsWidget> {
                       ),
                     ),
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -446,10 +484,48 @@ class _PostsWidgetState extends State<PostsWidget> {
                                   openDialog();
                                 },
                                 icon: const Icon(Icons.remove_red_eye_rounded),
-                                color: Colors.black38,
+                                color: Colors.indigo,
                               ),
                               Text(
                                 noViews.toString(),
+                                style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+
+                                  setState(() {
+                                    noViews++;
+                                  });
+
+                                  await FirebaseFirestore.instance.collection('Posts').doc(widget.posts.pID).set({
+                                    'uID': widget.posts.uID,
+                                    'pID': widget.posts.pID,
+                                    'Username': widget.posts.username,
+                                    'Title': widget.posts.title,
+                                    'Description': widget.posts.description,
+                                    'ImageURL': widget.posts.imageURL,
+                                    'HasImage': widget.posts.hasImage,
+                                    'Date': widget.posts.date,
+                                    'NumberOfLikes': noLikes,
+                                    'NumberOfComments': widget.posts.numberOfComments,
+                                    'NumberOfViews': widget.posts.numberOfViews + 1,
+                                  });
+
+                                  openDialog();
+                                },
+                                icon: const Icon(Icons.comment_rounded),
+                                color: Colors.green,
+                              ),
+                              Text(
+                                noComments.toString(),
                                 style: const TextStyle(
                                   color: Colors.black54,
                                   fontSize: 12,
