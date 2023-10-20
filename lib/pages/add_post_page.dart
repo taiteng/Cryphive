@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:cryphive/widgets/edit_text_form_field_widget.dart';
 import 'package:file_picker/file_picker.dart';
@@ -9,11 +10,8 @@ import 'package:flutter/material.dart';
 
 class AddPostPage extends StatefulWidget {
 
-  final Function() getPosts;
-
   const AddPostPage({
     super.key,
-    required this.getPosts,
   });
 
   @override
@@ -118,8 +116,7 @@ class _AddPostPageState extends State<AddPostPage> {
         });
       }
 
-      widget.getPosts();
-      Navigator.pop(context);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 2),),);
     }catch(e) {
       print(e.toString());
     }
