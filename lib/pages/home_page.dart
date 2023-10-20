@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future getWatchlistCoinIDs() async{
-    await FirebaseFirestore.instance.collection('Watchlist').doc(user?.uid.toString()).collection('Coins').get().then(
+    await FirebaseFirestore.instance.collection('Users').doc(user?.uid.toString()).collection('Watchlist').get().then(
           (snapshot) => snapshot.docs.forEach((coinID) {
         if (coinID.exists) {
           _coinIDs.add(coinID.reference.id);

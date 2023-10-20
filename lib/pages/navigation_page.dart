@@ -67,7 +67,7 @@ class _NavigationPageState extends State<NavigationPage> {
       // Notification details
       const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
 
-      await FirebaseFirestore.instance.collection('Notification').doc(user?.uid.toString()).collection('Alerts').get().then(
+      await FirebaseFirestore.instance.collection('Users').doc(user?.uid.toString()).collection('Notifications').get().then(
             (snapshot) => snapshot.docs.forEach((alertID) async {
           if (alertID.exists) {
             _alertIDs.add(alertID.reference.id);
@@ -130,7 +130,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
                             count++;
 
-                            await FirebaseFirestore.instance.collection('Notification').doc(user?.uid.toString()).collection('Alerts').doc(alertID.reference.id).set({
+                            await FirebaseFirestore.instance.collection('Users').doc(user?.uid.toString()).collection('Notifications').doc(alertID.reference.id).set({
                               'Initialized': true,
                               'Title': alertID['Title'],
                               'Description': alertID['Description'],

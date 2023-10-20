@@ -27,9 +27,9 @@ class _JournalPageState extends State<JournalPage> {
     tradingJournals = [];
 
     await FirebaseFirestore.instance
-        .collection('TradingJournal')
+        .collection('Users')
         .doc(user?.uid.toString())
-        .collection('Journals')
+        .collection('TradingJournals')
         .orderBy('EntryDate', descending: true)
         .get()
         .then(
@@ -44,7 +44,7 @@ class _JournalPageState extends State<JournalPage> {
                   exitPrice: journalID['ExitPrice'],
                   feedback: journalID['Feedback'],
                   fees: journalID['Fees'],
-                  image: journalID['Image'],
+                  image: journalID['ImageURL'],
                   journalID: journalID.reference.id,
                   profitAndLoss: journalID['ProfitAndLoss'],
                   riskRewardRatio: journalID['RiskRewardRatio'],
@@ -68,7 +68,6 @@ class _JournalPageState extends State<JournalPage> {
 
   @override
   void initState() {
-    getTradingJournals();
     super.initState();
   }
 
@@ -111,6 +110,12 @@ class _JournalPageState extends State<JournalPage> {
           indicatorBackgroundColor: Colors.grey,
         ),
         slideTransform: const CubeTransform(),
+        onSlideChanged: (index) {
+          tradingJournals?.clear();
+          if(user != null){
+            getTradingJournals();
+          }
+        },
         children: [
           SingleChildScrollView(
             physics: const BouncingScrollPhysics(),

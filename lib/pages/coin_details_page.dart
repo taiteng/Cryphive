@@ -33,9 +33,9 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
 
   Future<void> checkIsWatchlist() async {
     final coinIDSnapshot = await FirebaseFirestore.instance
-        .collection('Watchlist')
+        .collection('Users')
         .doc(user?.uid.toString())
-        .collection('Coins')
+        .collection('Watchlist')
         .doc(widget.coinID)
         .get();
 
@@ -48,9 +48,9 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
 
   Future<void> editWatchlist() async {
     final favouriteRef = FirebaseFirestore.instance
-        .collection("Watchlist")
+        .collection("Users")
         .doc(user?.uid.toString())
-        .collection("Coins")
+        .collection("Watchlist")
         .doc(widget.coinID);
 
     if (isWatchlist) {

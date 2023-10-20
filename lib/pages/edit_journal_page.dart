@@ -118,7 +118,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
           'ExitPrice': double.parse(exitPriceController.text.toString()),
           'Feedback': feedbackController.text.toString(),
           'Fees': double.parse(feesController.text.toString()),
-          'Image': urlDownload.toString(),
+          'ImageURL': urlDownload.toString(),
           'JID': widget.tradingJournal.journalID,
           'ProfitAndLoss': double.parse(profitAndLossController.text.toString()),
           'RiskRewardRatio': double.parse(riskRewardRatioController.text.toString()),
@@ -144,7 +144,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
           'ExitPrice': double.parse(exitPriceController.text.toString()),
           'Feedback': feedbackController.text.toString(),
           'Fees': double.parse(feesController.text.toString()),
-          'Image': imageValue.toString(),
+          'ImageURL': imageValue.toString(),
           'JID': widget.tradingJournal.journalID,
           'ProfitAndLoss': double.parse(profitAndLossController.text.toString()),
           'RiskRewardRatio': double.parse(riskRewardRatioController.text.toString()),
@@ -200,7 +200,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
         toolbarOpacity: 0.8,
         backgroundColor: const Color(0xff151f2c),
         title: const Text(
-          'ADD JOURNAL',
+          'EDIT JOURNAL',
           style: TextStyle(
             color: Colors.yellowAccent,
           ),
@@ -317,7 +317,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
                 password: false,
                 size: size,
                 validator: (value) {
-                  if (value <= 0) {
+                  if (value == null) {
                     buildSnackError(
                       'Invalid Entry Price',
                       context,
@@ -340,13 +340,37 @@ class _EditJournalPageState extends State<EditJournalPage> {
                 password: false,
                 size: size,
                 validator: (value) {
-                  if (value <= 0) {
+                  if (value == null) {
                     buildSnackError(
                       'Invalid Exit Price',
                       context,
                       size,
                     );
                     return '';
+                  }
+                  else if (actionSelectedValue == 'Buy'){
+                    if(entryPriceController.text != null){
+                      if(double.parse(value) < double.parse(entryPriceController.text)){
+                        buildSnackError(
+                          'Exit Price lower than Entry Price',
+                          context,
+                          size,
+                        );
+                        return '';
+                      }
+                    }
+                  }
+                  else if (actionSelectedValue == 'Sell'){
+                    if(entryPriceController.text != null){
+                      if(double.parse(value) > double.parse(entryPriceController.text)){
+                        buildSnackError(
+                          'Exit Price higher than Entry Price',
+                          context,
+                          size,
+                        );
+                        return '';
+                      }
+                    }
                   }
                   return null;
                 },
@@ -363,13 +387,51 @@ class _EditJournalPageState extends State<EditJournalPage> {
                 password: false,
                 size: size,
                 validator: (value) {
-                  if (value <= 0) {
+                  if (value == null) {
                     buildSnackError(
                       'Invalid Take Profit',
                       context,
                       size,
                     );
                     return '';
+                  }
+                  if(exitPriceController.text != null && entryPriceController.text != null){
+                    if (actionSelectedValue == 'Buy'){
+                      if(double.parse(value) < double.parse(exitPriceController.text)){
+                        buildSnackError(
+                          'Take Profit lower than Exit Price',
+                          context,
+                          size,
+                        );
+                        return '';
+                      }
+                      else if(double.parse(value) < double.parse(entryPriceController.text)){
+                        buildSnackError(
+                          'Take Profit lower than Entry Price',
+                          context,
+                          size,
+                        );
+                        return '';
+                      }
+                    }
+                    else if (actionSelectedValue == 'Sell'){
+                      if(double.parse(value) > double.parse(exitPriceController.text)){
+                        buildSnackError(
+                          'Take Profit higher than Exit Price',
+                          context,
+                          size,
+                        );
+                        return '';
+                      }
+                      else if(double.parse(value) > double.parse(entryPriceController.text)){
+                        buildSnackError(
+                          'Take Profit higher than Entry Price',
+                          context,
+                          size,
+                        );
+                        return '';
+                      }
+                    }
                   }
                   return null;
                 },
@@ -386,13 +448,23 @@ class _EditJournalPageState extends State<EditJournalPage> {
                 password: false,
                 size: size,
                 validator: (value) {
-                  if (value <= 0) {
+                  if (value == null) {
                     buildSnackError(
                       'Invalid Stop Loss',
                       context,
                       size,
                     );
                     return '';
+                  }
+                  else if (entryPriceController.text != null){
+                    if(double.parse(value) > double.parse(entryPriceController.text)){
+                      buildSnackError(
+                        'Stop Loss higher than Entry Price',
+                        context,
+                        size,
+                      );
+                      return '';
+                    }
                   }
                   return null;
                 },
@@ -455,7 +527,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
                 password: false,
                 size: size,
                 validator: (value) {
-                  if (value.length <= 0) {
+                  if (value == null) {
                     buildSnackError(
                       'Invalid Feedback',
                       context,
@@ -477,7 +549,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
                 password: false,
                 size: size,
                 validator: (value) {
-                  if (value < 0) {
+                  if (value == null) {
                     buildSnackError(
                       'Invalid Fees',
                       context,
@@ -526,6 +598,25 @@ class _EditJournalPageState extends State<EditJournalPage> {
                       size,
                     );
                     return '';
+                  }
+                  else if(entryDateController.text != null){
+                    DateTime entryDateTime = DateTime.parse(entryDateController.text);
+                    Timestamp entryTimestamp = Timestamp.fromDate(entryDateTime);
+
+                    DateTime exitDateTime = DateTime.parse(exitDateController.text);
+                    Timestamp exitTimestamp = Timestamp.fromDate(exitDateTime);
+
+                    if (exitTimestamp.compareTo(entryTimestamp) < 0) {
+                      buildSnackError(
+                        'Exit Date earlier than Entry Date',
+                        context,
+                        size,
+                      );
+                      return '';
+                    }
+                    else{
+                      return null;
+                    }
                   }
                   return null;
                 },
@@ -591,7 +682,35 @@ class _EditJournalPageState extends State<EditJournalPage> {
                     Colors.black,
                   ],
                   onPressed: () async {
-                    uploadToFirebase();
+                    if(_actionKey.currentState!.validate()){
+                      if(_symbolKey.currentState!.validate()){
+                        if(_timeFrameKey.currentState!.validate()){
+                          if(_strategyKey.currentState!.validate()){
+                            if(_entryPriceKey.currentState!.validate()){
+                              if(_exitPriceKey.currentState!.validate()){
+                                if(_takeProfitKey.currentState!.validate()){
+                                  if(_stopLossKey.currentState!.validate()){
+                                    if(_profitAndLossKey.currentState!.validate()){
+                                      if(_riskRewardRatioKey.currentState!.validate()){
+                                        if(_feedbackKey.currentState!.validate()){
+                                          if(_feesKey.currentState!.validate()){
+                                            if(_entryDateKey.currentState!.validate()){
+                                              if(_exitDateKey.currentState!.validate()){
+                                                uploadToFirebase();
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   },
                 ),
               ),
