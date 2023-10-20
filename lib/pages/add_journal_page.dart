@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:cryphive/widgets/date_time_picker_widget.dart';
 import 'package:cryphive/widgets/drop_down_widget.dart';

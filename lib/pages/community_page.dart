@@ -67,7 +67,7 @@ class _CommunityPageState extends State<CommunityPage> {
       floatingActionButton: GestureDetector(
         onTap: () {
           if(user != null){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => AddPostPage(getPosts: getPosts,)));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPostPage()));
           }
           else{
             buildSnackError(
@@ -133,27 +133,30 @@ class _CommunityPageState extends State<CommunityPage> {
             ),
           ),
         )
-            : ListView.builder(
+            : Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: ListView.builder(
           itemCount: posts!.length,
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) {
-            if(user != null){
-              return PostsWidget(
-                posts: posts[index],
-                isLoggedIn: true,
-                currentUserID: user!.uid.toString(),
-              );
-            }
-            else{
-              return PostsWidget(
-                posts: posts[index],
-                isLoggedIn: false,
-                currentUserID: '',
-              );
-            }
+              if(user != null){
+                return PostsWidget(
+                  posts: posts[index],
+                  isLoggedIn: true,
+                  currentUserID: user!.uid.toString(),
+                );
+              }
+              else{
+                return PostsWidget(
+                  posts: posts[index],
+                  isLoggedIn: false,
+                  currentUserID: '',
+                );
+              }
           },
         ),
+            ),
       ),
     );
   }
