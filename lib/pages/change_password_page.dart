@@ -25,36 +25,40 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _newPasswordKey = GlobalKey<FormState>();
 
   Future<void> changePassword() async {
-    var cred = EmailAuthProvider.credential(
-      email: currentUser!.email.toString().trim(),
-      password: textFieldsStrings[0].toString().trim(),
-    );
+    try{
+      var cred = EmailAuthProvider.credential(
+        email: currentUser!.email.toString().trim(),
+        password: textFieldsStrings[0].toString().trim(),
+      );
 
-    await currentUser!.reauthenticateWithCredential(cred).then((value) async {
-      currentUser!.updatePassword(textFieldsStrings[1].toString().trim());
+      await currentUser!.reauthenticateWithCredential(cred).then((value) async {
+        currentUser!.updatePassword(textFieldsStrings[1].toString().trim());
 
-      await Flushbar(
-        title: 'Change Password',
-        titleSize: 14,
-        titleColor: Colors.white,
-        message: 'Password Changed.',
-        messageSize: 12,
-        messageColor: Colors.white,
-        duration: const Duration(seconds: 3),
-        icon: const Icon(
-          Icons.check,
-          color: Colors.white,
-        ),
-        flushbarStyle: FlushbarStyle.FLOATING,
-        reverseAnimationCurve: Curves.decelerate,
-        forwardAnimationCurve: Curves.elasticOut,
-        backgroundColor: Colors.black,
-      ).show(context);
+        await Flushbar(
+          title: 'Change Password',
+          titleSize: 14,
+          titleColor: Colors.white,
+          message: 'Password Changed.',
+          messageSize: 12,
+          messageColor: Colors.white,
+          duration: const Duration(seconds: 3),
+          icon: const Icon(
+            Icons.check,
+            color: Colors.white,
+          ),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          reverseAnimationCurve: Curves.decelerate,
+          forwardAnimationCurve: Curves.elasticOut,
+          backgroundColor: Colors.black,
+        ).show(context);
 
-      Navigator.pop(context);
-    }).catchError((error){
+        Navigator.pop(context);
+      }).catchError((error){
+        print(error.toString());
+      });
+    } catch (error) {
       print(error.toString());
-    });
+    }
   }
 
   @override

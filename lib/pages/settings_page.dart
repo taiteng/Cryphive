@@ -4,7 +4,7 @@ import 'package:cryphive/pages/disclaimer_page.dart';
 import 'package:cryphive/pages/edit_notification_page.dart';
 import 'package:cryphive/pages/edit_profile_page.dart';
 import 'package:cryphive/pages/login_page.dart';
-import 'package:cryphive/pages/edit_posts_page.dart';
+import 'package:cryphive/pages/manage_posts_page.dart';
 import 'package:cryphive/pages/register_page.dart';
 import 'package:cryphive/widgets/edit_capital_balance_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,7 +37,11 @@ class _SettingsPageState extends State<SettingsPage> {
               icon: const Icon(Icons.done_rounded),
               color: Colors.green,
               onPressed: () async {
-                await user?.delete();
+                try {
+                  await user?.delete();
+                } catch (error) {
+                  print(error.toString());
+                }
                 signOut();
                 Navigator.of(context).pop();
               },
@@ -56,8 +60,14 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void signOut() async{
-    await FirebaseAuth.instance.signOut();
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage(),),);
+    try{
+      await FirebaseAuth.instance.signOut();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
+      });
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   TextStyle headingStyle = const TextStyle(
@@ -189,7 +199,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const EditPostsPage()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ManagePostsPage()));
                       },
                       child: const ListTile(
                         leading: Icon(
@@ -419,7 +429,9 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RegisterPage()));
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RegisterPage()));
+                  });
                 },
                 child: const ListTile(
                   leading: Icon(
@@ -435,7 +447,9 @@ class _SettingsPageState extends State<SettingsPage> {
               const Divider(color: Color(0xff3c3c3f),),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
+                  });
                 },
                 child: const ListTile(
                   leading: Icon(

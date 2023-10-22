@@ -22,9 +22,10 @@ class _CommunityPageState extends State<CommunityPage> {
   List<PostsModel> posts = [];
 
   Future<void> getPosts() async {
-    posts = [];
+    try{
+      posts.clear();
 
-    await FirebaseFirestore.instance.collection('Posts').orderBy('Date', descending: true).get().then((snapshot) => snapshot.docs.forEach((postID) async {
+      await FirebaseFirestore.instance.collection('Posts').orderBy('Date', descending: true).get().then((snapshot) => snapshot.docs.forEach((postID) async {
         if (postID.exists) {
           posts.add(
             PostsModel(
@@ -45,11 +46,14 @@ class _CommunityPageState extends State<CommunityPage> {
           print("Ntg to see here");
         }
       }),
-    );
+      );
 
-    setState(() {
-      isPageRefreshing = false;
-    });
+      setState(() {
+        isPageRefreshing = false;
+      });
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   @override

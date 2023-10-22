@@ -8,12 +8,10 @@ import 'package:flutter/material.dart';
 class JournalWidget extends StatefulWidget {
 
   final TradingJournalModel tradingJournal;
-  final Function() getTradingJournals;
 
   const JournalWidget({
     super.key,
     required this.tradingJournal,
-    required this.getTradingJournals,
   });
 
   @override
@@ -25,16 +23,21 @@ class _JournalWidgetState extends State<JournalWidget> {
   final User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> deleteFromFirebase() async{
-    final journalRef = FirebaseFirestore.instance
-        .collection("TradingJournal")
-        .doc(user?.uid.toString())
-        .collection("Journals")
-        .doc(widget.tradingJournal.journalID);
+    try{
+      final journalRef = FirebaseFirestore.instance
+          .collection("TradingJournal")
+          .doc(user?.uid.toString())
+          .collection("Journals")
+          .doc(widget.tradingJournal.journalID);
 
-    await journalRef.delete();
+      await journalRef.delete();
 
-    widget.getTradingJournals;
-    Navigator.pop(context);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
+      });
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   @override
@@ -259,7 +262,7 @@ class _JournalWidgetState extends State<JournalWidget> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => EditJournalPage(tradingJournal: widget.tradingJournal, getTradingJournals: widget.getTradingJournals,),),);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => EditJournalPage(tradingJournal: widget.tradingJournal,),),);
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -312,7 +315,9 @@ class _JournalWidgetState extends State<JournalWidget> {
                               ),
                               onPressed: () {
                                 deleteFromFirebase();
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3),),);
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
+                                });
                               },
                             ),
                           ],

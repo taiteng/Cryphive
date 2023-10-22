@@ -15,7 +15,7 @@ class _NewsPageState extends State<NewsPage> {
 
   List<News> newsList = [];
 
-  getNewsList(String s) async {
+  Future<List<News>> getNewsList(String s) async {
     newsList = await NewsService().getNewsList(s);
     return newsList;
   }

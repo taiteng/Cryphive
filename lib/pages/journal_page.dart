@@ -10,13 +10,17 @@ import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
 class JournalPage extends StatefulWidget {
-  const JournalPage({super.key});
+
+  const JournalPage({
+    super.key,
+  });
 
   @override
   State<JournalPage> createState() => _JournalPageState();
 }
 
 class _JournalPageState extends State<JournalPage> {
+
   final User? user = FirebaseAuth.instance.currentUser;
 
   bool isJournalRefreshing = true;
@@ -24,50 +28,56 @@ class _JournalPageState extends State<JournalPage> {
   List<TradingJournalModel> tradingJournals = [];
 
   Future getTradingJournals() async {
-    tradingJournals = [];
+    try{
+      tradingJournals = [];
 
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(user?.uid.toString())
-        .collection('TradingJournals')
-        .orderBy('EntryDate', descending: true)
-        .get()
-        .then(
-          (snapshot) => snapshot.docs.forEach((journalID) {
-            if (journalID.exists) {
-              tradingJournals.add(
-                TradingJournalModel(
-                  action: journalID['Action'],
-                  entryDate: journalID['EntryDate'],
-                  exitDate: journalID['ExitDate'],
-                  entryPrice: journalID['EntryPrice'],
-                  exitPrice: journalID['ExitPrice'],
-                  feedback: journalID['Feedback'],
-                  fees: journalID['Fees'],
-                  image: journalID['ImageURL'],
-                  journalID: journalID.reference.id,
-                  profitAndLoss: journalID['ProfitAndLoss'],
-                  riskRewardRatio: journalID['RiskRewardRatio'],
-                  stopLoss: journalID['StopLoss'],
-                  takeProfit: journalID['TakeProfit'],
-                  strategy: journalID['Strategy'],
-                  symbol: journalID['Symbol'],
-                  timeframe: journalID['Timeframe'],
-                ),
-              );
-            } else {
-              print("Ntg to see here");
-            }
-          }),
-        );
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user?.uid.toString())
+          .collection('TradingJournals')
+          .orderBy('EntryDate', descending: true)
+          .get()
+          .then(
+            (snapshot) => snapshot.docs.forEach((journalID) {
+          if (journalID.exists) {
+            tradingJournals.add(
+              TradingJournalModel(
+                action: journalID['Action'],
+                entryDate: journalID['EntryDate'],
+                exitDate: journalID['ExitDate'],
+                entryPrice: journalID['EntryPrice'],
+                exitPrice: journalID['ExitPrice'],
+                feedback: journalID['Feedback'],
+                fees: journalID['Fees'],
+                image: journalID['ImageURL'],
+                journalID: journalID.reference.id,
+                profitAndLoss: journalID['ProfitAndLoss'],
+                riskRewardRatio: journalID['RiskRewardRatio'],
+                stopLoss: journalID['StopLoss'],
+                takeProfit: journalID['TakeProfit'],
+                strategy: journalID['Strategy'],
+                symbol: journalID['Symbol'],
+                timeframe: journalID['Timeframe'],
+              ),
+            );
+          } else {
+            print("Ntg to see here");
+          }
+        }),
+      );
 
-    setState(() {
-      isJournalRefreshing = false;
-    });
+      setState(() {
+        isJournalRefreshing = false;
+      });
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   @override
   void initState() {
+    getTradingJournals();
+
     super.initState();
   }
 
@@ -98,7 +108,7 @@ class _JournalPageState extends State<JournalPage> {
               size: 30,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddJournalPage(getTradingJournals: getTradingJournals,)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddJournalPage()));
             },
           ),
         ],
@@ -112,9 +122,7 @@ class _JournalPageState extends State<JournalPage> {
         slideTransform: const CubeTransform(),
         onSlideChanged: (index) {
           tradingJournals?.clear();
-          if(user != null){
-            getTradingJournals();
-          }
+          getTradingJournals();
         },
         children: [
           SingleChildScrollView(
@@ -233,7 +241,6 @@ class _JournalPageState extends State<JournalPage> {
                     itemBuilder: (context, index) {
                       return JournalWidget(
                         tradingJournal: tradingJournals[index],
-                        getTradingJournals: getTradingJournals,
                       );
                     },
                   ),

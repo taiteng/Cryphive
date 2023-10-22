@@ -27,7 +27,12 @@ class _DeleteAlertWidgetState extends State<DeleteAlertWidget> {
         .doc(user?.uid.toString())
         .collection("Notifications")
         .doc(widget.alertID);
-    await alertRef.delete();
+
+    try{
+      await alertRef.delete();
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   @override
@@ -64,7 +69,9 @@ class _DeleteAlertWidgetState extends State<DeleteAlertWidget> {
           ),
           onSubmit: () {
             deleteFromNotification();
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const EditNotificationPage(),),);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const EditNotificationPage()));
+            });
           },
         ),
       ],

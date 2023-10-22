@@ -125,17 +125,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future getWatchlistCoinIDs() async{
-    await FirebaseFirestore.instance.collection('Users').doc(user?.uid.toString()).collection('Watchlist').get().then(
-          (snapshot) => snapshot.docs.forEach((coinID) {
-        if (coinID.exists) {
-          _coinIDs.add(coinID.reference.id);
+    try{
+      await FirebaseFirestore.instance.collection('Users').doc(user?.uid.toString()).collection('Watchlist').get().then(
+            (snapshot) => snapshot.docs.forEach((coinID) {
+          if (coinID.exists) {
+            _coinIDs.add(coinID.reference.id);
 
-          getWatchlistCoinsMarket(coinID.reference.id);
-        } else {
-          print("Ntg to see here");
-        }
-      }),
-    );
+            getWatchlistCoinsMarket(coinID.reference.id);
+          } else {
+            print("Ntg to see here");
+          }
+        }),
+      );
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   @override
@@ -173,11 +177,11 @@ class _HomePageState extends State<HomePage> {
           currentIndicatorColor: Colors.deepOrangeAccent,
           indicatorBackgroundColor: Colors.grey,
         ),
+        slideTransform: const CubeTransform(),
         onSlideChanged: (index) {
           watchlistCoinsMarketList?.clear();
           getWatchlistCoinIDs();
         },
-        slideTransform: const CubeTransform(),
         children: [
           SingleChildScrollView(
             physics: const BouncingScrollPhysics(),

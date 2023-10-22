@@ -14,7 +14,7 @@ class EditProfilePage extends StatefulWidget {
   final String username;
   final String profilePic;
   final String uID;
-  final String capitalBalance;
+  final num capitalBalance;
 
   const EditProfilePage({
     super.key,
@@ -48,29 +48,37 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String? urlDownload;
 
   Future selectFile() async{
-    final result = await FilePicker.platform.pickFiles();
-    if(result == null) return;
+    try{
+      final result = await FilePicker.platform.pickFiles();
+      if(result == null) return;
 
-    setState(() {
-      _pickedFile = result.files.first;
-    });
+      setState(() {
+        _pickedFile = result.files.first;
+      });
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   Future uploadFile() async{
-    final path = 'UserProfile/${_pickedFile!.name}';
-    final file = File(_pickedFile!.path!);
+    try{
+      final path = 'UserProfile/${_pickedFile!.name}';
+      final file = File(_pickedFile!.path!);
 
-    final ref = FirebaseStorage.instance.ref().child(path);
-    setState(() {
-      _uploadTask = ref.putFile(file);
-    });
+      final ref = FirebaseStorage.instance.ref().child(path);
+      setState(() {
+        _uploadTask = ref.putFile(file);
+      });
 
-    final snapshot = await _uploadTask!.whenComplete(() {});
-    urlDownload = await snapshot.ref.getDownloadURL();
+      final snapshot = await _uploadTask!.whenComplete(() {});
+      urlDownload = await snapshot.ref.getDownloadURL();
 
-    setState(() {
-      _uploadTask = null;
-    });
+      setState(() {
+        _uploadTask = null;
+      });
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   Future uploadToFirebase() async{
@@ -82,7 +90,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           'ProfilePic' : widget.profilePic.toString(),
           'LoginMethod' : 'Email',
           'UID' : widget.uID.toString(),
-          'Capital': widget.capitalBalance.toString(),
+          'Capital': widget.capitalBalance,
         });
       }
       else{
@@ -94,11 +102,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
           'ProfilePic' : urlDownload.toString(),
           'LoginMethod' : 'Email',
           'UID' : widget.uID.toString(),
-          'Capital': widget.capitalBalance.toString(),
+          'Capital': widget.capitalBalance,
         });
       }
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 4),),);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 4,)));
+      });
     } catch (e){
       print(e);
     }
@@ -123,15 +133,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           style: TextStyle(
             color: Colors.yellowAccent,
           ),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
       ),
       body: SingleChildScrollView(
