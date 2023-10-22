@@ -104,7 +104,9 @@ class _EditCapitalBalanceWidgetState extends State<EditCapitalBalanceWidget> {
             String userInput = capitalController.text;
             if (userInput.isNotEmpty) {
               uploadToFirebase();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 4),),);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 4,)));
+              });
             }
           },
         ),

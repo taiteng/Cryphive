@@ -18,15 +18,19 @@ class _EditNotificationPageState extends State<EditNotificationPage> {
   List<String> _alertIDs = [];
 
   Future getAlertIDs() async{
-    await FirebaseFirestore.instance.collection('Users').doc(user?.uid.toString()).collection('Notifications').get().then(
-          (snapshot) => snapshot.docs.forEach((alertID) {
-        if (alertID.exists) {
-          _alertIDs.add(alertID.reference.id);
-        } else {
-          print("Ntg to see here");
-        }
-      }),
-    );
+    try{
+      await FirebaseFirestore.instance.collection('Users').doc(user?.uid.toString()).collection('Notifications').get().then(
+            (snapshot) => snapshot.docs.forEach((alertID) {
+          if (alertID.exists) {
+            _alertIDs.add(alertID.reference.id);
+          } else {
+            print("Ntg to see here");
+          }
+        }),
+      );
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   @override

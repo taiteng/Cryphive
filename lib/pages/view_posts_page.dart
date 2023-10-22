@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cryphive/model/comments_model.dart';
 import 'package:cryphive/model/posts_model.dart';
 import 'package:cryphive/pages/navigation_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,57 +45,154 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
   num noViews = 0;
 
   Future<void> isLiked() async{
-    await FirebaseFirestore.instance.collection('Posts').doc(widget.postID).collection('Likes').get().then((snapshot) => snapshot.docs.forEach((likesID) {
-      if(likesID.reference.id == user!.uid.toString()){
-        setState(() {
-          isLikeButtonRed = true;
-        });
-      }
-    }));
+    try{
+      await FirebaseFirestore.instance.collection('Posts').doc(widget.postID).collection('Likes').get().then((snapshot) => snapshot.docs.forEach((likesID) {
+        if(likesID.reference.id == user!.uid.toString()){
+          setState(() {
+            isLikeButtonRed = true;
+          });
+        }
+      }));
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   Future<void> likePost() async{
 
-    final likeRef = FirebaseFirestore.instance.collection('Posts').doc(widget.postID).collection('Likes').doc(user!.uid.toString());
-    final postRef = FirebaseFirestore.instance.collection('Posts').doc(widget.postID);
+    try{
+      final likeRef = FirebaseFirestore.instance.collection('Posts').doc(widget.postID).collection('Likes').doc(user!.uid.toString());
+      final postRef = FirebaseFirestore.instance.collection('Posts').doc(widget.postID);
 
-    if(!isLikeButtonRed){
-      await likeRef.set({
-        'UID': user!.uid.toString(),
+      if(!isLikeButtonRed){
+        await likeRef.set({
+          'UID': user!.uid.toString(),
+        });
+
+        setState(() {
+          isLikeButtonRed = true;
+          noLikes++;
+        });
+      }
+      else{
+        await likeRef.delete();
+
+        setState(() {
+          isLikeButtonRed = false;
+          noLikes--;
+        });
+      }
+
+      await postRef.set({
+        'uID': uID,
+        'pID': pID,
+        'Username': username,
+        'Title': title,
+        'Description': description,
+        'ImageURL': imageURL,
+        'HasImage': hasImage,
+        'Date': date,
+        'NumberOfLikes': noLikes,
+        'NumberOfComments': noComments,
+        'NumberOfViews': noViews,
+      });
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
+  List<CommentsModel> comments = [];
+
+  bool isCommentsRefreshing = true;
+
+  Future<void> getComments() async {
+    try{
+      comments.clear();
+
+      await FirebaseFirestore.instance.collection('Posts').doc(widget.postID).collection('Comments').orderBy('Date', descending: true).get().then((snapshot) => snapshot.docs.forEach((commentID) async {
+        if (commentID.exists) {
+          comments.add(
+            CommentsModel(
+              username: commentID['Username'],
+              comment: commentID['Comment'],
+              date: commentID['Date'],
+            ),
+          );
+        } else {
+          print("Ntg to see here");
+        }
+      }),
+      );
+
+      setState(() {
+        isCommentsRefreshing = false;
+      });
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
+  Future<void> uploadComments() async {
+
+    try{
+      final commentRef = FirebaseFirestore.instance.collection('Posts').doc(widget.postID).collection('Comments');
+      final postRef = FirebaseFirestore.instance.collection('Posts').doc(widget.postID);
+
+      DateTime dateTime = DateTime.now();
+      Timestamp timestamp = Timestamp.fromDate(dateTime);
+
+      String usernameComment = '';
+
+      setState(() {
+
+      });
+
+      await FirebaseFirestore.instance.collection('Users').get().then((snapshot) => snapshot.docs.forEach((userID) async {
+        if (userID.exists) {
+          if(userID.reference.id == user!.uid.toString()){
+            usernameComment = userID['Username'];
+          }
+        }
+      }));
+
+      await commentRef.add({
+        'Username': usernameComment,
+        'Comment': commentController.text.toString(),
+        'Date': timestamp,
       });
 
       setState(() {
-        isLikeButtonRed = true;
-        noLikes++;
+        noComments++;
       });
-    }
-    else{
-      await likeRef.delete();
+
+      await postRef.set({
+        'uID': uID,
+        'pID': pID,
+        'Username': username,
+        'Title': title,
+        'Description': description,
+        'ImageURL': imageURL,
+        'HasImage': hasImage,
+        'Date': date,
+        'NumberOfLikes': noLikes,
+        'NumberOfComments': noComments,
+        'NumberOfViews': noViews,
+      });
 
       setState(() {
-        isLikeButtonRed = false;
-        noLikes--;
+        getComments();
+        commentController.text = '';
+        FocusScope.of(context).unfocus();
       });
+    } catch (error) {
+      print(error.toString());
     }
-
-    await postRef.set({
-      'uID': uID,
-      'pID': pID,
-      'Username': username,
-      'Title': title,
-      'Description': description,
-      'ImageURL': imageURL,
-      'HasImage': hasImage,
-      'Date': date,
-      'NumberOfLikes': noLikes,
-      'NumberOfComments': noComments,
-      'NumberOfViews': noViews,
-    });
   }
 
   @override
   void initState() {
     isLiked();
+    getComments();
     super.initState();
   }
 
@@ -123,7 +221,9 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 2),),);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 2,)));
+            });
           },
         ),
       ),
@@ -250,7 +350,7 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
                                                         likePost();
                                                       }
                                                       else{
-
+                                                        buildSnackError('Please Login', context, size);
                                                       }
                                                     },
                                                     icon: const Icon(Icons.favorite_rounded),
@@ -380,7 +480,7 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
                                                   likePost();
                                                 }
                                                 else{
-
+                                                  buildSnackError('Please Login', context, size);
                                                 }
                                               },
                                               icon: const Icon(Icons.favorite_rounded),
@@ -477,8 +577,77 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: size.height * 0.5,),
-              SizedBox(height: size.height * 0.5,),
+              isCommentsRefreshing ? const Center(
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: LoadingIndicator(
+                    colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                    indicatorType: Indicator.pacman,
+                  ),
+                ),
+              ) : comments == null || comments!.length == 0 ? 
+              Padding(
+                padding: EdgeInsets.all(size.height * 0.06),
+                child: const Center(
+                  child: Text(
+                    'No Comments Found. Or An Error Occurred.',
+                    style: TextStyle(fontSize: 12, color: Colors.white),
+                  ),
+                ),
+              ) : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                child: ListView.builder(
+                  itemCount: comments!.length,
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Card(
+                      child: ClipPath(
+                        clipper: ShapeBorderClipper(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3))),
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              left: BorderSide(color: Colors.greenAccent, width: 5),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                comments[index].username,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: size.height * 0.005,),
+                              Text(
+                                comments[index].comment,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              SizedBox(height: size.height * 0.005,),
+                              Text(
+                                comments[index].date.toDate().toString(),
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: size.height * 0.085,),
             ],
           ),
           Positioned(
@@ -544,7 +713,12 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
                         icon: const Icon(Icons.send),
                         color: Colors.white,
                         onPressed: () {
-
+                          if(user != null){
+                            uploadComments();
+                          }
+                          else{
+                            buildSnackError('Please Login', context, size);
+                          }
                         },
                       ),
                     ),

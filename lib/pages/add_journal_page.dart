@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:cryphive/widgets/date_time_picker_widget.dart';
 import 'package:cryphive/widgets/drop_down_widget.dart';
@@ -13,11 +14,8 @@ import 'package:flutter/material.dart';
 
 class AddJournalPage extends StatefulWidget {
 
-  final Function() getTradingJournals;
-
   const AddJournalPage({
     super.key,
-    required this.getTradingJournals,
   });
 
   @override
@@ -64,29 +62,37 @@ class _AddJournalPageState extends State<AddJournalPage> {
   String? urlDownload;
 
   Future selectFile() async{
-    final result = await FilePicker.platform.pickFiles();
-    if(result == null) return;
+    try{
+      final result = await FilePicker.platform.pickFiles();
+      if(result == null) return;
 
-    setState(() {
-      _pickedFile = result.files.first;
-    });
+      setState(() {
+        _pickedFile = result.files.first;
+      });
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   Future uploadFile() async{
-    final path = 'Journal/${_pickedFile!.name}';
-    final file = File(_pickedFile!.path!);
+    try{
+      final path = 'Journal/${_pickedFile!.name}';
+      final file = File(_pickedFile!.path!);
 
-    final ref = FirebaseStorage.instance.ref().child(path);
-    setState(() {
-      _uploadTask = ref.putFile(file);
-    });
+      final ref = FirebaseStorage.instance.ref().child(path);
+      setState(() {
+        _uploadTask = ref.putFile(file);
+      });
 
-    final snapshot = await _uploadTask!.whenComplete(() {});
-    urlDownload = await snapshot.ref.getDownloadURL();
+      final snapshot = await _uploadTask!.whenComplete(() {});
+      urlDownload = await snapshot.ref.getDownloadURL();
 
-    setState(() {
-      _uploadTask = null;
-    });
+      setState(() {
+        _uploadTask = null;
+      });
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   Future<void> uploadToFirebase() async{
@@ -153,8 +159,9 @@ class _AddJournalPageState extends State<AddJournalPage> {
         });
       }
 
-      widget.getTradingJournals();
-      Navigator.pop(context);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
+      });
     } catch(e) {
       print(e.toString());
     }

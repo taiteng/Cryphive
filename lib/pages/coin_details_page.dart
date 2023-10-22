@@ -32,38 +32,46 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
   final User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> checkIsWatchlist() async {
-    final coinIDSnapshot = await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(user?.uid.toString())
-        .collection('Watchlist')
-        .doc(widget.coinID)
-        .get();
+    try{
+      final coinIDSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user?.uid.toString())
+          .collection('Watchlist')
+          .doc(widget.coinID)
+          .get();
 
-    if (mounted) {
-      setState(() {
-        isWatchlist = coinIDSnapshot.exists;
-      });
+      if (mounted) {
+        setState(() {
+          isWatchlist = coinIDSnapshot.exists;
+        });
+      }
+    } catch (error) {
+      print(error.toString());
     }
   }
 
   Future<void> editWatchlist() async {
-    final favouriteRef = FirebaseFirestore.instance
-        .collection("Users")
-        .doc(user?.uid.toString())
-        .collection("Watchlist")
-        .doc(widget.coinID);
+    try{
+      final favouriteRef = FirebaseFirestore.instance
+          .collection("Users")
+          .doc(user?.uid.toString())
+          .collection("Watchlist")
+          .doc(widget.coinID);
 
-    if (isWatchlist) {
-      await favouriteRef.delete();
-    } else {
-      await favouriteRef.set({
-        'coinID': widget.coinID,
+      if (isWatchlist) {
+        await favouriteRef.delete();
+      } else {
+        await favouriteRef.set({
+          'coinID': widget.coinID,
+        });
+      }
+
+      setState(() {
+        isWatchlist = !isWatchlist;
       });
+    } catch (error) {
+      print(error.toString());
     }
-
-    setState(() {
-      isWatchlist = !isWatchlist;
-    });
   }
 
   List<ChartModel>? itemChart;

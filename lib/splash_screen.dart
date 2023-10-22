@@ -58,22 +58,24 @@ class _SplashScreenState extends State<SplashScreenPage>{
   Widget build(BuildContext context){
     return Scaffold(
       backgroundColor: const Color(0xff090a13),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //logo
-            Image.asset('assets/images/cryphive_word_nobg.png', height: 500,),
-            const SizedBox(height: 5,),
-            const SizedBox(
-              height: 80,
-              width: 80,
-              child: LoadingIndicator(
-                colors: [Colors.orangeAccent, Colors.orange, Colors.deepOrangeAccent, Colors.deepOrange],
-                indicatorType: Indicator.ballSpinFadeLoader,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //logo
+              Image.asset('assets/images/cryphive_word_nobg.png', height: 500,),
+              const SizedBox(height: 5,),
+              const SizedBox(
+                height: 80,
+                width: 80,
+                child: LoadingIndicator(
+                  colors: [Colors.orangeAccent, Colors.orange, Colors.deepOrangeAccent, Colors.deepOrange],
+                  indicatorType: Indicator.ballSpinFadeLoader,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -30,61 +30,44 @@ class _PostsWidgetState extends State<PostsWidget> {
   num noViews = 0;
 
   Future<void> isLiked() async{
-    await FirebaseFirestore.instance.collection('Posts').doc(widget.posts.pID).collection('Likes').get().then((snapshot) => snapshot.docs.forEach((likesID) {
-      if(likesID.reference.id == widget.currentUserID){
-        setState(() {
-          isLikeButtonRed = true;
-        });
-      }
-    }));
+    try{
+      await FirebaseFirestore.instance.collection('Posts').doc(widget.posts.pID).collection('Likes').get().then((snapshot) => snapshot.docs.forEach((likesID) {
+        if(likesID.reference.id == widget.currentUserID){
+          setState(() {
+            isLikeButtonRed = true;
+          });
+        }
+      }));
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   Future<void> likePost() async{
+    try{
+      final likeRef = FirebaseFirestore.instance.collection('Posts').doc(widget.posts.pID).collection('Likes').doc(widget.currentUserID);
+      final postRef = FirebaseFirestore.instance.collection('Posts').doc(widget.posts.pID);
 
-    final likeRef = FirebaseFirestore.instance.collection('Posts').doc(widget.posts.pID).collection('Likes').doc(widget.currentUserID);
-    final postRef = FirebaseFirestore.instance.collection('Posts').doc(widget.posts.pID);
+      if(!isLikeButtonRed){
+        await likeRef.set({
+          'UID': widget.currentUserID,
+        });
 
-    if(!isLikeButtonRed){
-      await likeRef.set({
-        'UID': widget.currentUserID,
-      });
+        setState(() {
+          isLikeButtonRed = true;
+          noLikes++;
+        });
+      }
+      else{
+        await likeRef.delete();
 
-      setState(() {
-        isLikeButtonRed = true;
-        noLikes++;
-      });
-    }
-    else{
-      await likeRef.delete();
+        setState(() {
+          isLikeButtonRed = false;
+          noLikes--;
+        });
+      }
 
-      setState(() {
-        isLikeButtonRed = false;
-        noLikes--;
-      });
-    }
-
-    await postRef.set({
-      'uID': widget.posts.uID,
-      'pID': widget.posts.pID,
-      'Username': widget.posts.username,
-      'Title': widget.posts.title,
-      'Description': widget.posts.description,
-      'ImageURL': widget.posts.imageURL,
-      'HasImage': widget.posts.hasImage,
-      'Date': widget.posts.date,
-      'NumberOfLikes': noLikes,
-      'NumberOfComments': widget.posts.numberOfComments,
-      'NumberOfViews': widget.posts.numberOfViews,
-    });
-  }
-
-  Future<void> addViewsAndRedirect() async {
-    if(widget.isLoggedIn){
-      setState(() {
-        noViews++;
-      });
-
-      await FirebaseFirestore.instance.collection('Posts').doc(widget.posts.pID).set({
+      await postRef.set({
         'uID': widget.posts.uID,
         'pID': widget.posts.pID,
         'Username': widget.posts.username,
@@ -95,11 +78,39 @@ class _PostsWidgetState extends State<PostsWidget> {
         'Date': widget.posts.date,
         'NumberOfLikes': noLikes,
         'NumberOfComments': widget.posts.numberOfComments,
-        'NumberOfViews': noViews,
+        'NumberOfViews': widget.posts.numberOfViews,
       });
+    } catch (error) {
+      print(error.toString());
     }
+  }
 
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ViewPostsPage(postID: widget.posts.pID,)));
+  Future<void> addViewsAndRedirect() async {
+    try{
+      if(widget.isLoggedIn){
+        setState(() {
+          noViews++;
+        });
+
+        await FirebaseFirestore.instance.collection('Posts').doc(widget.posts.pID).set({
+          'uID': widget.posts.uID,
+          'pID': widget.posts.pID,
+          'Username': widget.posts.username,
+          'Title': widget.posts.title,
+          'Description': widget.posts.description,
+          'ImageURL': widget.posts.imageURL,
+          'HasImage': widget.posts.hasImage,
+          'Date': widget.posts.date,
+          'NumberOfLikes': noLikes,
+          'NumberOfComments': widget.posts.numberOfComments,
+          'NumberOfViews': noViews,
+        });
+      }
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ViewPostsPage(postID: widget.posts.pID,)));
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   @override
@@ -130,7 +141,7 @@ class _PostsWidgetState extends State<PostsWidget> {
 
     if(widget.posts.hasImage){
       return Padding(
-        padding: const EdgeInsets.only(top: 13.0, left: 8.0, right: 8.0,),
+        padding: const EdgeInsets.symmetric(vertical: 13.0, horizontal: 8.0,),
         child: GestureDetector(
           onTap: () async {
             await addViewsAndRedirect();

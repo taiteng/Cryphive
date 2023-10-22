@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/model/trading_journal_model.dart';
+import 'package:cryphive/pages/navigation_page.dart';
 import 'package:cryphive/widgets/button_widget.dart';
 import 'package:cryphive/widgets/date_time_picker_widget.dart';
 import 'package:cryphive/widgets/drop_down_widget.dart';
@@ -15,12 +16,10 @@ import 'package:flutter/material.dart';
 class EditJournalPage extends StatefulWidget {
 
   final TradingJournalModel tradingJournal;
-  final Function() getTradingJournals;
 
   const EditJournalPage({
     super.key,
     required this.tradingJournal,
-    required this.getTradingJournals,
   });
 
   @override
@@ -156,8 +155,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
         });
       }
 
-      widget.getTradingJournals();
-      Navigator.pop(context);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
+      });
     } catch(e) {
       print(e.toString());
     }

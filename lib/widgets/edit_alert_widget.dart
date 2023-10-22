@@ -124,7 +124,9 @@ class _EditAlertWidgetState extends State<EditAlertWidget> {
             String userInputDesc = descriptionController.text;
             if (userInputPrice.isNotEmpty && userInputTitle.isNotEmpty && userInputDesc.isNotEmpty) {
               uploadToFirebase();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const EditNotificationPage(),),);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const EditNotificationPage()));
+              });
             }
           },
         ),
