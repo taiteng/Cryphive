@@ -191,7 +191,10 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
 
   @override
   void initState() {
-    isLiked();
+    if(user != null){
+      isLiked();
+    }
+
     getComments();
     super.initState();
   }
