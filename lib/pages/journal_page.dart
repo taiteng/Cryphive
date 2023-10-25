@@ -169,7 +169,7 @@ class _JournalPageState extends State<JournalPage> {
                     child: const Center(
                       child: Text(
                         'An error occurred. Please wait and try again later.',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 18, color: Colors.white,),
                       ),
                     ),
                   )
@@ -178,6 +178,10 @@ class _JournalPageState extends State<JournalPage> {
                     : const Center(
                   child: Text(
                     'Please login to review your journal analysis',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -230,7 +234,7 @@ class _JournalPageState extends State<JournalPage> {
                     child: const Center(
                       child: Text(
                         'An error occurred. Please wait and try again later.',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 18, color: Colors.white,),
                       ),
                     ),
                   )
@@ -248,6 +252,10 @@ class _JournalPageState extends State<JournalPage> {
                     : const Center(
                   child: Text(
                     'Please login to review your journals',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
                 SizedBox(
