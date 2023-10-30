@@ -33,17 +33,19 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
 
   Future<void> checkIsWatchlist() async {
     try{
-      final coinIDSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(user?.uid.toString())
-          .collection('Watchlist')
-          .doc(widget.coinID)
-          .get();
+      if(user != null){
+        final coinIDSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user?.uid.toString())
+            .collection('Watchlist')
+            .doc(widget.coinID)
+            .get();
 
-      if (mounted) {
-        setState(() {
-          isWatchlist = coinIDSnapshot.exists;
-        });
+        if (mounted) {
+          setState(() {
+            isWatchlist = coinIDSnapshot.exists;
+          });
+        }
       }
     } catch (error) {
       print(error.toString());
@@ -705,15 +707,23 @@ class _CoinDetailsPageState extends State<CoinDetailsPage> {
                               flex: 2,
                               child: GestureDetector(
                                 onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AddAlertWidget(
-                                        symbol: coinDetails.symbol,
-                                        id: coinDetails.id,
-                                      );
-                                    },
-                                  );
+                                  if(user != null){
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AddAlertWidget(
+                                          symbol: coinDetails.symbol,
+                                          id: coinDetails.id,
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    buildSnack(
+                                      'Please Login',
+                                      context,
+                                      size,
+                                    );
+                                  }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(

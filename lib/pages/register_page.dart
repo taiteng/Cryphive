@@ -361,9 +361,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       const SizedBox(height: 10,),
                       GestureDetector(
                         onTap: () {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
-                          });
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
                         },
                         child: RichText(
                           textAlign: TextAlign.left,
