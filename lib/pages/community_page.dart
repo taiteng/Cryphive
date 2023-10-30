@@ -75,7 +75,7 @@ class _CommunityPageState extends State<CommunityPage> {
           }
           else{
             buildSnackError(
-              'You are not logged in',
+              'Please Login',
               context,
               size,
             );

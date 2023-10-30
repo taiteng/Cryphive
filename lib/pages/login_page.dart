@@ -230,9 +230,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.all(5.0),
                         child: GestureDetector(
                           onTap: () {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 0,)));
-                            });
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 0,)));
                           },
                           child: RichText(
                             textAlign: TextAlign.left,
@@ -267,9 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 10,),
                       GestureDetector(
                         onTap: () {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RegisterPage()));
-                          });
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RegisterPage()));
                         },
                         child: RichText(
                           textAlign: TextAlign.left,

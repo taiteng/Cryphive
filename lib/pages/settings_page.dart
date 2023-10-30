@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/pages/change_password_page.dart';
+import 'package:cryphive/pages/contact_us_page.dart';
 import 'package:cryphive/pages/disclaimer_page.dart';
 import 'package:cryphive/pages/edit_notification_page.dart';
 import 'package:cryphive/pages/edit_profile_page.dart';
@@ -380,6 +381,28 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 10,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("Help", style: headingStyle),
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ContactUsPage()));
+                      },
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.file_open_outlined,
+                          color: Colors.deepOrange,
+                        ),
+                        title: Text(
+                          "Contact Us",
+                          style: TextStyle(color: Colors.white,),
+                        ),
+                      ),
+                    ),
                   ],
                 );
               }
@@ -458,6 +481,28 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   title: Text(
                     'Log In To A Account',
+                    style: TextStyle(color: Colors.white,),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text("Help", style: headingStyle),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ContactUsPage()));
+                },
+                child: const ListTile(
+                  leading: Icon(
+                    Icons.file_open_outlined,
+                    color: Colors.deepOrange,
+                  ),
+                  title: Text(
+                    "Contact Us",
                     style: TextStyle(color: Colors.white,),
                   ),
                 ),
