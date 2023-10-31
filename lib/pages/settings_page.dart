@@ -489,6 +489,28 @@ class _SettingsPageState extends State<SettingsPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  Text("Misc", style: headingStyle),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DisclaimerPage()));
+                },
+                child: const ListTile(
+                  leading: Icon(
+                    Icons.file_open_outlined,
+                    color: Colors.deepOrange,
+                  ),
+                  title: Text(
+                    "Disclaimer",
+                    style: TextStyle(color: Colors.white,),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
                   Text("Help", style: headingStyle),
                 ],
               ),
