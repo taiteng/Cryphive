@@ -17,6 +17,7 @@ class _BitcoinPriceForecastWidgetState
   DateTime currentDate = DateTime.now();
 
   bool isRefreshing = true;
+  bool isError = false;
 
   String predictions = "";
   List<dynamic> predictionList = [];
@@ -53,6 +54,10 @@ class _BitcoinPriceForecastWidgetState
         isRefreshing = false;
       });
     } else {
+      setState(() {
+        isRefreshing = false;
+        isError = true;
+      });
       throw Exception('Failed to load data');
     }
   }
@@ -82,146 +87,154 @@ class _BitcoinPriceForecastWidgetState
                 ),
               ),
             )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.yellowAccent,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(50),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Text(
-                      'Forecast Accuracy: $accuracy',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                Container(
-                  margin: const EdgeInsets.all(3.0),
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(25),
-                      ),
-                      border: Border.all(
-                        color: Colors.black,
-                        width: size.width * 0.005,
-                      )),
-                  height: size.height * 0.3,
-                  child: ListView.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            margin: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(50),
-                              ),
-                              border: Border.all(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            child: Text(
-                              changeDateFormat(currentDate.add(Duration(days: index + 1))),
-                              style: const TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            margin: const EdgeInsets.all(5.0),
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(50),
-                              ),
-                              color: Colors.grey,
-                            ),
-                            child: Text(
-                              '${predictionList[index]}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.orangeAccent,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    padding: const EdgeInsets.all(5.0),
-                    child: const Text(
-                      'Forecast for the next 30 days',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: size.height * 0.325,
-                  width: size.width * 0.9,
-                  decoration: BoxDecoration(
-                    color: const Color(0xff42501c),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: LineChart(
-                      LineChartData(
-                        gridData: const FlGridData(show: true),
-                        titlesData: const FlTitlesData(
-                          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 50,)),
-                          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
-                          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
-                          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
-                        ),
-                        borderData: FlBorderData(show: true),
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: List.generate(predictionList.length, (index) {
-                              return FlSpot(index.toDouble(), predictionList[index].toDouble());
-                            }),
-                            isCurved: true,
-                            color: Colors.orangeAccent,
-                            barWidth: 2,
-                            isStrokeCapRound: true,
-                            belowBarData: BarAreaData(show: false),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
+          : isError ? const Center(
+        child: Text(
+          'An Error Occured. Please Try Again Later.',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+          ),
+        ),
+      ) : Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.yellowAccent,
+              borderRadius: BorderRadius.all(
+                Radius.circular(50),
+              ),
             ),
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Text(
+                'Forecast Accuracy: $accuracy',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+          Container(
+            margin: const EdgeInsets.all(3.0),
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(25),
+                ),
+                border: Border.all(
+                  color: Colors.black,
+                  width: size.width * 0.005,
+                )),
+            height: size.height * 0.3,
+            child: ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(50),
+                        ),
+                        border: Border.all(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      child: Text(
+                        changeDateFormat(currentDate.add(Duration(days: index + 1))),
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.all(5.0),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50),
+                        ),
+                        color: Colors.grey,
+                      ),
+                      child: Text(
+                        '${predictionList[index]}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.orangeAccent,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              padding: const EdgeInsets.all(5.0),
+              child: const Text(
+                'Forecast for the next 30 days',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            height: size.height * 0.325,
+            width: size.width * 0.9,
+            decoration: BoxDecoration(
+              color: const Color(0xff42501c),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: LineChart(
+                LineChartData(
+                  gridData: const FlGridData(show: true),
+                  titlesData: const FlTitlesData(
+                    leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 50,)),
+                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
+                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
+                    bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
+                  ),
+                  borderData: FlBorderData(show: true),
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: List.generate(predictionList.length, (index) {
+                        return FlSpot(index.toDouble(), predictionList[index].toDouble());
+                      }),
+                      isCurved: true,
+                      color: Colors.orangeAccent,
+                      barWidth: 2,
+                      isStrokeCapRound: true,
+                      belowBarData: BarAreaData(show: false),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
