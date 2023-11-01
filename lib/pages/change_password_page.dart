@@ -63,7 +63,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           messageColor: Colors.white,
           duration: const Duration(seconds: 3),
           icon: const Icon(
-            Icons.check,
+            Icons.error_outline_rounded,
             color: Colors.white,
           ),
           flushbarStyle: FlushbarStyle.FLOATING,

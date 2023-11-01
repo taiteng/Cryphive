@@ -248,7 +248,7 @@ class _JournalWidgetState extends State<JournalWidget> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
-                      color: Colors.indigo,
+                      color: widget.tradingJournal.hasImage ? Colors.indigo : Colors.grey,
                     ),
                     child: const Padding(
                       padding: EdgeInsets.only(left: 8.0, right: 8.0,),

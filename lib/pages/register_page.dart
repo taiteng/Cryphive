@@ -150,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           false,
                           size,
                               (valuemail) {
-                            if (valuemail.length < 5) {
+                            if (valuemail.length <= 0) {
                               buildSnackError(
                                 'Invalid email',
                                 context,

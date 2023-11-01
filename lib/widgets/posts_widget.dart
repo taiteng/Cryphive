@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/model/posts_model.dart';
 import 'package:cryphive/pages/view_posts_page.dart';
@@ -115,7 +116,9 @@ class _PostsWidgetState extends State<PostsWidget> {
 
   @override
   void initState() {
-    isLiked();
+    if(widget.isLoggedIn){
+      isLiked();
+    }
 
     noLikes = widget.posts.numberOfLikes;
     noComments = widget.posts.numberOfComments;

@@ -74,7 +74,7 @@ class AddAlertWidget extends StatelessWidget {
             ),
             const SizedBox(height: 12.5,),
             const Text(
-              'Choose Symbol: ',
+              'Choose Condition: ',
               style: TextStyle(
                 color: Colors.black54,
               ),

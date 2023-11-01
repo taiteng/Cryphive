@@ -122,7 +122,7 @@ class _NavigationPageState extends State<NavigationPage> {
                               await flutterLocalNotificationsPlugin.show(
                                 count,
                                 alertID['Title'],
-                                '${alertID["Symbol"]} ${alertID["Condition"]} ${alertID["Price"]}',
+                                '${alertID["Symbol"]} ${alertID["Condition"]} \$${alertID["Price"]}',
                                 platformChannelSpecifics,
                                 payload: 'Testing',
                               );

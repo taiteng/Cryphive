@@ -173,7 +173,7 @@ class _SearchPageState extends State<SearchPage> {
                 height: size.height * 0.02,
               ),
               SizedBox(
-                height: size.height * 0.5,
+                height: size.height * 0.75,
                 child: isSearchRefreshing
                     ? const Center(
                   child: SizedBox(
