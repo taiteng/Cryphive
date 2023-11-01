@@ -286,7 +286,11 @@ class _EditPostPageState extends State<EditPostPage> {
                     Colors.black,
                   ],
                   onPressed: () async {
-                    uploadToFirebase();
+                    if(_titleKey.currentState!.validate()){
+                      if(_descriptionKey.currentState!.validate()){
+                        uploadToFirebase();
+                      }
+                    }
                   },
                 ),
               ),

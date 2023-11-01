@@ -52,7 +52,7 @@ class _JournalWidgetState extends State<JournalWidget> {
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Container(
-        height: size.height * 0.275,
+        height: size.height * 0.3,
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.0),
@@ -204,44 +204,46 @@ class _JournalWidgetState extends State<JournalWidget> {
               children: [
                 InkWell(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text(
-                            'Journal Image',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 15,
+                    if(widget.tradingJournal.hasImage){
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text(
+                              'Journal Image',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
-                          ),
-                          content: SizedBox(
-                            height: size.height * 0.275,
-                            width:  size.width * 0.9,
-                            child: Image.network(
-                              widget.tradingJournal.image.toString(),
-                              fit: BoxFit.cover,
-                              errorBuilder: (BuildContext context, Object exception,
-                                  StackTrace? stackTrace) {
-                                return const Padding(
-                                  padding: EdgeInsets.all(15.0),
-                                  child: Center(
-                                    child: Text(
-                                      '😢 Something Went Wrong',
-                                      style: TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                            content: SizedBox(
+                              height: size.height * 0.275,
+                              width:  size.width * 0.9,
+                              child: Image.network(
+                                widget.tradingJournal.image.toString(),
+                                fit: BoxFit.cover,
+                                errorBuilder: (BuildContext context, Object exception,
+                                    StackTrace? stackTrace) {
+                                  return const Padding(
+                                    padding: EdgeInsets.all(15.0),
+                                    child: Center(
+                                      child: Text(
+                                        '😢 Something Went Wrong',
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    );
+                          );
+                        },
+                      );
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -297,17 +299,6 @@ class _JournalWidgetState extends State<JournalWidget> {
                           actions: <Widget>[
                             TextButton(
                               child: const Text(
-                                'No',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            TextButton(
-                              child: const Text(
                                 'Yes',
                                 style: TextStyle(
                                   color: Colors.green,
@@ -318,6 +309,17 @@ class _JournalWidgetState extends State<JournalWidget> {
                                 WidgetsBinding.instance.addPostFrameCallback((_) {
                                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
                                 });
+                              },
+                            ),
+                            TextButton(
+                              child: const Text(
+                                'No',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
                               },
                             ),
                           ],

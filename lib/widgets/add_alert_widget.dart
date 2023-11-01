@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class AddAlertWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        'Add Alert',
+        'Add Notification',
         style: TextStyle(
           fontSize: 18,
         ),
@@ -113,13 +114,32 @@ class AddAlertWidget extends StatelessWidget {
               color: Colors.green,
             ),
           ),
-          onPressed: () {
+          onPressed: () async {
             String userInputPrice = priceController.text;
             String userInputTitle = titleController.text;
             String userInputDesc = descriptionController.text;
             if (userInputPrice.isNotEmpty && userInputTitle.isNotEmpty && userInputDesc.isNotEmpty) {
               uploadToFirebase();
               Navigator.pop(context);
+            }
+            else{
+              await Flushbar(
+                title: 'Input Error',
+                titleSize: 14,
+                titleColor: Colors.white,
+                message: 'User\'s Input Error',
+                messageSize: 12,
+                messageColor: Colors.white,
+                duration: const Duration(seconds: 3),
+                icon: const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.white,
+                ),
+                flushbarStyle: FlushbarStyle.FLOATING,
+                reverseAnimationCurve: Curves.decelerate,
+                forwardAnimationCurve: Curves.elasticOut,
+                backgroundColor: Colors.black,
+              ).show(context);
             }
           },
         ),

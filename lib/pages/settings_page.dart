@@ -27,45 +27,71 @@ class _SettingsPageState extends State<SettingsPage> {
   final CollectionReference _user = FirebaseFirestore.instance.collection('Users');
 
   void deleteProfile() async{
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Delete Profile'),
-          content: const Text("Are You Sure Want To Proceed ?"),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.done_rounded),
-              color: Colors.green,
-              onPressed: () async {
-                try {
-                  await user?.delete();
-                } catch (error) {
-                  print(error.toString());
-                }
-                signOut();
-                Navigator.of(context).pop();
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.cancel_rounded),
-              color: Colors.red,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    try{
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Delete Profile'),
+            content: const Text("Are You Sure Want To Proceed ?"),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.done_rounded),
+                color: Colors.green,
+                onPressed: () async {
+                  try {
+                    await user?.delete();
+                  } catch (error) {
+                    print(error.toString());
+                  }
+                  signOut();
+                  Navigator.of(context).pop();
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.cancel_rounded),
+                color: Colors.red,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   void signOut() async{
     try{
-      await FirebaseAuth.instance.signOut();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
-      });
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Sign Out'),
+            content: const Text("Are You Sure Want To Sign Out ?"),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.done_rounded),
+                color: Colors.green,
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.cancel_rounded),
+                color: Colors.red,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     } catch (error) {
       print(error.toString());
     }

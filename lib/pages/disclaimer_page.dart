@@ -22,7 +22,7 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
         title: const Text(
           'DISCLAIMER',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.yellowAccent,
           ),
         ),
         leading: IconButton(
