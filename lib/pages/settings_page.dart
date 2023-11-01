@@ -40,12 +40,35 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: Colors.green,
                 onPressed: () async {
                   try {
+                    QuerySnapshot notificationsQuerySnapshot = await _user.doc(user!.uid.toString()).collection('Notifications').get();
+                    QuerySnapshot tradingJournalsQuerySnapshot = await _user.doc(user!.uid.toString()).collection('TradingJournals').get();
+                    QuerySnapshot watchlistQuerySnapshot = await _user.doc(user!.uid.toString()).collection('Watchlist').get();
+
+                    for (QueryDocumentSnapshot nDoc in notificationsQuerySnapshot.docs) {
+                      if(nDoc.exists){
+                        await nDoc.reference.delete();
+                      }
+                    }
+
+                    for (QueryDocumentSnapshot tDoc in tradingJournalsQuerySnapshot.docs) {
+                      if(tDoc.exists){
+                        await tDoc.reference.delete();
+                      }
+                    }
+
+                    for (QueryDocumentSnapshot wDoc in watchlistQuerySnapshot.docs) {
+                      if(wDoc.exists){
+                        await wDoc.reference.delete();
+                      }
+                    }
+
                     await user?.delete();
+
+                    signOut();
+                    Navigator.of(context).pop();
                   } catch (error) {
                     print(error.toString());
                   }
-                  signOut();
-                  Navigator.of(context).pop();
                 },
               ),
               IconButton(
@@ -277,7 +300,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           color: Colors.deepOrange,
                         ),
                         title: Text(
-                          'Edit Notifications',
+                          'Manage Notifications',
                           style: TextStyle(color: Colors.white,),
                         ),
                       ),

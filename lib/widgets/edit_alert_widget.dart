@@ -95,7 +95,26 @@ class _EditAlertWidgetState extends State<EditAlertWidget> {
               controller: priceController,
               decoration: const InputDecoration(labelText: 'Input Price'),
             ),
-            const SizedBox(height: 2.0,),
+            const SizedBox(height: 12.5,),
+            const Text(
+              'Choose Condition: ',
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 12,
+              ),
+            ),
+            DropdownButton<String>(
+              value: 'Crossing',
+              onChanged: (String? newValue) {
+
+              },
+              items: <String>['Crossing', 'Coming Soon',].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
             const Divider(color: Colors.black87,),
           ],
         ),

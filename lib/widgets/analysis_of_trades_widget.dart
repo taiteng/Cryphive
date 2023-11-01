@@ -269,7 +269,7 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
                         PieChartSectionData(
                           value: numberOfLosingTrades.toDouble(),
                           color: Colors.red,
-                          title: 'Loss: ${numberOfLosingTrades.toString()}',
+                          title: 'Lose: ${numberOfLosingTrades.toString()}',
                         ),
                       ],
                     ),

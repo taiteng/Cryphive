@@ -68,17 +68,10 @@ class _CommunityPageState extends State<CommunityPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      floatingActionButton: GestureDetector(
+      floatingActionButton: user != null ? GestureDetector(
         onTap: () {
           if(user != null){
             Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPostPage()));
-          }
-          else{
-            buildSnackError(
-              'Please Login',
-              context,
-              size,
-            );
           }
         },
         child: Container(
@@ -98,7 +91,7 @@ class _CommunityPageState extends State<CommunityPage> {
             ),
           ),
         ),
-      ),
+      ) : null,
       backgroundColor: const Color(0xff090a13),
       appBar: AppBar(
         elevation: 0.00,

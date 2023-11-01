@@ -685,7 +685,7 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
                             validator: (value) {
                               if (value!.length <= 0) {
                                 buildSnackError(
-                                  'Invalid Title',
+                                  'Invalid Comment',
                                   context,
                                   size,
                                 );
@@ -717,7 +717,9 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
                         color: Colors.white,
                         onPressed: () {
                           if(user != null){
-                            uploadComments();
+                            if(_commentKey.currentState!.validate()){
+                              uploadComments();
+                            }
                           }
                           else{
                             buildSnackError('Please Login', context, size);
