@@ -53,8 +53,24 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         ).show(context);
 
         Navigator.pop(context);
-      }).catchError((error){
-        print(error.toString());
+      }).catchError((error) async {
+        await Flushbar(
+          title: 'Password Invalid',
+          titleSize: 14,
+          titleColor: Colors.white,
+          message: error.toString(),
+          messageSize: 12,
+          messageColor: Colors.white,
+          duration: const Duration(seconds: 3),
+          icon: const Icon(
+            Icons.check,
+            color: Colors.white,
+          ),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          reverseAnimationCurve: Curves.decelerate,
+          forwardAnimationCurve: Curves.elasticOut,
+          backgroundColor: Colors.black,
+        ).show(context);
       });
     } catch (error) {
       print(error.toString());

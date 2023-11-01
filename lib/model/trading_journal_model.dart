@@ -17,6 +17,7 @@ class TradingJournalModel {
   String strategy;
   String symbol;
   String timeframe;
+  bool hasImage;
 
   TradingJournalModel({
     required this.action,
@@ -35,5 +36,6 @@ class TradingJournalModel {
     required this.strategy,
     required this.symbol,
     required this.timeframe,
+    required this.hasImage,
   });
 }

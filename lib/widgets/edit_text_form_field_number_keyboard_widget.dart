@@ -5,7 +5,6 @@ class EditTextFormFieldNumberKeyboardWidget extends StatefulWidget {
 
   final String hintText;
   final IconData icon;
-  final bool password;
   final Size size;
   final FormFieldValidator validator;
   final Key formKey;
@@ -16,7 +15,6 @@ class EditTextFormFieldNumberKeyboardWidget extends StatefulWidget {
     super.key,
     required this.hintText,
     required this.icon,
-    required this.password,
     required this.size,
     required this.validator,
     required this.formKey,
@@ -29,8 +27,6 @@ class EditTextFormFieldNumberKeyboardWidget extends StatefulWidget {
 }
 
 class _EditTextFormFieldNumberKeyboardWidgetState extends State<EditTextFormFieldNumberKeyboardWidget> {
-
-  bool pwVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +61,6 @@ class _EditTextFormFieldNumberKeyboardWidgetState extends State<EditTextFormFiel
             },
             validator: widget.validator,
             textInputAction: TextInputAction.next,
-            obscureText: widget.password ? !pwVisible : false,
             decoration: InputDecoration(
               errorStyle: const TextStyle(height: 0),
               hintStyle: const TextStyle(
@@ -85,29 +80,6 @@ class _EditTextFormFieldNumberKeyboardWidgetState extends State<EditTextFormFiel
                   color: const Color(0xff7B6F72),
                 ),
               ),
-              suffixIcon: widget.password
-                  ? Padding(
-                padding: EdgeInsets.only(
-                  top: widget.size.height * 0.005,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      pwVisible = !pwVisible;
-                    });
-                  },
-                  child: pwVisible
-                      ? const Icon(
-                    Icons.visibility_off_outlined,
-                    color: Color(0xff7B6F72),
-                  )
-                      : const Icon(
-                    Icons.visibility_outlined,
-                    color: Color(0xff7B6F72),
-                  ),
-                ),
-              )
-                  : null,
             ),
           ),
         ),

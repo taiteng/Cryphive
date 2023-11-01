@@ -35,7 +35,8 @@ class _BitcoinPriceForecastWidgetState
   }
 
   Future<void> fetchForecastData() async {
-    final response = await http.get(Uri.parse('http://192.168.81.152:5000'));
+    //Start the LSTM model and change the URL based on the IP server given
+    final response = await http.get(Uri.parse('http://192.168.0.110:5000'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
@@ -95,7 +96,7 @@ class _BitcoinPriceForecastWidgetState
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: Text(
-                      'Prediction Accuracy: $accuracy',
+                      'Forecast Accuracy: $accuracy',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -176,7 +177,7 @@ class _BitcoinPriceForecastWidgetState
                     ),
                     padding: const EdgeInsets.all(5.0),
                     child: const Text(
-                      'Prediction for the next 30 days',
+                      'Forecast for the next 30 days',
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.white,
@@ -192,7 +193,7 @@ class _BitcoinPriceForecastWidgetState
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(1.0),
+                    padding: const EdgeInsets.all(5.0),
                     child: LineChart(
                       LineChartData(
                         gridData: const FlGridData(show: true),

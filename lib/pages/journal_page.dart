@@ -58,6 +58,7 @@ class _JournalPageState extends State<JournalPage> {
                 strategy: journalID['Strategy'],
                 symbol: journalID['Symbol'],
                 timeframe: journalID['Timeframe'],
+                hasImage: journalID['HasImage'],
               ),
             );
           } else {
@@ -108,7 +109,16 @@ class _JournalPageState extends State<JournalPage> {
               size: 30,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddJournalPage()));
+              if(user != null){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AddJournalPage()));
+              }
+              else{
+                buildSnackError(
+                  'Please Login',
+                  context,
+                  size,
+                );
+              }
             },
           ),
         ],
@@ -265,6 +275,22 @@ class _JournalPageState extends State<JournalPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> buildSnackError(
+      String error, context, size) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.black,
+        content: SizedBox(
+          height: size.height * 0.02,
+          child: Center(
+            child: Text(error),
+          ),
+        ),
       ),
     );
   }

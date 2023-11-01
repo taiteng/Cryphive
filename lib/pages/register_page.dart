@@ -202,7 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           true,
                           size,
                               (valuepassword) {
-                            if (valuepassword != textFieldsStrings[3]) {
+                            if (valuepassword != textFieldsStrings[2]) {
                               buildSnackError(
                                 'Passwords must match',
                                 context,
@@ -332,7 +332,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       .validate()) {
                                     if (checkedValue == false) {
                                       buildSnackError(
-                                          'Accept our Privacy Policy and Term Of Use',
+                                          'Accept our Disclaimer, Privacy Policy and Term Of Use',
                                           context,
                                           size);
                                     } else {

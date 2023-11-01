@@ -34,9 +34,7 @@ class _LoginPageState extends State<LoginPage> {
         password: textFieldsStrings[1],
       );
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 0,)));
-      });
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 0,)));
     } on FirebaseAuthException catch (e) {
       if(e.code == 'user-not-found'){
         await Flushbar(

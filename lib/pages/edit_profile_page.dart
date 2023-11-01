@@ -40,7 +40,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    usernameController = TextEditingController(text: widget.username.toString());
+    usernameController.text = widget.username.toString();
   }
 
   PlatformFile? _pickedFile;
@@ -142,7 +142,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               EditTextFormFieldWidget(
-                hintText: widget.username,
+                hintText: 'Username',
                 icon: Icons.person_outlined,
                 password: false,
                 size: size,

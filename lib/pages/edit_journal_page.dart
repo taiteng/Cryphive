@@ -314,10 +314,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Entry Price',
                 icon: Icons.trending_up_outlined,
-                password: false,
                 size: size,
                 validator: (value) {
-                  if (value == null) {
+                  if (value.isEmpty) {
                     buildSnackError(
                       'Invalid Entry Price',
                       context,
@@ -337,10 +336,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Exit Price',
                 icon: Icons.trending_down_rounded,
-                password: false,
                 size: size,
                 validator: (value) {
-                  if (value == null) {
+                  if (value.isEmpty) {
                     buildSnackError(
                       'Invalid Exit Price',
                       context,
@@ -348,30 +346,30 @@ class _EditJournalPageState extends State<EditJournalPage> {
                     );
                     return '';
                   }
-                  else if (actionSelectedValue == 'Buy'){
-                    if(entryPriceController.text != null){
-                      if(double.parse(value) < double.parse(entryPriceController.text)){
-                        buildSnackError(
-                          'Exit Price lower than Entry Price',
-                          context,
-                          size,
-                        );
-                        return '';
-                      }
-                    }
-                  }
-                  else if (actionSelectedValue == 'Sell'){
-                    if(entryPriceController.text != null){
-                      if(double.parse(value) > double.parse(entryPriceController.text)){
-                        buildSnackError(
-                          'Exit Price higher than Entry Price',
-                          context,
-                          size,
-                        );
-                        return '';
-                      }
-                    }
-                  }
+                  // else if (actionSelectedValue == 'Buy'){
+                  //   if(entryPriceController.text != null){
+                  //     if(double.parse(value) < double.parse(entryPriceController.text)){
+                  //       buildSnackError(
+                  //         'Exit Price lower than Entry Price',
+                  //         context,
+                  //         size,
+                  //       );
+                  //       return '';
+                  //     }
+                  //   }
+                  // }
+                  // else if (actionSelectedValue == 'Sell'){
+                  //   if(entryPriceController.text != null){
+                  //     if(double.parse(value) > double.parse(entryPriceController.text)){
+                  //       buildSnackError(
+                  //         'Exit Price higher than Entry Price',
+                  //         context,
+                  //         size,
+                  //       );
+                  //       return '';
+                  //     }
+                  //   }
+                  // }
                   return null;
                 },
                 formKey: _exitPriceKey,
@@ -384,10 +382,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Take Profit',
                 icon: Icons.trending_flat_rounded,
-                password: false,
                 size: size,
                 validator: (value) {
-                  if (value == null) {
+                  if (value.isEmpty) {
                     buildSnackError(
                       'Invalid Take Profit',
                       context,
@@ -395,9 +392,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
                     );
                     return '';
                   }
-                  if(exitPriceController.text != null && entryPriceController.text != null){
+                  else if(exitPriceController.text != null && entryPriceController.text != null){
                     if (actionSelectedValue == 'Buy'){
-                      if(double.parse(value) < double.parse(exitPriceController.text)){
+                      if(double.parse(value) < double.parse(exitPriceController.text) && double.parse(value) > double.parse(entryPriceController.text)){
                         buildSnackError(
                           'Take Profit lower than Exit Price',
                           context,
@@ -415,7 +412,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
                       }
                     }
                     else if (actionSelectedValue == 'Sell'){
-                      if(double.parse(value) > double.parse(exitPriceController.text)){
+                      if(double.parse(value) > double.parse(exitPriceController.text) && double.parse(value) < double.parse(entryPriceController.text)){
                         buildSnackError(
                           'Take Profit higher than Exit Price',
                           context,
@@ -445,10 +442,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Stop Loss',
                 icon: Icons.warning_amber_rounded,
-                password: false,
                 size: size,
                 validator: (value) {
-                  if (value == null) {
+                  if (value.isEmpty) {
                     buildSnackError(
                       'Invalid Stop Loss',
                       context,
@@ -457,13 +453,25 @@ class _EditJournalPageState extends State<EditJournalPage> {
                     return '';
                   }
                   else if (entryPriceController.text != null){
-                    if(double.parse(value) > double.parse(entryPriceController.text)){
-                      buildSnackError(
-                        'Stop Loss higher than Entry Price',
-                        context,
-                        size,
-                      );
-                      return '';
+                    if(actionSelectedValue == 'Buy'){
+                      if(double.parse(value) > double.parse(entryPriceController.text)){
+                        buildSnackError(
+                          'Stop Loss higher than Entry Price',
+                          context,
+                          size,
+                        );
+                        return '';
+                      }
+                    }
+                    else if(actionSelectedValue == 'Sell'){
+                      if(double.parse(value) < double.parse(entryPriceController.text)){
+                        buildSnackError(
+                          'Stop Loss lower than Entry Price',
+                          context,
+                          size,
+                        );
+                        return '';
+                      }
                     }
                   }
                   return null;
@@ -478,10 +486,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Profit and Loss',
                 icon: Icons.money_rounded,
-                password: false,
                 size: size,
                 validator: (value) {
-                  if (value == null) {
+                  if (value.isEmpty) {
                     buildSnackError(
                       'Invalid P&L',
                       context,
@@ -501,10 +508,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Risk and Reward',
                 icon: Icons.compare_arrows_rounded,
-                password: false,
                 size: size,
                 validator: (value) {
-                  if (value == null) {
+                  if (value.isEmpty) {
                     buildSnackError(
                       'Invalid RRR',
                       context,
@@ -527,7 +533,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
                 password: false,
                 size: size,
                 validator: (value) {
-                  if (value == null) {
+                  if (value.length <= 0) {
                     buildSnackError(
                       'Invalid Feedback',
                       context,
@@ -546,10 +552,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
               EditTextFormFieldNumberKeyboardWidget(
                 hintText: 'Fees',
                 icon: Icons.payments_rounded,
-                password: false,
                 size: size,
                 validator: (value) {
-                  if (value == null) {
+                  if (value.isEmpty) {
                     buildSnackError(
                       'Invalid Fees',
                       context,
@@ -570,7 +575,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
                 size: size,
                 hintText: 'Entry Date',
                 validator: (value) {
-                  if (value == null) {
+                  if (value.isEmpty) {
                     buildSnackError(
                       'Invalid Entry Date',
                       context,
@@ -591,7 +596,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
                 size: size,
                 hintText: 'Exit Date',
                 validator: (value) {
-                  if (value == null) {
+                  if (value.isEmpty) {
                     buildSnackError(
                       'Invalid Exit Date',
                       context,
@@ -639,11 +644,17 @@ class _EditJournalPageState extends State<EditJournalPage> {
               )
                   : Padding(
                 padding: const EdgeInsets.all(20),
-                child: Image.network(
-                  'https://www.entrepreneurshipinabox.com/wp-content/uploads/A-Basic-Guide-To-Stock-Trading-1024x682.jpg',
+                child: widget.tradingJournal.hasImage ? Image.network(
+                  widget.tradingJournal.image,
                   fit: BoxFit.cover,
                   width: MediaQuery.of(context).size.width,
                   height: 200,
+                ) : const Text(
+                  'Image Will Be Displayed Here',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
               GestureDetector(

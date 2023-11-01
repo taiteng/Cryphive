@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryphive/pages/navigation_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -100,13 +101,30 @@ class _EditCapitalBalanceWidgetState extends State<EditCapitalBalanceWidget> {
               color: Colors.green,
             ),
           ),
-          onPressed: () {
+          onPressed: () async {
             String userInput = capitalController.text;
             if (userInput.isNotEmpty) {
               uploadToFirebase();
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 4,)));
-              });
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 4,)));
+            }
+            else{
+              await Flushbar(
+                title: 'Input Error',
+                titleSize: 14,
+                titleColor: Colors.white,
+                message: 'User\'s Input Error',
+                messageSize: 12,
+                messageColor: Colors.white,
+                duration: const Duration(seconds: 3),
+                icon: const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.white,
+                ),
+                flushbarStyle: FlushbarStyle.FLOATING,
+                reverseAnimationCurve: Curves.decelerate,
+                forwardAnimationCurve: Curves.elasticOut,
+                backgroundColor: Colors.black,
+              ).show(context);
             }
           },
         ),

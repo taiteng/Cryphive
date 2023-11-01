@@ -124,9 +124,7 @@ class _AddPostPageState extends State<AddPostPage> {
         });
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 2,)));
-      });
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 2,)));
     }catch(e) {
       print(e.toString());
     }
@@ -250,13 +248,14 @@ class _AddPostPageState extends State<AddPostPage> {
                   height: 200,
                 ),
               )
-                  : Padding(
-                padding: const EdgeInsets.all(20),
-                child: Image.network(
-                  'https://www.entrepreneurshipinabox.com/wp-content/uploads/A-Basic-Guide-To-Stock-Trading-1024x682.jpg',
-                  fit: BoxFit.cover,
-                  width: MediaQuery.of(context).size.width,
-                  height: 200,
+                  : const Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'Image Will Be Displayed Here',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
               GestureDetector(
@@ -295,7 +294,11 @@ class _AddPostPageState extends State<AddPostPage> {
                     Colors.black,
                   ],
                   onPressed: () async {
-                    uploadToFirebase();
+                    if(_titleKey.currentState!.validate()){
+                      if(_descriptionKey.currentState!.validate()){
+                        uploadToFirebase();
+                      }
+                    }
                   },
                 ),
               ),
