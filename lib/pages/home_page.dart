@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                   ClipPath(
                     clipper: CryphiveCustomClipper(),
                     child: Container(
-                      height: size.height * 0.7,
+                      height: size.height * 0.75,
                       width: size.width,
                       decoration: BoxDecoration(
                         boxShadow: [
@@ -360,9 +360,7 @@ class _HomePageState extends State<HomePage> {
                               height: size.height * 0.005,
                             ),
                             const BitcoinPriceForecastWidget(),
-                            SizedBox(
-                              height: size.height * 0.06,
-                            ),
+
                           ],
                         ),
                       ),
