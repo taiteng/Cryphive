@@ -37,7 +37,7 @@ class _BitcoinPriceForecastWidgetState
 
   Future<void> fetchForecastData() async {
     //Start the LSTM model and change the URL based on the IP server given
-    final response = await http.get(Uri.parse('http://192.168.0.110:5000'));
+    final response = await http.get(Uri.parse('http://192.168.0.118:5000'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

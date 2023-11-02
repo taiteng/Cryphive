@@ -74,6 +74,25 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Colors.black,
         ).show(context);
       }
+      else{
+        await Flushbar(
+          title: 'Invalid Email',
+          titleSize: 14,
+          titleColor: Colors.white,
+          message: 'Email might be badly formatted.',
+          messageSize: 12,
+          messageColor: Colors.white,
+          duration: const Duration(seconds: 3),
+          icon: const Icon(
+            Icons.not_interested_rounded,
+            color: Colors.white,
+          ),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          reverseAnimationCurve: Curves.decelerate,
+          forwardAnimationCurve: Curves.elasticOut,
+          backgroundColor: Colors.black,
+        ).show(context);
+      }
     }
   }
 
