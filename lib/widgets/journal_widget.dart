@@ -32,9 +32,7 @@ class _JournalWidgetState extends State<JournalWidget> {
 
       await journalRef.delete();
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
-      });
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
     } catch (error) {
       print(error.toString());
     }
