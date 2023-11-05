@@ -231,7 +231,7 @@ class _EditPostPageState extends State<EditPostPage> {
                 formKey: _descriptionKey,
                 controller: descriptionController,
               ),
-              widget.postData.hasImage ? _pickedFile != null
+              _pickedFile != null
                   ? Padding(
                 padding: const EdgeInsets.all(20),
                 child: Image.file(
@@ -243,14 +243,20 @@ class _EditPostPageState extends State<EditPostPage> {
               )
                   : Padding(
                 padding: const EdgeInsets.all(20),
-                child: Image.network(
+                child: widget.postData.hasImage ? Image.network(
                   widget.postData.imageURL,
                   fit: BoxFit.cover,
                   width: MediaQuery.of(context).size.width,
                   height: 200,
+                ) : const Text(
+                  'No Image Uploaded',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
                 ),
-              ) : const SizedBox(),
-              widget.postData.hasImage ? GestureDetector(
+              ),
+              GestureDetector(
                 onTap: (){
                   selectFile();
                 },
@@ -271,7 +277,7 @@ class _EditPostPageState extends State<EditPostPage> {
                     ),
                   ),
                 ),
-              ) : const SizedBox(),
+              ),
               AnimatedPadding(
                 duration: const Duration(milliseconds: 500),
                 padding: EdgeInsets.only(top: size.height * 0.025),
