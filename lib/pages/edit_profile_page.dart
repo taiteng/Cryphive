@@ -106,9 +106,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         });
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 4,)));
-      });
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 4,)));
     } catch (e){
       print(e);
     }

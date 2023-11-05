@@ -31,8 +31,6 @@ class _JournalWidgetState extends State<JournalWidget> {
           .doc(widget.tradingJournal.journalID);
 
       await journalRef.delete();
-      
-      Navigator.pop(context);
 
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
     } catch (error) {

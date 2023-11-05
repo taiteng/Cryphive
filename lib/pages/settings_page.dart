@@ -62,10 +62,11 @@ class _SettingsPageState extends State<SettingsPage> {
                       }
                     }
 
+                    await _user.doc(user!.uid.toString()).delete();
                     await user?.delete();
-
-                    signOut();
+                    await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pop();
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
                   } catch (error) {
                     print(error.toString());
                   }
