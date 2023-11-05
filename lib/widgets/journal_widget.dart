@@ -25,12 +25,14 @@ class _JournalWidgetState extends State<JournalWidget> {
   Future<void> deleteFromFirebase() async{
     try{
       final journalRef = FirebaseFirestore.instance
-          .collection("TradingJournal")
+          .collection("Users")
           .doc(user?.uid.toString())
-          .collection("Journals")
+          .collection("TradingJournals")
           .doc(widget.tradingJournal.journalID);
 
       await journalRef.delete();
+      
+      Navigator.pop(context);
 
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
     } catch (error) {
@@ -304,9 +306,6 @@ class _JournalWidgetState extends State<JournalWidget> {
                               ),
                               onPressed: () {
                                 deleteFromFirebase();
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
-                                });
                               },
                             ),
                             TextButton(
