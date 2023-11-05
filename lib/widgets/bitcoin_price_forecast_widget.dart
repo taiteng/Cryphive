@@ -37,7 +37,7 @@ class _BitcoinPriceForecastWidgetState
 
   Future<void> fetchForecastData() async {
     //Start the LSTM model and change the URL based on the IP server given
-    final response = await http.get(Uri.parse('http://192.168.0.118:5000'));
+    final response = await http.get(Uri.parse('http://192.168.0.106:5000'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
@@ -73,29 +73,49 @@ class _BitcoinPriceForecastWidgetState
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return SizedBox(
-      height: size.height * 0.75,
+    return isRefreshing == true
+        ? SizedBox(
+      height: size.height * 0.3,
       width: size.width * 0.8,
-      child: isRefreshing == true
-          ? const Center(
-              child: SizedBox(
-                height: 50,
-                width: 50,
-                child: LoadingIndicator(
-                  colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
-                  indicatorType: Indicator.audioEqualizer,
-                ),
+          child: const Center(
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 50,
+              width: 50,
+              child: LoadingIndicator(
+                colors: [Colors.red, Colors.green, Colors.blue, Colors.yellow],
+                indicatorType: Indicator.audioEqualizer,
               ),
-            )
-          : isError ? const Center(
-        child: Text(
+            ),
+            Text(
+              'Model is Running, Please Wait...',
+              style: TextStyle(
+                color: Colors.black38,
+              ),
+            ),
+          ],
+      ),
+    ),
+        )
+        : isError ? SizedBox(
+      height: size.height * 0.3,
+      width: size.width * 0.8,
+          child: const Center(
+      child: Text(
           'An Error Occured. Please Try Again Later.',
           style: TextStyle(
             color: Colors.white,
             fontSize: 15,
           ),
-        ),
-      ) : Column(
+      ),
+    ),
+        ) : SizedBox(
+      height: size.height * 0.85,
+      width: size.width * 0.8,
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -232,7 +252,10 @@ class _BitcoinPriceForecastWidgetState
                 ),
               ),
             ),
-          )
+          ),
+          SizedBox(
+            height: size.height * 0.02,
+          ),
         ],
       ),
     );
