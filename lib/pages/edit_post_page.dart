@@ -83,7 +83,7 @@ class _EditPostPageState extends State<EditPostPage> {
           'Username': widget.postData.username,
           'Title': titleController.text.toString(),
           'Description': descriptionController.text.toString(),
-          'HasImage': widget.postData.hasImage,
+          'HasImage': true,
           'ImageURL': urlDownload.toString(),
           'Date': widget.postData.date,
           'NumberOfLikes': widget.postData.numberOfLikes,
@@ -107,9 +107,7 @@ class _EditPostPageState extends State<EditPostPage> {
         });
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const ManagePostsPage()));
-      });
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const ManagePostsPage()));
     }catch(e) {
       print(e.toString());
     }

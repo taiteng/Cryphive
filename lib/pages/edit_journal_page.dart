@@ -126,6 +126,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
           'Strategy': strategyController.text.toString(),
           'Symbol': symbolController.text.toString(),
           'Timeframe': timeFrameSelectedValue.toString(),
+          'HasImage': true,
         });
       }
       else{
@@ -152,6 +153,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
           'Strategy': strategyController.text.toString(),
           'Symbol': symbolController.text.toString(),
           'Timeframe': timeFrameSelectedValue.toString(),
+          'HasImage': widget.tradingJournal.hasImage,
         });
       }
 

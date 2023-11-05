@@ -131,6 +131,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
             'Strategy': strategyController.text.toString(),
             'Symbol': symbolController.text.toString(),
             'Timeframe': timeFrameSelectedValue.toString(),
+            'HasImage': true,
           });
         });
       }
@@ -155,6 +156,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
             'Strategy': strategyController.text.toString(),
             'Symbol': symbolController.text.toString(),
             'Timeframe': timeFrameSelectedValue.toString(),
+            'HasImage': false
           });
         });
       }
