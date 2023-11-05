@@ -36,6 +36,7 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
   num highestRiskRewardRatio = 0;
   Map<int, double> chartData = {};
   List<FlSpot> spots = [];
+  List<double> tJournals = [];
 
   void getAnalysis(){
     totalTrades = widget.tradingJournal.length;
@@ -75,8 +76,12 @@ class _AnalysisOfTradesWidgetState extends State<AnalysisOfTradesWidget> {
       }
     }
 
+    for (int i = totalTrades - 1; i >= 0; i--) {
+      tJournals.add(widget.tradingJournal[i].profitAndLoss.toDouble());
+    }
+
     for (int i = 0; i < totalTrades; i++) {
-      spots.add(FlSpot(i.toDouble(), widget.tradingJournal[i].profitAndLoss.toDouble()));
+      spots.add(FlSpot(i.toDouble(), tJournals[i]));
     }
   }
 

@@ -104,9 +104,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
         await uploadFile();
 
         final journalRef = FirebaseFirestore.instance
-            .collection("TradingJournal")
+            .collection("Users")
             .doc(user?.uid.toString())
-            .collection("Journals")
+            .collection("TradingJournals")
             .doc(widget.tradingJournal.journalID);
 
         await journalRef.set({
@@ -131,9 +131,9 @@ class _EditJournalPageState extends State<EditJournalPage> {
       }
       else{
         final journalRef = FirebaseFirestore.instance
-            .collection("TradingJournal")
+            .collection("Users")
             .doc(user?.uid.toString())
-            .collection("Journals")
+            .collection("TradingJournals")
             .doc(widget.tradingJournal.journalID);
 
         await journalRef.set({
