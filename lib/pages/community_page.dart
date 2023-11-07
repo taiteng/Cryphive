@@ -107,6 +107,7 @@ class _CommunityPageState extends State<CommunityPage> {
           ),
         ),
         leading: null,
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

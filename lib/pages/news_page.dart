@@ -41,6 +41,7 @@ class _NewsPageState extends State<NewsPage> {
           ),
         ),
         leading: null,
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         child: FutureBuilder(
