@@ -158,6 +158,7 @@ class _SettingsPageState extends State<SettingsPage> {
             color: Colors.yellowAccent,
           ),
         ),
+        leading: null,
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

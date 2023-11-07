@@ -170,6 +170,7 @@ class _HomePageState extends State<HomePage> {
             color: Colors.yellowAccent,
           ),
         ),
+        leading: null,
       ),
       body: CarouselSlider(
         slideIndicator: CircularSlideIndicator(
