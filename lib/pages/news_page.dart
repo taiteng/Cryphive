@@ -40,6 +40,7 @@ class _NewsPageState extends State<NewsPage> {
             color: Colors.yellowAccent,
           ),
         ),
+        leading: null,
       ),
       body: Container(
         child: FutureBuilder(

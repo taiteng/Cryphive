@@ -101,6 +101,7 @@ class _JournalPageState extends State<JournalPage> {
             color: Colors.yellowAccent,
           ),
         ),
+        leading: null,
         actions: <Widget>[
           IconButton(
             icon: const Icon(

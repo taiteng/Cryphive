@@ -106,6 +106,7 @@ class _CommunityPageState extends State<CommunityPage> {
             color: Colors.yellowAccent,
           ),
         ),
+        leading: null,
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
