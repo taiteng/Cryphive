@@ -171,6 +171,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         leading: null,
+        automaticallyImplyLeading: false,
       ),
       body: CarouselSlider(
         slideIndicator: CircularSlideIndicator(

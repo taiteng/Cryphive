@@ -159,6 +159,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
         leading: null,
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

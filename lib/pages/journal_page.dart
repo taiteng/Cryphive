@@ -102,6 +102,7 @@ class _JournalPageState extends State<JournalPage> {
           ),
         ),
         leading: null,
+        automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
             icon: const Icon(
