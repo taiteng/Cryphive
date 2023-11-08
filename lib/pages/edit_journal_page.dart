@@ -100,14 +100,14 @@ class _EditJournalPageState extends State<EditJournalPage> {
       DateTime exitDateTime = DateTime.parse(exitDateController.text);
       Timestamp exitTimestamp = Timestamp.fromDate(exitDateTime);
 
+      final journalRef = FirebaseFirestore.instance
+          .collection("Users")
+          .doc(user?.uid.toString())
+          .collection("TradingJournals")
+          .doc(widget.tradingJournal.journalID);
+
       if(_pickedFile != null){
         await uploadFile();
-
-        final journalRef = FirebaseFirestore.instance
-            .collection("Users")
-            .doc(user?.uid.toString())
-            .collection("TradingJournals")
-            .doc(widget.tradingJournal.journalID);
 
         await journalRef.set({
           'Action' : actionSelectedValue.toString(),
@@ -130,12 +130,6 @@ class _EditJournalPageState extends State<EditJournalPage> {
         });
       }
       else{
-        final journalRef = FirebaseFirestore.instance
-            .collection("Users")
-            .doc(user?.uid.toString())
-            .collection("TradingJournals")
-            .doc(widget.tradingJournal.journalID);
-
         await journalRef.set({
           'Action' : actionSelectedValue.toString(),
           'EntryDate': entryTimestamp,
@@ -157,9 +151,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
         });
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
-      });
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
     } catch(e) {
       print(e.toString());
     }
