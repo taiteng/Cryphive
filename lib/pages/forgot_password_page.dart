@@ -42,15 +42,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ).show(context);
     } on FirebaseAuthException catch (e) {
       await Flushbar(
-        title: 'An Error Occured',
+        title: 'An error occurred.',
         titleSize: 14,
         titleColor: Colors.white,
-        message: 'User not found.',
+        message: e.toString(),
         messageSize: 12,
         messageColor: Colors.white,
         duration: const Duration(seconds: 3),
         icon: const Icon(
-          Icons.check,
+          Icons.warning_amber_rounded,
           color: Colors.white,
         ),
         flushbarStyle: FlushbarStyle.FLOATING,
