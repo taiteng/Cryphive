@@ -180,7 +180,7 @@ class _JournalPageState extends State<JournalPage> {
                     padding: EdgeInsets.all(size.height * 0.06),
                     child: const Center(
                       child: Text(
-                        'An error occurred. Please wait and try again later.',
+                        'No Journals Found.',
                         style: TextStyle(fontSize: 18, color: Colors.white,),
                       ),
                     ),
@@ -245,7 +245,7 @@ class _JournalPageState extends State<JournalPage> {
                     padding: EdgeInsets.all(size.height * 0.06),
                     child: const Center(
                       child: Text(
-                        'An error occurred. Please wait and try again later.',
+                        'No Journals Found.',
                         style: TextStyle(fontSize: 18, color: Colors.white,),
                       ),
                     ),
