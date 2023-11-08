@@ -100,14 +100,14 @@ class _EditJournalPageState extends State<EditJournalPage> {
       DateTime exitDateTime = DateTime.parse(exitDateController.text);
       Timestamp exitTimestamp = Timestamp.fromDate(exitDateTime);
 
+      final journalRef = FirebaseFirestore.instance
+          .collection("Users")
+          .doc(user?.uid.toString())
+          .collection("TradingJournals")
+          .doc(widget.tradingJournal.journalID);
+
       if(_pickedFile != null){
         await uploadFile();
-
-        final journalRef = FirebaseFirestore.instance
-            .collection("Users")
-            .doc(user?.uid.toString())
-            .collection("TradingJournals")
-            .doc(widget.tradingJournal.journalID);
 
         await journalRef.set({
           'Action' : actionSelectedValue.toString(),
@@ -130,12 +130,6 @@ class _EditJournalPageState extends State<EditJournalPage> {
         });
       }
       else{
-        final journalRef = FirebaseFirestore.instance
-            .collection("Users")
-            .doc(user?.uid.toString())
-            .collection("TradingJournals")
-            .doc(widget.tradingJournal.journalID);
-
         await journalRef.set({
           'Action' : actionSelectedValue.toString(),
           'EntryDate': entryTimestamp,
