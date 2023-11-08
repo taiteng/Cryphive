@@ -271,7 +271,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
                 formKey: _symbolKey,
                 controller: symbolController,
               ),
-
               DropDownWidget(
                 selectedValue: actionSelectedValue,
                 dropdownItems: const ['Buy', 'Sell'],

@@ -69,9 +69,7 @@ class _DeleteAlertWidgetState extends State<DeleteAlertWidget> {
           ),
           onSubmit: () {
             deleteFromNotification();
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const EditNotificationPage()));
-            });
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const EditNotificationPage()));
           },
         ),
       ],
