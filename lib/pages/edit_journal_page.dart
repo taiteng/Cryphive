@@ -151,9 +151,7 @@ class _EditJournalPageState extends State<EditJournalPage> {
         });
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
-      });
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => NavigationPage(index: 3,)));
     } catch(e) {
       print(e.toString());
     }
