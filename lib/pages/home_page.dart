@@ -133,7 +133,9 @@ class _HomePageState extends State<HomePage> {
 
             getWatchlistCoinsMarket(coinID.reference.id);
           } else {
-            print("Ntg to see here");
+            setState(() {
+              isWatchlistRefreshing = false;
+            });
           }
         }),
       );
@@ -433,13 +435,13 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         )
-                            : watchlistCoinsMarketList == null || watchlistCoinsMarketList!.length == 0
+                            : watchlistCoinsMarketList == null || watchlistCoinsMarketList!.length == 0 || watchlistCoinsMarketList!.isEmpty
                             ? Padding(
                           padding: EdgeInsets.all(size.height * 0.06),
                           child: const Center(
                             child: Text(
-                              'An error occurred. Please wait and try again later.',
-                              style: TextStyle(fontSize: 18),
+                              'Watch list is empty.',
+                              style: TextStyle(fontSize: 15),
                             ),
                           ),
                         )
